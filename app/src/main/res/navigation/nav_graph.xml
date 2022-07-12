@@ -12,16 +12,23 @@
         <action
             android:id="@+id/action_listDisplay_to_addEdit"
             app:destination="@id/addEdit" />
+<!--        <argument-->
+<!--            android:name="Id"-->
+<!--            app:argType="integer" />-->
     </fragment>
     <fragment
         android:id="@+id/addEdit"
         android:name="com.example.expensetracker.AddEdit"
         android:label="fragment_add_edit"
         tools:layout="@layout/fragment_add_edit" >
+
+        <argument
+            android:name="expense"
+            app:argType="com.example.expensetracker.database.expense.Expense" app:nullable="true"/>
         <action
             android:id="@+id/action_addEdit_to_listDisplay"
             app:destination="@id/listDisplay"
             app:popUpTo="@id/listDisplay"
-            app:popUpToInclusive="true" />
-    </fragment>
-</navigation>
+            app:popUpToInclusive="true"/>
+                </fragment>
+            </navigation>

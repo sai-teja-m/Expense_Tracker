@@ -9,23 +9,26 @@ class ExpenseRepositoryImpl(
     private val dao:ExpenseDao
 ) : ExpenseRepository{
     override fun updateExpense(exp: Expense): Completable {
-        dao.updateExpense(exp)
+        return dao.updateExpense(exp)
     }
 
     override fun insertExpense(exp: Expense): Completable {
-        dao.insertExpense(exp)
+        return dao.insertExpense(exp)
     }
 
     override fun deleteExpense(exp: Expense): Completable {
-        dao.deleteExpense(exp)
+        return dao.deleteExpense(exp)
     }
 
     override fun getAll(): Single<List<Expense>> {
-        dao.getAll()
+        return dao.getAll()
     }
 
+    override fun getByCat(cat: String): Single<List<Expense>> {
+        return dao.getByCat(cat)
+    }
     override fun getById(id: Int): Single<Expense> {
-        dao.getById(id)
+        return dao.getById(id)
     }
 
 

@@ -10,7 +10,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.expensetracker.databinding.ActivityMainBinding
 
 
-class MainActivity : FragmentActivity() {
+class MainActivity : AppCompatActivity() {
+
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,14 +25,14 @@ class MainActivity : FragmentActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         // Instantiate the navController using the NavHostFragment
         navController = navHostFragment.navController
-//        // Make sure actions in the ActionBar get propagated to the NavController
-//        setupActionBarWithNavController(navController)
+        // Make sure actions in the ActionBar get propagated to the NavController
+        setupActionBarWithNavController(navController)
     }
 
     /**
      * Enables back button support. Simply navigates one element up on the stack.
      */
-//    override fun onSupportNavigateUp(): Boolean {
-//        return navController.navigateUp() || super.onSupportNavigateUp()
-//    }
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
 }

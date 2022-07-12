@@ -15,6 +15,9 @@ interface ExpenseDao {
     @Delete
     fun deleteExpense(exp : Expense) : Completable
 
+    @Query("SELECT * FROM Expense WHERE category = :cat")
+    fun getByCat(cat : String) : Single<List<Expense>>
+
     @Query("SELECT * FROM Expense ORDER BY `when` ASC")
     fun getAll(): Single<List<Expense>>
 

@@ -1,54 +1,64 @@
 package com.example.expensetracker
 
-import android.content.Context
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+
+import android.widget.ListView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.database.expense.Expense
+import com.example.expensetracker.databinding.ExpenseViewBinding
+import com.example.expensetracker.databinding.FragmentListDisplayBinding
 
 
-class ExpenseAdapter(private var expenses : ArrayList<Expense>) :RecyclerView.Adapter<ExpenseAdapter.ExpenseHolder>() {
+class ExpenseAdapter( private val onClick: (Expense) -> Unit ) : ListAdapter<Expense,ExpenseAdapter.ExpenseHolder>(
+    DIFF
+) {
+    companion object{
+        val DIFF = object:DiffUtil.ItemCallback<Expense>(){
+            override fun areItemsTheSame(oldItem: Expense, newItem: Expense): Boolean {
+                return oldItem.Id == newItem.Id
+            }
 
-    class ExpenseHolder(view: View): RecyclerView.ViewHolder(view){
-        val title: TextView = view.findViewById(R.id.expense_title)
-        val exp:TextView = view.findViewById(R.id.expense)
-        val `when`:TextView = view.findViewById(R.id.`when`)
-        val category:TextView= view.findViewById(R.id.category)
-        val edit_Button : Button = view.findViewById(R.id.edit_button)
-        val deleteButton:Button = view.findViewById(R.id.delete_button)
+            override fun areContentsTheSame(oldItem: Expense, newItem: Expense): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
+
+
+
+    class ExpenseHolder(private val binding: ExpenseViewBinding): RecyclerView.ViewHolder(binding.root){
+       fun bind(exp: Expense){
+           binding.run {
+               expenseTitle.text = exp.expenseTitle
+               expense.text = exp.expense.toString()
+               `when`.text = exp.`when`
+               category.text = exp.category
+           }
+       }
+    }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseHolder {
-        val view : View = LayoutInflater.from(parent.context).inflate(R.layout.expense_view,parent,false)
-        return ExpenseHolder(view)
+        val binding = ExpenseViewBinding.inflate(LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ExpenseHolder(binding)
     }
+
 
     override fun onBindViewHolder(holder: ExpenseHolder, position: Int) {
-         val expense : Expense = expenses[position]
-        holder.title.text = expense.expenseTitle
-        holder.exp.setText( expense.expense)
-        holder.`when`.text = expense.`when`
-        holder.category.text = expense.category
-
-        holder.edit_Button.setOnClickListener {
-            //goto edit page
-
-        }
-        holder.deleteButton.setOnClickListener{
-            //dlt from DB
-        }
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int {
-        return expenses.size
-    }
-
-    fun setData(expenses: List<Expense>){
-        this.expenses = expenses as ArrayList<Expense>
-        notifyDataSetChanged()
-    }
 
 }

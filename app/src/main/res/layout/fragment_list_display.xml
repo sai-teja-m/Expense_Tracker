@@ -37,6 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:scrollbars="vertical"
+        android:background="@color/cardview_light_background"
         >
 
     </androidx.recyclerview.widget.RecyclerView>

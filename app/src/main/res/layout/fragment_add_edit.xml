@@ -8,59 +8,94 @@
     tools:context=".AddEdit"
     android:layout_margin="8dp">
 
-    <EditText
-        android:id="@+id/edit_titile"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_title_label"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginTop="24dp"
-        android:hint="Title of Expense"
+        android:layout_height="85dp"
+        android:hint="What is the Expense?"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
-    <TextView
-        android:id="@+id/title_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/edit_titile"
-        android:text="What is the Title of expense"
-        />
-    <EditText
-        android:id="@+id/edit_expense"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginTop="10dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textAutoComplete|textCapWords"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_expense_label"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        app:layout_constraintTop_toBottomOf="@+id/title_hint"
-        android:hint="how much did it cost"
-        android:layout_marginTop="30dp"
-        />
-    <TextView
-        android:id="@+id/expense_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/edit_expense"
-        android:text="Enter you Expense"
-        />
-    <EditText
-        android:id="@+id/edit_when"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/expense_hint"
-        android:hint="When did you spend that money"
-        android:layout_marginTop="30dp"
-        />
-    <TextView
-        android:id="@+id/when_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/edit_when"
-        android:text="When did you Spend?"
-        />
+        android:layout_height="85dp"
+        android:hint="What is the Expense?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_title_label"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginTop="10dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_expense"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textAutoComplete|textCapWords"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_when_label"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:hint="When did you spend?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_expense_label"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginTop="10dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_when"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textAutoComplete|textCapWords"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_category_label"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:hint="what is category?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_when_label"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginTop="10dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_category"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textAutoComplete|textCapWords"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <Button
         android:id="@+id/edit_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ADD"
-        app:layout_constraintTop_toBottomOf="@id/when_hint"
+        app:layout_constraintTop_toBottomOf="@id/edit_category_label"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="30dp"
         android:layout_marginRight="10dp"
