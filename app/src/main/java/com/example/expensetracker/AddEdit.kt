@@ -1,38 +1,44 @@
 package com.example.expensetracker
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentAddEditBinding
-import com.example.expensetracker.domain.usecase.DeleteExpenseUseCase
-import com.example.expensetracker.domain.usecase.GetAllUseCase
-import com.example.expensetracker.domain.usecase.InsertExpenseUseCase
-import com.example.expensetracker.domain.usecase.UpdateExpenseUseCase
+import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
+import kotlinx.android.synthetic.main.expense_view.*
 import kotlinx.android.synthetic.main.fragment_add_edit.*
+import java.util.Observer
 
 
-class AddEdit : Fragment() {
+class AddEdit : Fragment(), DatePickerDialog.OnDateSetListener{
 
-    private val expenseApplication = activity?.application as ExpenseApplication
-    private val insertExpenseUseCase = InsertExpenseUseCase(expenseApplication.expenseRepo)
-    private val updateExpenseUseCase = UpdateExpenseUseCase(expenseApplication.expenseRepo)
-    private val deleteExpenseUseCase = DeleteExpenseUseCase(expenseApplication.expenseRepo)
-    private val getAllUseCase = GetAllUseCase(expenseApplication.expenseRepo)
+    private val expenseApplication by lazy {  requireActivity().application as ExpenseApplication}
+    private val insertExpenseUseCase by lazy {   InsertExpenseUseCase(expenseApplication.expenseRepo)}
+    private val updateExpenseUseCase by lazy {  UpdateExpenseUseCase(expenseApplication.expenseRepo)}
+    private val deleteExpenseUseCase by lazy {   DeleteExpenseUseCase(expenseApplication.expenseRepo)}
+    private val getAllUseCase by lazy {   GetAllUseCase(expenseApplication.expenseRepo)}
+    private val getByCatUseCase by lazy { GetByCatUseCase(expenseApplication.expenseRepo) }
+    private val getCatUseCase by lazy { GetCatUseCase(expenseApplication.expenseRepo) }
+
     private val navigationArgs: AddEditArgs by navArgs()
+
 
 
     private val viewModel: ExpenseViewModel by activityViewModels {
         ExpenseViewModelFactory(
-            insertExpenseUseCase,updateExpenseUseCase,deleteExpenseUseCase,getAllUseCase
+            insertExpenseUseCase,updateExpenseUseCase,deleteExpenseUseCase,getAllUseCase , getByCatUseCase,getCatUseCase
         )
     }
 
@@ -54,13 +60,16 @@ class AddEdit : Fragment() {
     }
 
     private fun bind(expense: Expense) {
-        binding.apply {
-            edit_title.setText(expense.expenseTitle)
-            edit_expense.setText(expense.expense.toString())
-            edit_category.setText(expense.category)
-            edit_when.setText(expense.`when`)
+        binding?.apply {
+            editTitle.setText(expense.expenseTitle)
+            editExpense.setText(expense.expense.toString())
+            editCategory.setText(expense.category)
+            editWhen.setText(expense.`when`)
+            editDone.text = getString(R.string.update)
         }
     }
+
+
 
     private fun addNewExpense() {
 
@@ -69,44 +78,67 @@ class AddEdit : Fragment() {
             binding?.run {
 
                 viewModel.addNewExpense(
-                    edit_title.text.toString(),
-                    edit_expense.text.toString(),
-                    edit_category.text.toString(),
-                    edit_when.text.toString()
+                    editTitle.text.toString(),
+                    editExpense.text.toString(),
+                    editWhen.text.toString(),
+                    editCategory.text.toString()
                 )
             }
 
             val action = AddEditDirections.actionAddEditToListDisplay()
-//            Log.d("addNew","here")
+            findNavController().navigate(action)
+
+        }
+    }
+
+    private fun updateExpense() {
+
+
+        if (isEntryValid()) {
+            binding?.run {
+            val exp = navigationArgs.expense?.copy(
+                expenseTitle = editTitle.text.toString(),
+                expense = editExpense.text.toString().toInt(),
+                `when` = editWhen.text.toString(),
+                category = editCategory.text.toString()
+
+            )
+                exp?.let { viewModel.updateExpense(exp) }
+
+            }
+
+            val action = AddEditDirections.actionAddEditToListDisplay()
             findNavController().navigate(action)
 
         }
     }
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
             super.onViewCreated(view, savedInstanceState)
             navigationArgs.expense?.let {
+
                 bind(it)
-                binding?.editDone?.setOnClickListener {
 
-                    binding?.run {
-                        viewModel.updateExpense(
-                            editTitle.text.toString(),
-                            editExpense.text.toString(),
-                            editWhen.text.toString(),
-                            editCategory.text.toString()
-                        )
 
-                    }
-                }
             }
-            edit_done.setOnClickListener{
+            binding?.editWhen?.setOnClickListener{
+                val newFragment = DatePickerFragment()
+                newFragment.setDateChangeListener(this)
+                newFragment.show(childFragmentManager, "datePicker")
+            }
+            binding?.editDone?.setOnClickListener{
+                if(navigationArgs.expense == null) {
+                    addNewExpense()
+                }else {
+                    updateExpense()
 
-                addNewExpense()
+                }
+
             }
 
         }
-
 
         private fun isEntryValid(): Boolean {
             var temp = false
@@ -121,6 +153,10 @@ class AddEdit : Fragment() {
             return temp
         }
 
+    override fun onDateSet(view: DatePicker?, year: Int,month: Int, day: Int) {
+        binding?.editWhen?.setText( "$day/$month/$year")
+
+    }
 
 
 }

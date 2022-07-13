@@ -7,6 +7,11 @@ import com.example.expensetracker.domain.repository.ExpenseRepository
 import com.example.expensetracker.domain.repository.ExpenseRepositoryImpl
 
 class ExpenseApplication :Application() {
-    val database: ExpenseDatabase by lazy { ExpenseDatabase.getDatabase(this) }
-    val expenseRepo: ExpenseRepository = ExpenseRepositoryImpl(database.expenseDao())
+lateinit var database: ExpenseDatabase
+lateinit var expenseRepo: ExpenseRepository
+    override fun onCreate() {
+        super.onCreate()
+        database = ExpenseDatabase.getDatabase(this)
+        expenseRepo =ExpenseRepositoryImpl(database.expenseDao())
+    }
 }

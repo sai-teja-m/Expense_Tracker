@@ -20,6 +20,8 @@ interface ExpenseRepository {
 
     fun getByCat(cat :String) :Single<List<Expense>>
 
+    fun getCat(): Single<List<String>>
+
     fun getById(id : Int) : Single<Expense>
 
 }

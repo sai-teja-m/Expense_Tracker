@@ -12,7 +12,10 @@
         <action
             android:id="@+id/action_listDisplay_to_addEdit"
             app:destination="@id/addEdit" />
-<!--        <argument-->
+        <action
+            android:id="@+id/action_listDisplay_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
+        <!--        <argument-->
 <!--            android:name="Id"-->
 <!--            app:argType="integer" />-->
     </fragment>
@@ -31,4 +34,9 @@
             app:popUpTo="@id/listDisplay"
             app:popUpToInclusive="true"/>
                 </fragment>
-            </navigation>
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.example.expensetracker.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" />
+</navigation>

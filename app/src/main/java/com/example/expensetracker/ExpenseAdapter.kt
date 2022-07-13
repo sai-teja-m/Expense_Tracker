@@ -17,7 +17,7 @@ import com.example.expensetracker.databinding.ExpenseViewBinding
 import com.example.expensetracker.databinding.FragmentListDisplayBinding
 
 
-class ExpenseAdapter( private val onClick: (Expense) -> Unit ) : ListAdapter<Expense,ExpenseAdapter.ExpenseHolder>(
+class ExpenseAdapter( private val onClick: (Expense) -> Unit ,private  val onDelete: (Expense) -> Unit) : ListAdapter<Expense,ExpenseAdapter.ExpenseHolder>(
     DIFF
 ) {
     companion object{
@@ -34,14 +34,21 @@ class ExpenseAdapter( private val onClick: (Expense) -> Unit ) : ListAdapter<Exp
 
 
 
-    class ExpenseHolder(private val binding: ExpenseViewBinding): RecyclerView.ViewHolder(binding.root){
+    inner class ExpenseHolder(private val binding: ExpenseViewBinding): RecyclerView.ViewHolder(binding.root){
        fun bind(exp: Expense){
            binding.run {
                expenseTitle.text = exp.expenseTitle
                expense.text = exp.expense.toString()
                `when`.text = exp.`when`
                category.text = exp.category
+               root.setOnClickListener{
+                   onClick(exp)
+               }
+               deleteButton.setOnClickListener {
+                   onDelete(exp)
+               }
            }
+
        }
     }
 

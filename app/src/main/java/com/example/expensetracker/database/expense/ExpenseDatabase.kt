@@ -15,7 +15,7 @@ abstract class ExpenseDatabase: RoomDatabase(){
         fun getDatabase(context: Context): ExpenseDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context,
+                    context.applicationContext,
                     ExpenseDatabase::class.java,
                     "expense_database")
                     .build()

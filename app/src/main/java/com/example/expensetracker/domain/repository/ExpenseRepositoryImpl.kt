@@ -24,6 +24,10 @@ class ExpenseRepositoryImpl(
         return dao.getAll()
     }
 
+    override fun getCat() : Single<List<String>>{
+        return dao.getCat()
+    }
+
     override fun getByCat(cat: String): Single<List<Expense>> {
         return dao.getByCat(cat)
     }

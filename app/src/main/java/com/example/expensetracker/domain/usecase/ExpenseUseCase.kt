@@ -58,6 +58,13 @@ class GetByIdUseCase(
     }
 }
 
+class GetCatUseCase(
+    private val expenseRepo: ExpenseRepository
+):SingleUseCaseString<String>{
+    override fun execute(): Single<List<String>> {
+        return expenseRepo.getCat()
+    }
+}
 
 interface SingleUseCase<T> {
     fun execute() : Single<T>
@@ -73,4 +80,8 @@ interface SingleUseCaseListParams<P>{
 }
 interface SingleUseCaseParams<P>{
     fun execute(data:Int) : Single<P>
+}
+
+interface SingleUseCaseString<P>{
+    fun execute(): Single<List<P>>
 }

@@ -3,17 +3,17 @@ package com.example.expensetracker.viewmodels
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.expensetracker.database.expense.Expense
-import com.example.expensetracker.domain.usecase.DeleteExpenseUseCase
-import com.example.expensetracker.domain.usecase.GetAllUseCase
-import com.example.expensetracker.domain.usecase.InsertExpenseUseCase
-import com.example.expensetracker.domain.usecase.UpdateExpenseUseCase
-import io.reactivex.Single
+import com.example.expensetracker.domain.usecase.*
+
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.launch
 
-class ExpenseViewModel(private val insertUse: InsertExpenseUseCase,private val updateUse:UpdateExpenseUseCase , private  val deleteCase:DeleteExpenseUseCase,private val getAllUse:GetAllUseCase):ViewModel(){
+
+class ExpenseViewModel(
+    private val insertUse: InsertExpenseUseCase,private val updateUse:UpdateExpenseUseCase ,
+    private  val deleteCase:DeleteExpenseUseCase,private val getAllUse:GetAllUseCase,
+    private val getByCatUseCase: GetByCatUseCase, private val getCatUseCase: GetCatUseCase):ViewModel(){
 
     private val uiScheduler by lazy { AndroidSchedulers.mainThread() }
     private val ioScheduler by lazy { Schedulers.io() }
@@ -29,6 +29,24 @@ class ExpenseViewModel(private val insertUse: InsertExpenseUseCase,private val u
 
     private val _allExpense : MutableLiveData<List<Expense>> = MutableLiveData()
     val allExpense: LiveData<List<Expense>> = _allExpense
+    private val _categoryList: MutableLiveData<List<String>> = MutableLiveData()
+    val categoryList :LiveData<List<String>> = _categoryList
+    private val _selectedCategory: MutableLiveData<String> = MutableLiveData()
+    val selectedCategory : LiveData<String> = _selectedCategory
+
+    fun selectCategory(category: String){
+        _selectedCategory.postValue(category)
+    }
+
+    fun getCat(){
+        getCatUseCase.execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
+            _categoryList.postValue(it)
+        },{
+            Log.e("catList","Error in Generating a List")
+        }).let {
+            compositeDisposable.add(it)
+        }
+    }
 
     fun getAll(){
         getAllUse.execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({list->
@@ -52,8 +70,8 @@ class ExpenseViewModel(private val insertUse: InsertExpenseUseCase,private val u
         }
     }
 
-    fun updateExpense(expenseTitle:String , expense:String , `when` :String,category:String){
-        val exp = getNewExpenseEntry(expenseTitle,expense,`when`,category)
+    fun updateExpense(exp:Expense){
+
         updateUse.execute(exp).subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
             getAll()
         },{
@@ -74,6 +92,16 @@ class ExpenseViewModel(private val insertUse: InsertExpenseUseCase,private val u
         }
     }
 
+    fun filterByCategory(cat:String){
+        getByCatUseCase.execute(cat).subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
+            _allExpense.postValue(it)
+        },{
+            Log.e("getByCat","error in get By CAt")
+        }).let {
+            compositeDisposable.add(it)
+        }
+    }
+
 
 
     private fun getNewExpenseEntry(expenseTitle:String , expense:String , `when` :String,category:String): Expense{
@@ -88,11 +116,13 @@ class ExpenseViewModel(private val insertUse: InsertExpenseUseCase,private val u
 }
 
 
-class ExpenseViewModelFactory(private val insertUse: InsertExpenseUseCase,private val updateUse:UpdateExpenseUseCase , private  val deleteCase:DeleteExpenseUseCase,private val getAllUse:GetAllUseCase): ViewModelProvider.Factory{
+class ExpenseViewModelFactory(private val insertUse: InsertExpenseUseCase,private val updateUse:UpdateExpenseUseCase ,
+                              private  val deleteCase:DeleteExpenseUseCase,private val getAllUse:GetAllUseCase,
+                              private val getByCatUseCase: GetByCatUseCase, private val getCatUseCase: GetCatUseCase): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ExpenseViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ExpenseViewModel(insertUse, updateUse , deleteCase , getAllUse ) as T
+            return ExpenseViewModel(insertUse, updateUse , deleteCase , getAllUse ,getByCatUseCase, getCatUseCase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

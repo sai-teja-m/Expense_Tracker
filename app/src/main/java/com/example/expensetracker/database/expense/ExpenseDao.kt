@@ -18,8 +18,12 @@ interface ExpenseDao {
     @Query("SELECT * FROM Expense WHERE category = :cat")
     fun getByCat(cat : String) : Single<List<Expense>>
 
+    @Query("SELECT DISTINCT category FROM Expense ")
+    fun getCat(): Single<List<String>>
+
     @Query("SELECT * FROM Expense ORDER BY `when` ASC")
     fun getAll(): Single<List<Expense>>
+
 
     @Query("SELECT * FROM Expense WHERE Id = :id ")
             fun getById(id : Int) : Single<Expense>
