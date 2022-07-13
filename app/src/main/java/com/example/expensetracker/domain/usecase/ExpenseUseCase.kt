@@ -4,10 +4,10 @@ import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.domain.repository.ExpenseRepository
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.internal.operators.single.SingleLift
+import javax.inject.Inject
 
 
-class UpdateExpenseUseCase(
+class UpdateExpenseUseCase @Inject constructor(
     private val expenseRepo : ExpenseRepository
 ) : CompletableUseCaseParams<Expense>{
 
@@ -17,7 +17,7 @@ class UpdateExpenseUseCase(
 
 }
 
-class InsertExpenseUseCase(
+class InsertExpenseUseCase @Inject constructor(
     private val expenseRepo : ExpenseRepository
 ) : CompletableUseCaseParams<Expense>{
 
@@ -26,7 +26,7 @@ class InsertExpenseUseCase(
     }
 }
 
-class DeleteExpenseUseCase(
+class DeleteExpenseUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ):CompletableUseCaseParams<Expense>{
     override fun execute(data: Expense): Completable {
@@ -34,7 +34,7 @@ class DeleteExpenseUseCase(
     }
 }
 
-class GetAllUseCase(
+class GetAllUseCase  @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ):SingleUseCase<List<Expense>>{
     override fun execute(): Single<List<Expense>> {
@@ -42,7 +42,7 @@ class GetAllUseCase(
     }
 }
 
-class GetByCatUseCase(
+class GetByCatUseCase  @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ):SingleUseCaseListParams<List<Expense>>{
     override fun execute(data:String): Single<List<Expense>> {
@@ -50,7 +50,7 @@ class GetByCatUseCase(
     }
 }
 
-class GetByIdUseCase(
+class GetByIdUseCase  @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ):SingleUseCaseParams<Expense>{
     override fun execute(data: Int): Single<Expense> {
@@ -58,7 +58,7 @@ class GetByIdUseCase(
     }
 }
 
-class GetCatUseCase(
+class GetCatUseCase  @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ):SingleUseCaseString<String>{
     override fun execute(): Single<List<String>> {

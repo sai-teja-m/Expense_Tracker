@@ -4,43 +4,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
+
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentListDisplayBinding
 import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
-import kotlinx.android.synthetic.main.expense_view.*
-import kotlinx.android.synthetic.main.fragment_list_display.*
+import javax.inject.Inject
+
 
 class ListDisplay : Fragment() {
 
 
-
-    private val expenseApplication by lazy {  requireActivity().application as ExpenseApplication}
-    private val insertExpenseUseCase by lazy {   InsertExpenseUseCase(expenseApplication.expenseRepo)}
-    private val updateExpenseUseCase by lazy {  UpdateExpenseUseCase(expenseApplication.expenseRepo)}
-    private val deleteExpenseUseCase by lazy {   DeleteExpenseUseCase(expenseApplication.expenseRepo)}
-    private val getAllUseCase by lazy {   GetAllUseCase(expenseApplication.expenseRepo)}
-    private val getByCatUseCase by lazy { GetByCatUseCase(expenseApplication.expenseRepo)}
-    private val getCatUseCase by lazy { GetCatUseCase(expenseApplication.expenseRepo) }
-
-
     private val expenseAdapter:ExpenseAdapter by lazy { ExpenseAdapter(::onClickEdit, ::onClickDlt) }
 
+    @Inject
+    lateinit var expenseViewModelFactory: ExpenseViewModelFactory
 
     private val viewModel: ExpenseViewModel by activityViewModels {
-        ExpenseViewModelFactory(
-            insertExpenseUseCase,updateExpenseUseCase,deleteExpenseUseCase,getAllUseCase,getByCatUseCase,getCatUseCase
-        )
+        expenseViewModelFactory
     }
 
 

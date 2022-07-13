@@ -84,5 +84,9 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     //noinspection GradleCompatible
     implementation "androidx.cardview:cardview:1.0.0"
+    implementation "com.google.dagger:dagger:2.40.5"
+    implementation "com.google.dagger:dagger-android:2.40.5"
+    kapt "com.google.dagger:dagger-compiler:2.40.5"
+
 
 }
