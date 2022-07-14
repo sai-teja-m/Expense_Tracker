@@ -58,6 +58,22 @@ class GetByIdUseCase  @Inject constructor(
     }
 }
 
+class GetTotalExpenseUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+): SingleUseCase<Int>{
+    override fun execute(): Single<Int> {
+        return expenseRepo.getTotalExpense()
+    }
+}
+
+class GetCategoryExpenseUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+): SingleUseCaseListParams<Int>{
+    override fun execute(data: String): Single<Int> {
+        return expenseRepo.getCategoryExpense(data)
+    }
+}
+
 class GetCatUseCase  @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ):SingleUseCaseString<String>{

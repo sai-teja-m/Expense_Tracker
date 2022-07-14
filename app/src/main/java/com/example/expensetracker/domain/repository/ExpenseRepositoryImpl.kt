@@ -29,8 +29,16 @@ class ExpenseRepositoryImpl @Inject constructor(
         return dao.getCat()
     }
 
-    override fun getByCat(cat: String): Single<List<Expense>> {
-        return dao.getByCat(cat)
+    override fun getTotalExpense(): Single<Int> {
+        return dao.getTotalExpense()
+    }
+
+    override fun getCategoryExpense(category: String): Single<Int> {
+       return dao.getCategoryExpense(category)
+    }
+
+    override fun getByCat(category: String): Single<List<Expense>> {
+        return dao.getByCat(category)
     }
     override fun getById(id: Int): Single<Expense> {
         return dao.getById(id)

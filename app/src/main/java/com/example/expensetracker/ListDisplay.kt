@@ -2,17 +2,19 @@ package com.example.expensetracker
 
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentListDisplayBinding
@@ -20,13 +22,14 @@ import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.expense_view.*
 import javax.inject.Inject
 
 
 class ListDisplay : DaggerFragment() {
 
 
-    private val expenseAdapter:ExpenseAdapter by lazy { ExpenseAdapter(::onClickEdit, ::onClickDlt) }
+    private val expenseAdapter:ExpenseAdapter by lazy { ExpenseAdapter(::onClickEdit, ::onDelete) }
 
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
@@ -94,12 +97,27 @@ class ListDisplay : DaggerFragment() {
             }
             viewModel.getAll()
             viewModel.getCat()
+            Log.d("totalExpense","${viewModel.totalExoense}")
+
+//            val swipeDelete = object : SwipeDelete(){
+//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                    onDelete(expenseAdapter.getItemAtPosition(viewHolder.adapterPosition))
+//                    super.onSwiped(viewHolder, direction)
+//                }
+//            }
+//
+//            val itemTouchHelper = ItemTouchHelper(swipeDelete)
+//            itemTouchHelper.attachToRecyclerView(recyclerView)
+
         }
     }
+
+
+
     private fun onClickEdit(expense:Expense){
         findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit( expense ))
     }
-    private fun onClickDlt(expense: Expense){
+    private fun onDelete(expense: Expense){
         viewModel.deleteItem(expense)
     }
 

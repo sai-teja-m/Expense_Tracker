@@ -15,8 +15,8 @@ interface ExpenseDao {
     @Delete
     fun deleteExpense(exp : Expense) : Completable
 
-    @Query("SELECT * FROM Expense WHERE category = :cat")
-    fun getByCat(cat : String) : Single<List<Expense>>
+    @Query("SELECT * FROM Expense WHERE category = :category")
+    fun getByCat(category : String) : Single<List<Expense>>
 
     @Query("SELECT DISTINCT category FROM Expense ")
     fun getCat(): Single<List<String>>
@@ -24,6 +24,11 @@ interface ExpenseDao {
     @Query("SELECT * FROM Expense ORDER BY `when` ASC")
     fun getAll(): Single<List<Expense>>
 
+    @Query("SELECT SUM(expense) FROM Expense ")
+    fun getTotalExpense() : Single<Int>
+
+    @Query("SELECT SUM(expense) FROM Expense WHERE category= :category")
+    fun getCategoryExpense(category: String) : Single<Int>
 
     @Query("SELECT * FROM Expense WHERE Id = :id ")
             fun getById(id : Int) : Single<Expense>

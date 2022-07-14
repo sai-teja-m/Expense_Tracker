@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.database.expense.Expense
@@ -44,12 +45,13 @@ class ExpenseAdapter( private val onClick: (Expense) -> Unit ,private  val onDel
                root.setOnClickListener{
                    onClick(exp)
                }
-               deleteButton.setOnClickListener {
-                   onDelete(exp)
-               }
-           }
 
+//               deleteButton.setOnClickListener {
+//                   onDelete(exp)
+           }
        }
+
+
     }
 
 
@@ -65,6 +67,10 @@ class ExpenseAdapter( private val onClick: (Expense) -> Unit ,private  val onDel
 
     override fun onBindViewHolder(holder: ExpenseHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    fun getItemAtPosition(position: Int):Expense{
+        return getItem(position)
     }
 
 

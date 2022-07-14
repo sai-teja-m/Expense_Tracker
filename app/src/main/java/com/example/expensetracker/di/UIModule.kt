@@ -42,14 +42,18 @@ abstract class UIModule {
             deleteExpenseUseCase: DeleteExpenseUseCase,
             getAllExpensesUseCase: GetAllUseCase,
             getByCatUseCase: GetByCatUseCase,
-            getCatUseCase: GetCatUseCase
+            getCatUseCase: GetCatUseCase,
+            getTotalExpenseUseCase: GetTotalExpenseUseCase,
+            getCategoryExpenseUseCase: GetCategoryExpenseUseCase
         ) = ExpenseViewModelFactory(
             insertExpenseUseCase,
             updateExpenseUseCase,
             deleteExpenseUseCase,
             getAllExpensesUseCase,
             getByCatUseCase,
-            getCatUseCase
+            getCatUseCase,
+            getTotalExpenseUseCase,
+            getCategoryExpenseUseCase
         )
     }
 }
