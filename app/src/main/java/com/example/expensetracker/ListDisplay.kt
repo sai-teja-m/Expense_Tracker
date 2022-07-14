@@ -3,9 +3,7 @@ package com.example.expensetracker
 import android.app.Application
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -50,7 +48,34 @@ class ListDisplay : DaggerFragment() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.list_menu,menu)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.total_expense->{
+                viewModel.getTotalExpense()
+                true
+            }
+            R.id.category_total->{
+
+                true
+            }
+
+            R.id.filter->{
+                onClickFilter()
+                true
+            }
+            else->super.onOptionsItemSelected(item)
+        }
+    }
+
+
+
+    private fun onClickFilter(){
+        findNavController().navigate(ListDisplayDirections.actionListDisplayToCategoryFragment())
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,40 +99,31 @@ class ListDisplay : DaggerFragment() {
             recyclerView.layoutManager = LinearLayoutManager(context)
 
             recyclerView.adapter = expenseAdapter
+            val itemTouchHelper = ItemTouchHelper(SwipeDeleteCallBack(expenseAdapter,requireContext()))
+            itemTouchHelper.attachToRecyclerView(recyclerView)
             addButton.setOnClickListener{
                 findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit(null ))
             }
-            filter.setOnClickListener{
-                findNavController().navigate(ListDisplayDirections.actionListDisplayToCategoryFragment())
-            }
-            clearFilter.setOnClickListener{
-                viewModel.selectCategory("")
-            }
+//
+//            clearFilter.setOnClickListener{
+//                viewModel.selectCategory("")
+//            }
             viewModel.allExpense.observe(viewLifecycleOwner, Observer { expenseAdapter.submitList(it)})
-            viewModel.selectedCategory.observe(viewLifecycleOwner) {
-                filter.text = if (it.isEmpty()) {
-                    viewModel.getAll()
-                    clearFilter.visibility = View.GONE
-                    getString(R.string.filter)
-                } else {
-                    viewModel.filterByCategory(it)
-                    clearFilter.visibility = View.VISIBLE
-                    it
-                }
-            }
+//            viewModel.selectedCategory.observe(viewLifecycleOwner) {
+//                filter.text = if (it.isEmpty()) {
+//                    viewModel.getAll()
+//                    clearFilter.visibility = View.GONE
+//                    getString(R.string.filter)
+//                } else {
+//                    viewModel.filterByCategory(it)
+//                    clearFilter.visibility = View.VISIBLE
+//                    it
+//                }
+//            }
             viewModel.getAll()
             viewModel.getCat()
             Log.d("totalExpense","${viewModel.totalExoense}")
 
-//            val swipeDelete = object : SwipeDelete(){
-//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                    onDelete(expenseAdapter.getItemAtPosition(viewHolder.adapterPosition))
-//                    super.onSwiped(viewHolder, direction)
-//                }
-//            }
-//
-//            val itemTouchHelper = ItemTouchHelper(swipeDelete)
-//            itemTouchHelper.attachToRecyclerView(recyclerView)
 
         }
     }

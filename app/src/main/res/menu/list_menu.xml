@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/filter"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_filter_list"
+        android:title="@string/filter"
+        />
+    <item
+        android:id="@+id/total_expense"
+        app:showAsAction="never"
+        android:title="@string/total_expense"
+        />
+    <item
+        android:id="@+id/category_total"
+        app:showAsAction="never"
+        android:title="@string/category_exp"/>
+</menu>

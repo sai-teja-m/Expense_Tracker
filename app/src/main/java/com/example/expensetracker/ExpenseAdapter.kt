@@ -18,7 +18,7 @@ import com.example.expensetracker.databinding.ExpenseViewBinding
 import com.example.expensetracker.databinding.FragmentListDisplayBinding
 
 
-class ExpenseAdapter( private val onClick: (Expense) -> Unit ,private  val onDelete: (Expense) -> Unit) : ListAdapter<Expense,ExpenseAdapter.ExpenseHolder>(
+class ExpenseAdapter( private val onClick: (Expense) -> Unit , val onDelete: (Expense) -> Unit) : ListAdapter<Expense,ExpenseAdapter.ExpenseHolder>(
     DIFF
 ) {
     companion object{

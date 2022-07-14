@@ -2,9 +2,7 @@ package com.example.expensetracker
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.DatePicker
 
 import androidx.fragment.app.Fragment
@@ -27,6 +25,27 @@ import javax.inject.Inject
 class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
 
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if(navigationArgs.expense != null)
+            inflater.inflate(R.menu.edit_menu,menu)
+        else
+            super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when(item.itemId){
+            R.id.delete->{
+                navigationArgs.expense?.let {
+                    viewModel.deleteItem(it)
+                }
+                true
+            }
+            else ->{
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
 
     private val navigationArgs: AddEditArgs by navArgs()
 
