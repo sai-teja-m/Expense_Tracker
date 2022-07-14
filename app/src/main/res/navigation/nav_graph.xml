@@ -22,8 +22,12 @@
     <fragment
         android:id="@+id/addEdit"
         android:name="com.example.expensetracker.AddEdit"
-        android:label="Add Expense"
+        android:label="@string/add_edit_label"
         tools:layout="@layout/fragment_add_edit" >
+
+        <argument
+            android:name="action"
+            app:argType="string" />
 
         <argument
             android:name="expense"

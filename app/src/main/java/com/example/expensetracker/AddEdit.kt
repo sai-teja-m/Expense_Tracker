@@ -174,6 +174,15 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
 
     }
 
+//    override fun onStart() {
+//        super.onStart()
+//        requireActivity().actionBar?.title = if (navigationArgs.expense == null) {
+//            getString(R.string.add_expense)
+//        } else {
+//            getString(R.string.edit_expense)
+//        }
+//    }
+
 
 }
 

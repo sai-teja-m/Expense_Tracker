@@ -102,7 +102,7 @@ class ListDisplay : DaggerFragment() {
             val itemTouchHelper = ItemTouchHelper(SwipeDeleteCallBack(expenseAdapter,requireContext()))
             itemTouchHelper.attachToRecyclerView(recyclerView)
             addButton.setOnClickListener{
-                findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit(null ))
+                findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit(getString(R.string.add_expense),null))
             }
 //
 //            clearFilter.setOnClickListener{
@@ -131,7 +131,7 @@ class ListDisplay : DaggerFragment() {
 
 
     private fun onClickEdit(expense:Expense){
-        findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit( expense ))
+        findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit(getString(R.string.edit_expense), expense))
     }
     private fun onDelete(expense: Expense){
         viewModel.deleteItem(expense)
