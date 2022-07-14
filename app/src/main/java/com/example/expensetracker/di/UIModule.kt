@@ -1,25 +1,22 @@
 package com.example.expensetracker.di
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.example.expensetracker.*
-import com.example.expensetracker.ViewModelKey
-import com.example.expensetracker.viewmodels.ExpenseViewModel
+import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
-import dagger.Binds
+import dagger.Module
+import dagger.Provides
 import dagger.android.ContributesAndroidInjector
-import dagger.multibindings.IntoMap
-import javax.inject.Inject
 
-
+@Module
 abstract class UIModule {
-    @Binds
-    internal abstract fun bindExpenseViewModelFactory(factory : ExpenseViewModelFactory) :ViewModelProvider.Factory
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(ExpenseViewModel::class)
-    abstract fun provideExpenseViewModel(viewModel: ExpenseViewModel) : ViewModel
+//    @Binds
+//    internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+
+//    @Binds
+//    @IntoMap
+//    @ViewModelKey(ExpenseViewModel::class)
+//    abstract fun provideExpenseViewModel(viewModel: ExpenseViewModel) : ViewModel
 
     @ContributesAndroidInjector
     abstract  fun bindsListDisplay() : ListDisplay
@@ -35,4 +32,24 @@ abstract class UIModule {
 
     @ContributesAndroidInjector
     abstract fun bindsMainActivity() : MainActivity
+
+    companion object {
+        @Provides
+        @JvmStatic
+        fun provideExpenseViewModelFactory(
+            insertExpenseUseCase: InsertExpenseUseCase,
+            updateExpenseUseCase: UpdateExpenseUseCase,
+            deleteExpenseUseCase: DeleteExpenseUseCase,
+            getAllExpensesUseCase: GetAllUseCase,
+            getByCatUseCase: GetByCatUseCase,
+            getCatUseCase: GetCatUseCase
+        ) = ExpenseViewModelFactory(
+            insertExpenseUseCase,
+            updateExpenseUseCase,
+            deleteExpenseUseCase,
+            getAllExpensesUseCase,
+            getByCatUseCase,
+            getCatUseCase
+        )
+    }
 }

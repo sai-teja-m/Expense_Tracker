@@ -125,7 +125,6 @@ class ExpenseViewModel(
 
 }
 
-
 class ExpenseViewModelFactory @Inject constructor(private val insertUse: InsertExpenseUseCase,private val updateUse:UpdateExpenseUseCase ,
                               private  val deleteCase:DeleteExpenseUseCase,private val getAllUse:GetAllUseCase,
                               private val getByCatUseCase: GetByCatUseCase, private val getCatUseCase: GetCatUseCase): ViewModelProvider.Factory{

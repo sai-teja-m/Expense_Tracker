@@ -16,11 +16,12 @@ import com.example.expensetracker.databinding.FragmentListDisplayBinding
 import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_list_display.*
 import javax.inject.Inject
 
 
-class CategoryFragment : Fragment() {
+class CategoryFragment : DaggerFragment() {
 
 
 

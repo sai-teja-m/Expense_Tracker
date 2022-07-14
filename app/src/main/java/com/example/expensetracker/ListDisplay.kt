@@ -1,5 +1,6 @@
 package com.example.expensetracker
 
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,10 +19,11 @@ import com.example.expensetracker.databinding.FragmentListDisplayBinding
 import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
+import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
 
-class ListDisplay : Fragment() {
+class ListDisplay : DaggerFragment() {
 
 
     private val expenseAdapter:ExpenseAdapter by lazy { ExpenseAdapter(::onClickEdit, ::onClickDlt) }
@@ -28,8 +31,11 @@ class ListDisplay : Fragment() {
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
 
-    private val viewModel: ExpenseViewModel by activityViewModels {
-        expenseViewModelFactory
+    @Inject
+    lateinit var application: Application
+
+    private val viewModel: ExpenseViewModel by lazy {
+        ViewModelProvider((requireActivity().viewModelStore), expenseViewModelFactory)[ExpenseViewModel::class.java]
     }
 
 

@@ -17,13 +17,14 @@ import com.example.expensetracker.databinding.FragmentAddEditBinding
 import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.expense_view.*
 import kotlinx.android.synthetic.main.fragment_add_edit.*
 import java.util.Observer
 import javax.inject.Inject
 
 
-class AddEdit : Fragment(), DatePickerDialog.OnDateSetListener{
+class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
 
 
 
