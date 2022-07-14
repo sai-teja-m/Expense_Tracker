@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.math.abs
 
 class SwipeDeleteCallBack(private val adapter: ExpenseAdapter, private val context: Context) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
@@ -65,7 +66,11 @@ class SwipeDeleteCallBack(private val adapter: ExpenseAdapter, private val conte
         if (dX > 0) { // Swiping to the right
             val iconLeft = itemView.left + iconMargin
             val iconRight = iconLeft + (deleteIcon?.intrinsicWidth ?: 0)
-            deleteIcon?.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+            if (abs(dX) > (iconMargin + (deleteIcon?.intrinsicWidth ?: 0) + iconMargin / 2)) {
+                deleteIcon?.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+            } else {
+                deleteIcon?.setBounds(0, 0, 0, 0)
+            }
             deleteBackground?.setBounds(
                 itemView.left,
                 itemView.top,
@@ -75,7 +80,11 @@ class SwipeDeleteCallBack(private val adapter: ExpenseAdapter, private val conte
         } else if (dX < 0) { // Swiping to the left
             val iconLeft = itemView.right - iconMargin - (deleteIcon?.intrinsicWidth ?: 0)
             val iconRight = itemView.right - iconMargin
-            deleteIcon?.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+            if (abs(dX) > (iconMargin + (deleteIcon?.intrinsicWidth ?: 0) + iconMargin / 2)) {
+                deleteIcon?.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+            } else {
+                deleteIcon?.setBounds(0, 0, 0, 0)
+            }
             deleteBackground?.setBounds(
                 itemView.right + dX.toInt() - backgroundCornerOffSet,
                 itemView.top,
@@ -84,6 +93,7 @@ class SwipeDeleteCallBack(private val adapter: ExpenseAdapter, private val conte
             )
         } else {
             deleteBackground?.setBounds(0, 0, 0, 0)
+            deleteIcon?.setBounds(0, 0, 0, 0)
         }
 
         deleteBackground?.draw(c)

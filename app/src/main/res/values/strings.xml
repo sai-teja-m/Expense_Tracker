@@ -11,6 +11,6 @@
     <string name="category_exp">Calculate Category Expense</string>
     <string name="add_expense">Add Expense</string>
     <string name="edit_expense">Edit Expense</string>
-    <string name="add_edit_label">{action} Expense</string>
+    <string name="add_edit_label">{action}</string>
 
 </resources>

@@ -35,6 +35,8 @@ class ListDisplay : DaggerFragment() {
     @Inject
     lateinit var application: Application
 
+    private lateinit var menu: Menu
+
     private val viewModel: ExpenseViewModel by lazy {
         ViewModelProvider((requireActivity().viewModelStore), expenseViewModelFactory)[ExpenseViewModel::class.java]
     }
@@ -49,7 +51,13 @@ class ListDisplay : DaggerFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.list_menu,menu)
+        inflater.inflate(R.menu.list_menu, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        this.menu = menu
+        setFilterIcon()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -109,17 +117,14 @@ class ListDisplay : DaggerFragment() {
 //                viewModel.selectCategory("")
 //            }
             viewModel.allExpense.observe(viewLifecycleOwner, Observer { expenseAdapter.submitList(it)})
-//            viewModel.selectedCategory.observe(viewLifecycleOwner) {
-//                filter.text = if (it.isEmpty()) {
-//                    viewModel.getAll()
-//                    clearFilter.visibility = View.GONE
-//                    getString(R.string.filter)
-//                } else {
-//                    viewModel.filterByCategory(it)
-//                    clearFilter.visibility = View.VISIBLE
-//                    it
-//                }
-//            }
+            viewModel.selectedCategory.observe(viewLifecycleOwner) {
+                setFilterIcon()
+                if (it.isEmpty()) {
+                    //TODO: Clear filter
+                } else {
+                    viewModel.filterByCategory(it)
+                }
+            }
             viewModel.getAll()
             viewModel.getCat()
             Log.d("totalExpense","${viewModel.totalExoense}")
@@ -140,6 +145,20 @@ class ListDisplay : DaggerFragment() {
 
     private fun totalExpense(){
 
+    }
+
+    private fun setFilterIcon() {
+        if (::menu.isInitialized) {
+            val item = menu.findItem(R.id.filter)
+            val filterSelected = !viewModel.selectedCategory.value.isNullOrEmpty()
+            if (item != null) {
+                if (filterSelected) {
+                    item.setIcon(R.drawable.ic_filter_list_enabled)
+                } else {
+                    item.setIcon(R.drawable.ic_filter_list)
+                }
+            }
+        }
     }
 
 }
