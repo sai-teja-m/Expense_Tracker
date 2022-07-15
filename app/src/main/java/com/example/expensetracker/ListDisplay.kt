@@ -112,16 +112,16 @@ class ListDisplay : DaggerFragment() {
             addButton.setOnClickListener{
                 findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit(getString(R.string.add_expense),null))
             }
-//
-//            clearFilter.setOnClickListener{
-//                viewModel.selectCategory("")
-//            }
+
             viewModel.allExpense.observe(viewLifecycleOwner, Observer { expenseAdapter.submitList(it)})
             viewModel.selectedCategory.observe(viewLifecycleOwner) {
                 setFilterIcon()
                 if (it.isEmpty()) {
                     //TODO: Clear filter
+
+
                 } else {
+
                     viewModel.filterByCategory(it)
                 }
             }

@@ -12,5 +12,5 @@
     <string name="add_expense">Add Expense</string>
     <string name="edit_expense">Edit Expense</string>
     <string name="add_edit_label">{action}</string>
-
+    <string name="clear_filter">Clear Filter</string>
 </resources>
