@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
+import androidx.core.widget.doOnTextChanged
 
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -17,27 +18,27 @@ import kotlinx.android.synthetic.main.fragment_add_edit.*
 import javax.inject.Inject
 
 
-class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
+class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if(navigationArgs.expense != null)
-            inflater.inflate(R.menu.edit_menu,menu)
+        if (navigationArgs.expense != null)
+            inflater.inflate(R.menu.edit_menu, menu)
         else
             super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        return when(item.itemId){
-            R.id.delete->{
+        return when (item.itemId) {
+            R.id.delete -> {
                 navigationArgs.expense?.let {
                     viewModel.deleteExpense(it)
                     findNavController().navigateUp()
                 }
                 true
             }
-            else ->{
+            else -> {
                 super.onOptionsItemSelected(item)
             }
         }
@@ -58,6 +59,20 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        binding?.run {
+            editTitle.doOnTextChanged { _, _, _, _ ->
+                editTitleLabel.isErrorEnabled = false
+            }
+            editExpense.doOnTextChanged { _, _, _, _ ->
+                editExpenseLabel.isErrorEnabled = false
+            }
+            editCategory.doOnTextChanged { _, _, _, _ ->
+                editCategoryLabel.isErrorEnabled = false
+            }
+            editWhen.doOnTextChanged { _, _, _, _ ->
+                editWhenLabel.isErrorEnabled = false
+            }
+        }
     }
 
     override fun onCreateView(
@@ -78,7 +93,6 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
             editDone.text = getString(R.string.update)
         }
     }
-
 
 
     private fun addNewExpense() {
@@ -106,13 +120,13 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
 
         if (isEntryValid()) {
             binding?.run {
-            val exp = navigationArgs.expense?.copy(
-                expenseTitle = editTitle.text.toString(),
-                expense = editExpense.text.toString().toInt(),
-                `when` = editWhen.text.toString(),
-                category = editCategory.text.toString()
+                val exp = navigationArgs.expense?.copy(
+                    expenseTitle = editTitle.text.toString(),
+                    expense = editExpense.text.toString().toInt(),
+                    `when` = editWhen.text.toString(),
+                    category = editCategory.text.toString()
 
-            )
+                )
                 exp?.let { viewModel.updateExpense(exp) }
 
             }
@@ -123,48 +137,80 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
         }
     }
 
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
-            super.onViewCreated(view, savedInstanceState)
-            navigationArgs.expense?.let {
+        super.onViewCreated(view, savedInstanceState)
+        navigationArgs.expense?.let {
 
-                bind(it)
+            bind(it)
 
+
+        }
+        binding?.editWhen?.setOnClickListener {
+            val newFragment = DatePickerFragment()
+            newFragment.setDateChangeListener(this)
+            newFragment.show(childFragmentManager, "datePicker")
+        }
+        binding?.editDone?.setOnClickListener {
+            if (navigationArgs.expense == null) {
+                addNewExpense()
+            } else {
+                updateExpense()
 
             }
-            binding?.editWhen?.setOnClickListener{
-                val newFragment = DatePickerFragment()
-                newFragment.setDateChangeListener(this)
-                newFragment.show(childFragmentManager, "datePicker")
-            }
-            binding?.editDone?.setOnClickListener{
-                if(navigationArgs.expense == null) {
-                    addNewExpense()
-                }else {
-                    updateExpense()
 
+        }
+
+    }
+
+    private fun isEntryValid(): Boolean {
+        var temp = false
+        val errorMap: MutableMap<Int, Int> = mutableMapOf()
+        binding?.run {
+            temp = viewModel.isEntryValid(
+                edit_title.text.toString(),
+                edit_expense.text.toString(),
+                edit_when.text.toString(),
+                edit_category.text.toString(),
+                errorMap
+            )
+        }
+        if (!temp) {
+            showErrorMessages(errorMap)
+        }
+        return temp
+    }
+
+    private fun showErrorMessages(errorMap: Map<Int, Int>) {
+        binding?.run {
+
+            if (errorMap.containsKey(1)) {
+                errorMap[1]?.let {
+                    editTitleLabel.isErrorEnabled = true
+                    editTitleLabel.error = getString(it)
                 }
-
             }
-
-        }
-
-        private fun isEntryValid(): Boolean {
-            var temp = false
-            binding?.run {
-                temp =  viewModel.isEntryValid(
-                    edit_title.text.toString(),
-                    edit_expense.text.toString(),
-                    edit_when.text.toString(),
-                    edit_category.text.toString(),
-                )
+            if (errorMap.containsKey(2)) {
+                errorMap[2]?.let {
+                    editExpenseLabel.isErrorEnabled = true
+                    editExpenseLabel.error = getString(it) }
             }
-            return temp
+            if (errorMap.containsKey(3)) {
+                errorMap[3]?.let {
+                    editCategoryLabel.isErrorEnabled  = true
+                    editCategoryLabel.error = getString(it) }
+            }
+            if (errorMap.containsKey(4)) {
+                errorMap[4]?.let {
+                    editWhenLabel.isErrorEnabled = true
+                    editWhenLabel.error = getString(it) }
+            }
         }
+    }
 
-    override fun onDateSet(view: DatePicker?, year: Int,month: Int, day: Int) {
-        binding?.editWhen?.setText( "$day/$month/$year")
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {
+        binding?.editWhen?.setText("$day/$month/$year")
 
     }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.expensetracker.R
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.domain.usecase.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -46,9 +47,27 @@ class ExpenseViewModel(
         expenseTitle: String,
         expense: String,
         `when`: String,
-        category: String
+        category: String,
+        errorMap: MutableMap<Int, Int>
     ): Boolean {
-        return !(expenseTitle.isBlank() || expense.isBlank() || `when`.isBlank() || category.isBlank())
+        var validEntry = true
+        if (expenseTitle.isBlank()) {
+            errorMap[1] = R.string.empty_title_msg
+            validEntry = false
+        }
+        if (expense.isBlank()) {
+            errorMap[2] = R.string.empty_amount_msg
+            validEntry = false
+        }
+        if (category.isBlank()) {
+            errorMap[3] = R.string.empty_category_msg
+            validEntry = false
+        }
+        if (`when`.isBlank()) {
+            errorMap[4] = R.string.empty_date_msg
+            validEntry = false
+        }
+        return validEntry
     }
 
     fun selectCategory(category: String) {
@@ -72,8 +91,8 @@ class ExpenseViewModel(
             }, {
                 Log.e("CategoryExpenseVM", "Error in Getting Category Expense")
             }).let {
-            compositeDisposable.add(it)
-        }
+                compositeDisposable.add(it)
+            }
     }
 
     fun clearCategoryExpense() {

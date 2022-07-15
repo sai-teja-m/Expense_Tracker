@@ -13,4 +13,8 @@
     <string name="edit_expense">Edit Expense</string>
     <string name="add_edit_label">{action}</string>
     <string name="clear_filter">Clear Filter</string>
+    <string name="empty_title_msg">Title cannot be empty</string>
+    <string name="empty_amount_msg">Amount cannot be empty</string>
+    <string name="empty_category_msg">Category cannot be empty</string>
+    <string name="empty_date_msg">Date cannot be empty</string>
 </resources>
