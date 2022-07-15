@@ -33,9 +33,9 @@
     <string name="education">Education</string>
     <string name="shopping">Shopping</string>
     <string name="no_items_found">No Expenses Found</string>
-    <string name="total_expense_is">Total Expense is</string>
+    <string name="total_expense_is">Total Expense is %s</string>
     <string name="no_filter_applied">No Filter Applied</string>
-    <string name="expense_for">Expense for</string>
+    <string name="expense_for">Expense for %s is %s</string>
     <string name="is">is</string>
 
 </resources>

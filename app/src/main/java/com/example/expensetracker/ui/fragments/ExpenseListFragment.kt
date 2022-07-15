@@ -1,5 +1,6 @@
 package com.example.expensetracker.ui.fragments
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.Observer
@@ -158,7 +159,7 @@ class ExpenseListFragment : DaggerFragment() {
         binding?.let {
             Snackbar.make(
                 it.listDisplay,
-                "${getString(R.string.total_expense_is)} ${viewModel.totalExpense.value}",
+                getString(R.string.total_expense_is,viewModel.totalExpense.value.toString()),
                 Snackbar.LENGTH_LONG
             )
                 .show()
@@ -169,13 +170,13 @@ class ExpenseListFragment : DaggerFragment() {
         binding?.let {
 
             if (categoryExpense == null) {
-                Snackbar.make(it.listDisplay, "${getString(R.string.no_filter_applied)}", Snackbar.LENGTH_LONG)
+                Snackbar.make(it.listDisplay, getString(R.string.no_filter_applied), Snackbar.LENGTH_LONG)
                     .show()
             } else {
 
                 Snackbar.make(
                     it.listDisplay,
-                    "${getString(R.string.expense_for)} ${viewModel.selectedCategory.value.toString()} ${getString(R.string.`is`)} $categoryExpense",
+                    getString(R.string.expense_for ,viewModel.selectedCategory.value.toString(), categoryExpense.toString()),
                     Snackbar.LENGTH_LONG
                 )
                     .show()
