@@ -34,8 +34,14 @@ DIFF
         currentSelectedCategory = category
     }
     inner class ExpenseHolder(private val binding: ItemCategoryBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(category : String){
+        fun bind(position: Int){
             binding.run {
+                val category: String = getItem(position)
+                if(position == itemCount -1)
+                    divider.visibility = View.INVISIBLE
+                else{
+                    divider.visibility = View.VISIBLE
+                }
                 if(category == currentSelectedCategory){
                     TextViewCompat.setTextAppearance(itemText, R.style.selectedCategoryStyle)
                     ivSelection.visibility = View.VISIBLE
@@ -63,7 +69,7 @@ DIFF
 
 
     override fun onBindViewHolder(holder: CategoryAdapter.ExpenseHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(position)
 
     }
 }

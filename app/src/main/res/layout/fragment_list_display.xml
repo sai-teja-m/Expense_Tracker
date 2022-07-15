@@ -1,67 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/list_display"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ListDisplay">
-
-<!--    <TextView-->
-<!--        android:id="@+id/filter"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Filter"-->
-<!--        app:layout_constraintRight_toLeftOf="@id/clear_filter"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/total_expense"-->
-<!--        android:layout_marginRight="40dp"-->
-<!--        />-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/clear_filter"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:src="@drawable/ic_clear"-->
-<!--        android:visibility="gone"-->
-<!--        app:layout_constraintTop_toTopOf="@id/filter"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/filter"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        android:layout_marginLeft="15dp"-->
-<!--         />-->
-
-<!--    <ImageView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:src="@drawable/ic_filter_list"-->
-<!--        app:layout_constraintTop_toTopOf="@id/filter"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/filter"-->
-<!--        app:layout_constraintRight_toLeftOf="@id/filter"-->
-<!--        android:layout_marginRight="8dp"-->
-<!--        />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/total_expense"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/filter"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        android:text="@string/total_expense"-->
-<!--        tools:text = "Total Expense"-->
-<!--        android:layout_margin="15dp"-->
-<!--        android:textColor="@color/red"-->
-<!--        style="@style/TextAppearance.MaterialComponents.Headline3"-->
-<!--        />-->
-<!--    <TextView-->
-<!--        android:id="@+id/category_expense"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/total_expense"-->
-<!--        android:layout_margin="15dp"-->
-<!--        tools:text = "@string/category_exp"-->
-<!--        style="@style/TextAppearance.MaterialComponents.Headline4"-->
-
-<!--        />-->
-
 
 
 
@@ -79,16 +26,7 @@
         >
 
     </androidx.recyclerview.widget.RecyclerView>
-<!--    <ImageButton-->
-<!--        android:id="@+id/add_button"-->
-<!--        android:layout_width="80dp"-->
-<!--        android:layout_height="80dp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        android:src= "@drawable/ic_add"-->
-<!--        android:layout_alignParentTop = "true"-->
-<!--        android:background="@drawable/round_button"-->
-<!--        />-->
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_button"
         android:layout_width="wrap_content"

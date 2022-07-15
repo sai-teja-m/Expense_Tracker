@@ -5,20 +5,15 @@ import android.os.Bundle
 import android.view.*
 import android.widget.DatePicker
 
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentAddEditBinding
-import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.expense_view.*
 import kotlinx.android.synthetic.main.fragment_add_edit.*
-import java.util.Observer
 import javax.inject.Inject
 
 
@@ -38,6 +33,7 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
             R.id.delete->{
                 navigationArgs.expense?.let {
                     viewModel.deleteItem(it)
+                    findNavController().navigateUp()
                 }
                 true
             }

@@ -4,21 +4,17 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentListDisplayBinding
 import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.expense_view.*
 import javax.inject.Inject
@@ -63,10 +59,11 @@ class ListDisplay : DaggerFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.total_expense->{
-                viewModel.getTotalExpense()
+                showSnackBarTotalExp()
                 true
             }
             R.id.category_total->{
+                viewModel.getCategoryExpense(viewModel.selectedCategory.value.toString())
 
                 true
             }
@@ -117,23 +114,50 @@ class ListDisplay : DaggerFragment() {
             viewModel.selectedCategory.observe(viewLifecycleOwner) {
                 setFilterIcon()
                 if (it.isEmpty()) {
-                    //TODO: Clear filter
-
-
+                    //DO NOTHING
                 } else {
 
                     viewModel.filterByCategory(it)
+
                 }
             }
+
+            viewModel.categoryExpense.observe(viewLifecycleOwner) {
+                if(it != null) {
+                    showSnackBarCategoryExp()
+                    viewModel.clearCategoryExpense()
+                }
+            }
+
             viewModel.getAll()
             viewModel.getCat()
-            Log.d("totalExpense","${viewModel.totalExoense}")
+            viewModel.getTotalExpense()
 
 
         }
     }
 
+    private fun showSnackBarTotalExp(){
+        binding?.let {
+            Snackbar.make(it.listDisplay, "Total Expense is ${viewModel.totalExpense.value}", Snackbar.LENGTH_LONG)
+                .show()
+        }
+    }
 
+    private fun showSnackBarCategoryExp(){
+        binding?.let {
+
+            if(viewModel.selectedCategory.value.isNullOrEmpty()){
+                Snackbar.make(it.listDisplay, "No Filter Applied", Snackbar.LENGTH_LONG)
+                    .show()
+            }
+            else{
+
+            Snackbar.make(it.listDisplay, "Category Expense for ${viewModel.selectedCategory.value.toString()} is ${viewModel.categoryExpense.value}", Snackbar.LENGTH_LONG)
+                .show()
+        }
+        }
+    }
 
     private fun onClickEdit(expense:Expense){
         findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit(getString(R.string.edit_expense), expense))
@@ -142,10 +166,6 @@ class ListDisplay : DaggerFragment() {
         viewModel.deleteItem(expense)
     }
 
-
-    private fun totalExpense(){
-
-    }
 
     private fun setFilterIcon() {
         if (::menu.isInitialized) {

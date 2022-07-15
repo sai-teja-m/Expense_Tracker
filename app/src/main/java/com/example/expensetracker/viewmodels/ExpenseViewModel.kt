@@ -9,8 +9,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import kotlin.math.absoluteValue
-import kotlin.properties.Delegates
 
 
 class ExpenseViewModel(
@@ -38,7 +36,10 @@ class ExpenseViewModel(
     private val _selectedCategory: MutableLiveData<String> = MutableLiveData()
     val selectedCategory : LiveData<String> = _selectedCategory
     private val _totalExpense : MutableLiveData<Int> = MutableLiveData()
-    val totalExoense : LiveData<Int> = _totalExpense
+    val totalExpense : LiveData<Int> = _totalExpense
+    private val _categoryExpense : MutableLiveData<Int> = MutableLiveData()
+    val categoryExpense : LiveData<Int> = _categoryExpense
+
 
     fun isEntryValid(expenseTitle: String, expense:String, `when`:String, category:String): Boolean {
         return  !(expenseTitle.isBlank() ||expense.isBlank() || `when`.isBlank() || category.isBlank())
@@ -52,10 +53,24 @@ class ExpenseViewModel(
         getTotalExpenseUseCase.execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
             _totalExpense.postValue(it)
         },{
-
+            Log.e("TotalExpenseViewModel","Error in Getting Total Expense")
         }).let {
             compositeDisposable.add(it)
         }
+    }
+
+    fun getCategoryExpense(category: String){
+        getCategoryExpenseUseCase.execute(category).subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
+            _categoryExpense.postValue(it)
+        },{
+            Log.e("CategoryExpenseVM","Error in Getting Category Expense")
+        }).let {
+            compositeDisposable.add(it)
+        }
+    }
+
+    fun clearCategoryExpense(){
+        _categoryExpense.postValue(null)
     }
 
     fun getCat(){
