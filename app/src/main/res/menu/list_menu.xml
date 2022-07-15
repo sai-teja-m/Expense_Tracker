@@ -8,8 +8,10 @@
         android:title="@string/filter"
         />
     <item
+
         android:id="@+id/total_expense"
         app:showAsAction="never"
+        android:icon="@drawable/ic_calculate"
         android:title="@string/total_expense"
         />
     <item

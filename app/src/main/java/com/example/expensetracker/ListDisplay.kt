@@ -63,8 +63,12 @@ class ListDisplay : DaggerFragment() {
                 true
             }
             R.id.category_total->{
-                viewModel.getCategoryExpense(viewModel.selectedCategory.value.toString())
-
+                if(viewModel.selectedCategory.value.isNullOrEmpty()){
+                    showSnackBarCategoryExp(null)
+                }
+                else {
+                    viewModel.getCategoryExpense(viewModel.selectedCategory.value.toString())
+                }
                 true
             }
 
@@ -124,7 +128,8 @@ class ListDisplay : DaggerFragment() {
 
             viewModel.categoryExpense.observe(viewLifecycleOwner) {
                 if(it != null) {
-                    showSnackBarCategoryExp()
+
+                    showSnackBarCategoryExp(it)
                     viewModel.clearCategoryExpense()
                 }
             }
@@ -144,16 +149,16 @@ class ListDisplay : DaggerFragment() {
         }
     }
 
-    private fun showSnackBarCategoryExp(){
+    private fun showSnackBarCategoryExp(categoryExpense: Int?){
         binding?.let {
 
-            if(viewModel.selectedCategory.value.isNullOrEmpty()){
+            if(categoryExpense == null){
                 Snackbar.make(it.listDisplay, "No Filter Applied", Snackbar.LENGTH_LONG)
                     .show()
             }
             else{
 
-            Snackbar.make(it.listDisplay, "Category Expense for ${viewModel.selectedCategory.value.toString()} is ${viewModel.categoryExpense.value}", Snackbar.LENGTH_LONG)
+            Snackbar.make(it.listDisplay, "Expense for ${viewModel.selectedCategory.value.toString()} is $categoryExpense", Snackbar.LENGTH_LONG)
                 .show()
         }
         }
