@@ -3,19 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/filter"
-        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_filter_list"
         android:title="@string/filter"
-        />
+        app:showAsAction="ifRoom" />
     <item
 
         android:id="@+id/total_expense"
-        app:showAsAction="never"
         android:icon="@drawable/ic_calculate"
         android:title="@string/total_expense"
-        />
+        app:showAsAction="never" />
     <item
         android:id="@+id/category_total"
-        app:showAsAction="never"
-        android:title="@string/category_exp"/>
+        android:title="@string/category_exp"
+        app:showAsAction="never" />
 </menu>

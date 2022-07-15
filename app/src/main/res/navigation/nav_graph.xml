@@ -8,22 +8,20 @@
         android:id="@+id/listDisplay"
         android:name="com.example.expensetracker.ListDisplay"
         android:label="Expense Tracker"
-        tools:layout="@layout/fragment_list_display" >
+        tools:layout="@layout/fragment_list_display">
         <action
             android:id="@+id/action_listDisplay_to_addEdit"
             app:destination="@id/addEdit" />
         <action
             android:id="@+id/action_listDisplay_to_categoryFragment"
             app:destination="@id/categoryFragment" />
-        <!--        <argument-->
-<!--            android:name="Id"-->
-<!--            app:argType="integer" />-->
+
     </fragment>
     <fragment
         android:id="@+id/addEdit"
         android:name="com.example.expensetracker.AddEdit"
         android:label="@string/add_edit_label"
-        tools:layout="@layout/fragment_add_edit" >
+        tools:layout="@layout/fragment_add_edit">
 
         <argument
             android:name="action"
@@ -31,13 +29,14 @@
 
         <argument
             android:name="expense"
-            app:argType="com.example.expensetracker.database.expense.Expense" app:nullable="true"/>
+            app:argType="com.example.expensetracker.database.expense.Expense"
+            app:nullable="true" />
         <action
             android:id="@+id/action_addEdit_to_listDisplay"
             app:destination="@id/listDisplay"
             app:popUpTo="@id/listDisplay"
-            app:popUpToInclusive="true"/>
-                </fragment>
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.example.expensetracker.CategoryFragment"
