@@ -11,4 +11,6 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:textAppearance">?attr/textAppearanceHeadline3</item>
     </style>
+    <style name="selectedCategoryStyle" parent="@style/TextAppearance.Material3.TitleMedium" />
+    <style name="unSelectedCategoryStyle" parent="@style/TextAppearance.Material3.BodyMedium" />
 </resources>

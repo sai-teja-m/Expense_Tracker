@@ -2,6 +2,7 @@ package com.example.expensetracker
 
 import android.graphics.Typeface
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.widget.TextViewCompat
@@ -36,10 +37,11 @@ DIFF
         fun bind(category : String){
             binding.run {
                 if(category == currentSelectedCategory){
-                    itemText.setTypeface(itemText.typeface,Typeface.BOLD)
-                }
-                else{
-                    itemText.setTypeface(itemText.typeface, Typeface.NORMAL)
+                    TextViewCompat.setTextAppearance(itemText, R.style.selectedCategoryStyle)
+                    ivSelection.visibility = View.VISIBLE
+                } else{
+                    TextViewCompat.setTextAppearance(itemText, R.style.unSelectedCategoryStyle)
+                    ivSelection.visibility = View.GONE
                 }
                 itemText.text = category
                 root.setOnClickListener{
