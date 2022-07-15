@@ -1,14 +1,16 @@
-package com.example.expensetracker
+package com.example.expensetracker.ui.fragments
 
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.core.widget.doOnTextChanged
 
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.expensetracker.R
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentAddEditBinding
 import com.example.expensetracker.viewmodels.ExpenseViewModel
@@ -18,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_add_edit.*
 import javax.inject.Inject
 
 
-class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener {
+class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -44,7 +46,7 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener {
         }
     }
 
-    private val navigationArgs: AddEditArgs by navArgs()
+    private val navigationArgs: AddEditExpenseFragmentArgs by navArgs()
 
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
@@ -59,20 +61,9 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        binding?.run {
-            editTitle.doOnTextChanged { _, _, _, _ ->
-                editTitleLabel.isErrorEnabled = false
-            }
-            editExpense.doOnTextChanged { _, _, _, _ ->
-                editExpenseLabel.isErrorEnabled = false
-            }
-            editCategory.doOnTextChanged { _, _, _, _ ->
-                editCategoryLabel.isErrorEnabled = false
-            }
-            editWhen.doOnTextChanged { _, _, _, _ ->
-                editWhenLabel.isErrorEnabled = false
-            }
-        }
+
+
+
     }
 
     override fun onCreateView(
@@ -109,7 +100,7 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener {
                 )
             }
 
-            val action = AddEditDirections.actionAddEditToListDisplay()
+            val action = AddEditExpenseFragmentDirections.actionAddEditToListDisplay()
             findNavController().navigate(action)
 
         }
@@ -131,7 +122,7 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
             }
 
-            val action = AddEditDirections.actionAddEditToListDisplay()
+            val action = AddEditExpenseFragmentDirections.actionAddEditToListDisplay()
             findNavController().navigate(action)
 
         }
@@ -161,9 +152,42 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener {
             }
 
         }
+        binding?.run {
+            editTitle.doOnTextChanged { _, _, _, _ ->
 
+                editTitleLabel.isErrorEnabled =   false
+            }
+            editExpense.doOnTextChanged { _, _, _, _ ->
+                editExpenseLabel.isErrorEnabled = false
+            }
+            editCategory.doOnTextChanged { _, _, _, _ ->
+                editCategoryLabel.isErrorEnabled = false
+            }
+            editWhen.doOnTextChanged { _, _, _, _ ->
+                editWhenLabel.isErrorEnabled = false
+            }
+        }
+        binding?.run {
+            val categoryList:MutableList<String> = (viewModel.categoryList.value?.toMutableList()?: mutableListOf()).apply {
+                addAll(getDefaultCategoryList())
+
+            }
+            val adapter = ArrayAdapter(requireContext(),
+                R.layout.dropdown_category_list, categoryList.distinct())
+            editCategory.setAdapter(adapter)
+        }
     }
 
+    private fun getDefaultCategoryList():List<String>{
+        return listOf(
+            getString(R.string.food),
+            getString(R.string.grocery),
+            getString(R.string.education),
+            getString(R.string.entertainment),
+            getString(R.string.shopping),
+            getString(R.string.travel)
+        )
+    }
     private fun isEntryValid(): Boolean {
         var temp = false
         val errorMap: MutableMap<Int, Int> = mutableMapOf()
@@ -187,23 +211,19 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener {
 
             if (errorMap.containsKey(1)) {
                 errorMap[1]?.let {
-                    editTitleLabel.isErrorEnabled = true
                     editTitleLabel.error = getString(it)
                 }
             }
             if (errorMap.containsKey(2)) {
                 errorMap[2]?.let {
-                    editExpenseLabel.isErrorEnabled = true
                     editExpenseLabel.error = getString(it) }
             }
             if (errorMap.containsKey(3)) {
                 errorMap[3]?.let {
-                    editCategoryLabel.isErrorEnabled  = true
                     editCategoryLabel.error = getString(it) }
             }
             if (errorMap.containsKey(4)) {
                 errorMap[4]?.let {
-                    editWhenLabel.isErrorEnabled = true
                     editWhenLabel.error = getString(it) }
             }
         }

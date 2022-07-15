@@ -1,4 +1,4 @@
-package com.example.expensetracker
+package com.example.expensetracker.ui.fragments
 
 
 import android.os.Bundle
@@ -7,6 +7,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.expensetracker.ui.adapters.CategoryAdapter
+import com.example.expensetracker.R
 import com.example.expensetracker.databinding.FragmentCategoryBinding
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory

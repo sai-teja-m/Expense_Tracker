@@ -3,6 +3,7 @@ package com.example.expensetracker.domain.repository
 
 import com.example.expensetracker.database.expense.Expense
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 interface ExpenseRepository {
@@ -20,7 +21,7 @@ interface ExpenseRepository {
 
     fun getByCategory(category: String): Single<List<Expense>>
 
-    fun getCategory(): Single<List<String>>
+    fun getCategory(): Flowable<List<String>>
 
     fun getTotalExpense(): Single<Int>
 

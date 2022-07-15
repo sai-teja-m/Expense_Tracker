@@ -1,4 +1,4 @@
-package com.example.expensetracker
+package com.example.expensetracker.ui.fragments
 
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 import java.util.*
 
 class DatePickerFragment : DialogFragment() {
-    private lateinit var listener :DatePickerDialog.OnDateSetListener
+    private lateinit var listener: DatePickerDialog.OnDateSetListener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current date as the default date in the picker
@@ -21,7 +21,7 @@ class DatePickerFragment : DialogFragment() {
 
     }
 
-    fun setDateChangeListener(listener:DatePickerDialog.OnDateSetListener){
+    fun setDateChangeListener(listener: DatePickerDialog.OnDateSetListener) {
         this.listener = listener
     }
 }

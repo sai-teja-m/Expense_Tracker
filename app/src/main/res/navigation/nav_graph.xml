@@ -6,7 +6,7 @@
     app:startDestination="@id/listDisplay">
     <fragment
         android:id="@+id/listDisplay"
-        android:name="com.example.expensetracker.ListDisplay"
+        android:name="com.example.expensetracker.ui.fragments.ExpenseListFragment"
         android:label="Expense Tracker"
         tools:layout="@layout/fragment_list_display">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/addEdit"
-        android:name="com.example.expensetracker.AddEdit"
+        android:name="com.example.expensetracker.ui.fragments.AddEditExpenseFragment"
         android:label="@string/add_edit_label"
         tools:layout="@layout/fragment_add_edit">
 
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/categoryFragment"
-        android:name="com.example.expensetracker.CategoryFragment"
+        android:name="com.example.expensetracker.ui.fragments.CategoryFragment"
         android:label="Choose Category"
         tools:layout="@layout/fragment_category" />
 </navigation>

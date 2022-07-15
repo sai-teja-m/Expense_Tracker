@@ -20,7 +20,7 @@ class ExpenseViewModel(
     private val deleteCase: DeleteExpenseUseCase,
     private val getAllUse: GetAllUseCase,
     private val getByCatUseCase: GetByCatUseCase,
-    private val getCatUseCase: GetCatUseCase,
+    private val getCatUseCase: GetCategoryUseCase,
     private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
     private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase
 ) : ViewModel() {
@@ -41,7 +41,6 @@ class ExpenseViewModel(
     val totalExpense: LiveData<Int> = _totalExpense
     private val _categoryExpense: MutableLiveData<Int> = MutableLiveData()
     val categoryExpense: LiveData<Int> = _categoryExpense
-
 
     fun isEntryValid(
         expenseTitle: String,
@@ -194,7 +193,7 @@ class ExpenseViewModelFactory @Inject constructor(
     private val deleteCase: DeleteExpenseUseCase,
     private val getAllUse: GetAllUseCase,
     private val getByCatUseCase: GetByCatUseCase,
-    private val getCatUseCase: GetCatUseCase,
+    private val getCatUseCase: GetCategoryUseCase,
     private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
     private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase
 ) : ViewModelProvider.Factory {

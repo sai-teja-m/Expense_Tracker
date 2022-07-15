@@ -2,6 +2,7 @@ package com.example.expensetracker.database.expense
 
 import androidx.room.*
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 @Dao
@@ -19,7 +20,7 @@ interface ExpenseDao {
     fun getByCategory(category: String): Single<List<Expense>>
 
     @Query("SELECT DISTINCT category FROM Expense ")
-    fun getCategory(): Single<List<String>>
+    fun getCategory(): Flowable<List<String>>
 
     @Query("SELECT * FROM Expense ORDER BY `when` ASC")
     fun getAllExpense(): Single<List<Expense>>

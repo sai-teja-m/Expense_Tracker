@@ -17,4 +17,25 @@
     <string name="empty_amount_msg">Amount cannot be empty</string>
     <string name="empty_category_msg">Category cannot be empty</string>
     <string name="empty_date_msg">Date cannot be empty</string>
+    <string name="expense_amount">₹ %d</string>
+    <string name="expense_title">%s</string>
+    <string name="expense_category">%s</string>
+    <string name="expense_date">%s</string>
+    <string name="expense_title_hint">Expense Title</string>
+    <string name="expense_amount_hint">Amount</string>
+    <string name="expense_category_hint">Category</string>
+    <string name="expense_date_hint">Date</string>
+    <string name="travel">Travel</string>
+    <string name="food">Food</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="grocery">Grocery</string>
+    <string name="health">Health</string>
+    <string name="education">Education</string>
+    <string name="shopping">Shopping</string>
+    <string name="no_items_found">No Expenses Found</string>
+    <string name="total_expense_is">Total Expense is</string>
+    <string name="no_filter_applied">No Filter Applied</string>
+    <string name="expense_for">Expense for</string>
+    <string name="is">is</string>
+
 </resources>
