@@ -32,7 +32,7 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
         return when(item.itemId){
             R.id.delete->{
                 navigationArgs.expense?.let {
-                    viewModel.deleteItem(it)
+                    viewModel.deleteExpense(it)
                     findNavController().navigateUp()
                 }
                 true
@@ -47,8 +47,6 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
 
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
-
-
 
     private val viewModel: ExpenseViewModel by activityViewModels {
         expenseViewModelFactory
@@ -169,16 +167,6 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
         binding?.editWhen?.setText( "$day/$month/$year")
 
     }
-
-//    override fun onStart() {
-//        super.onStart()
-//        requireActivity().actionBar?.title = if (navigationArgs.expense == null) {
-//            getString(R.string.add_expense)
-//        } else {
-//            getString(R.string.edit_expense)
-//        }
-//    }
-
 
 }
 

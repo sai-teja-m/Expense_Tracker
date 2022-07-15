@@ -6,9 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [Expense::class], version = 1)
-abstract class ExpenseDatabase: RoomDatabase(){
+abstract class ExpenseDatabase : RoomDatabase() {
     abstract fun expenseDao(): ExpenseDao
-    companion object{
+
+    companion object {
         @Volatile
         private var INSTANCE: ExpenseDatabase? = null
 
@@ -17,7 +18,8 @@ abstract class ExpenseDatabase: RoomDatabase(){
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ExpenseDatabase::class.java,
-                    "expense_database")
+                    "expense_database"
+                )
                     .build()
                 INSTANCE = instance
 

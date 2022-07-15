@@ -1,11 +1,8 @@
 package com.example.expensetracker
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.expensetracker.databinding.ActivityMainBinding
 import dagger.android.support.DaggerAppCompatActivity

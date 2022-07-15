@@ -2,7 +2,6 @@ package com.example.expensetracker
 
 import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -11,12 +10,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentListDisplayBinding
-import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.expense_view.*
 import javax.inject.Inject
 
 
@@ -94,9 +91,6 @@ class ListDisplay : DaggerFragment() {
         return binding?.root
     }
 
-
-//    private var recyclerView: RecyclerView = binding.recyclerViewew
-
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
@@ -134,8 +128,8 @@ class ListDisplay : DaggerFragment() {
                 }
             }
 
-            viewModel.getAll()
-            viewModel.getCat()
+            viewModel.getAllExpenses()
+            viewModel.getCategory()
             viewModel.getTotalExpense()
 
 
@@ -168,7 +162,7 @@ class ListDisplay : DaggerFragment() {
         findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit(getString(R.string.edit_expense), expense))
     }
     private fun onDelete(expense: Expense){
-        viewModel.deleteItem(expense)
+        viewModel.deleteExpense(expense)
     }
 
 

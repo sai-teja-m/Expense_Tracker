@@ -44,15 +44,11 @@ class ExpenseAdapter( private val onClick: (Expense) -> Unit , val onDelete: (Ex
                root.setOnClickListener{
                    onClick(exp)
                }
-
-//               deleteButton.setOnClickListener {
-//                   onDelete(exp)
            }
        }
 
 
     }
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseHolder {
@@ -62,7 +58,6 @@ class ExpenseAdapter( private val onClick: (Expense) -> Unit , val onDelete: (Ex
         )
         return ExpenseHolder(binding)
     }
-
 
     override fun onBindViewHolder(holder: ExpenseHolder, position: Int) {
         holder.bind(position)
