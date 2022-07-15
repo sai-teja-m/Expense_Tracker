@@ -16,22 +16,20 @@ import com.example.expensetracker.databinding.FragmentListDisplayBinding
 import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_list_display.*
+import javax.inject.Inject
 
 
-class CategoryFragment : Fragment() {
-    private val expenseApplication by lazy {  requireActivity().application as ExpenseApplication}
-    private val insertExpenseUseCase by lazy {   InsertExpenseUseCase(expenseApplication.expenseRepo) }
-    private val updateExpenseUseCase by lazy {  UpdateExpenseUseCase(expenseApplication.expenseRepo) }
-    private val deleteExpenseUseCase by lazy {   DeleteExpenseUseCase(expenseApplication.expenseRepo) }
-    private val getAllUseCase by lazy {   GetAllUseCase(expenseApplication.expenseRepo) }
-    private val getByCatUseCase by lazy { GetByCatUseCase(expenseApplication.expenseRepo) }
-    private val getCatUseCase by lazy { GetCatUseCase(expenseApplication.expenseRepo) }
+class CategoryFragment : DaggerFragment() {
+
+
+
+    @Inject
+    lateinit var expenseViewModelFactory: ExpenseViewModelFactory
 
     private val viewModel: ExpenseViewModel by activityViewModels {
-        ExpenseViewModelFactory(
-            insertExpenseUseCase,updateExpenseUseCase,deleteExpenseUseCase,getAllUseCase,getByCatUseCase,getCatUseCase
-        )
+        expenseViewModelFactory
     }
 
     private val categoryAdapter: CategoryAdapter by lazy { CategoryAdapter(::onClick) }

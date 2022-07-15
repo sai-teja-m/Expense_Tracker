@@ -8,24 +8,23 @@ import com.example.expensetracker.domain.usecase.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 
 class ExpenseViewModel(
-    private val insertUse: InsertExpenseUseCase,private val updateUse:UpdateExpenseUseCase ,
-    private  val deleteCase:DeleteExpenseUseCase,private val getAllUse:GetAllUseCase,
-    private val getByCatUseCase: GetByCatUseCase, private val getCatUseCase: GetCatUseCase):ViewModel(){
+    private val insertUse: InsertExpenseUseCase,
+    private val updateUse:UpdateExpenseUseCase ,
+    private  val deleteCase:DeleteExpenseUseCase,
+    private val getAllUse:GetAllUseCase,
+    private val getByCatUseCase: GetByCatUseCase,
+    private val getCatUseCase: GetCatUseCase):ViewModel(){
 
     private val uiScheduler by lazy { AndroidSchedulers.mainThread() }
     private val ioScheduler by lazy { Schedulers.io() }
     private val disposableDelegate = lazy { CompositeDisposable() }
     private val compositeDisposable by disposableDelegate
 
-    fun isEntryValid(expenseTitle: String, expense:String, `when`:String, category:String): Boolean {
-        if (expenseTitle.isBlank() ||expense.isBlank() || `when`.isBlank() || category.isBlank()) {
-            return false
-        }
-        return true
-    }
+
 
     private val _allExpense : MutableLiveData<List<Expense>> = MutableLiveData()
     val allExpense: LiveData<List<Expense>> = _allExpense
@@ -34,12 +33,22 @@ class ExpenseViewModel(
     private val _selectedCategory: MutableLiveData<String> = MutableLiveData()
     val selectedCategory : LiveData<String> = _selectedCategory
 
+    fun isEntryValid(expenseTitle: String, expense:String, `when`:String, category:String): Boolean {
+        return  !(expenseTitle.isBlank() ||expense.isBlank() || `when`.isBlank() || category.isBlank())
+
+    }
+
     fun selectCategory(category: String){
         _selectedCategory.postValue(category)
     }
 
     fun getCat(){
-        getCatUseCase.execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
+        getCatUseCase
+            .execute()
+            .subscribeOn(ioScheduler)
+            .observeOn(uiScheduler)
+            .subscribe(
+            {
             _categoryList.postValue(it)
         },{
             Log.e("catList","Error in Generating a List")
@@ -49,7 +58,8 @@ class ExpenseViewModel(
     }
 
     fun getAll(){
-        getAllUse.execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({list->
+        getAllUse
+            .execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({list->
             _allExpense.postValue(list)
         },{
             Log.e("getAllError","error in loading DB in getALL")
@@ -115,8 +125,7 @@ class ExpenseViewModel(
 
 }
 
-
-class ExpenseViewModelFactory(private val insertUse: InsertExpenseUseCase,private val updateUse:UpdateExpenseUseCase ,
+class ExpenseViewModelFactory @Inject constructor(private val insertUse: InsertExpenseUseCase,private val updateUse:UpdateExpenseUseCase ,
                               private  val deleteCase:DeleteExpenseUseCase,private val getAllUse:GetAllUseCase,
                               private val getByCatUseCase: GetByCatUseCase, private val getCatUseCase: GetCatUseCase): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

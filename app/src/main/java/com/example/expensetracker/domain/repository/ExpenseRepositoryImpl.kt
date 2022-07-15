@@ -4,8 +4,9 @@ import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.database.expense.ExpenseDao
 import io.reactivex.Completable
 import io.reactivex.Single
+import javax.inject.Inject
 
-class ExpenseRepositoryImpl(
+class ExpenseRepositoryImpl @Inject constructor(
     private val dao:ExpenseDao
 ) : ExpenseRepository{
     override fun updateExpense(exp: Expense): Completable {

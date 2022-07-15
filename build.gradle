@@ -9,6 +9,7 @@ buildscript {
         nav_version = '2.4.2'
         lifecycle_version = "2.4.0"
         datastore_version = "1.0.0"
+        dagger_version = "2.42"
     }
     repositories {
         google()

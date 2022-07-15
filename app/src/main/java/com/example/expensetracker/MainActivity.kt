@@ -8,9 +8,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.expensetracker.databinding.ActivityMainBinding
+import dagger.android.support.DaggerAppCompatActivity
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
     private lateinit var navController: NavController
 

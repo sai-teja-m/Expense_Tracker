@@ -1,17 +1,37 @@
 package com.example.expensetracker
 
 import android.app.Application
-import com.example.expensetracker.database.expense.ExpenseDao
 import com.example.expensetracker.database.expense.ExpenseDatabase
+import com.example.expensetracker.di.ApplicationComponent
+import com.example.expensetracker.di.DaggerApplicationComponent
+
 import com.example.expensetracker.domain.repository.ExpenseRepository
 import com.example.expensetracker.domain.repository.ExpenseRepositoryImpl
+import dagger.Component
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import javax.inject.Inject
 
-class ExpenseApplication :Application() {
-lateinit var database: ExpenseDatabase
-lateinit var expenseRepo: ExpenseRepository
+
+class ExpenseApplication : DaggerApplication() {
+    @Inject
+    @Volatile
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
+    lateinit var database: ExpenseDatabase
+    lateinit var expenseRepo: ExpenseRepository
+    private var appComponent: ApplicationComponent? = null
+
     override fun onCreate() {
         super.onCreate()
+
         database = ExpenseDatabase.getDatabase(this)
-        expenseRepo =ExpenseRepositoryImpl(database.expenseDao())
+        expenseRepo = ExpenseRepositoryImpl(database.expenseDao())
+    }
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        appComponent = DaggerApplicationComponent.builder().application(this).build()
+        return appComponent!!
     }
 }

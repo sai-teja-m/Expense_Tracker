@@ -17,29 +17,26 @@ import com.example.expensetracker.databinding.FragmentAddEditBinding
 import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.expense_view.*
 import kotlinx.android.synthetic.main.fragment_add_edit.*
 import java.util.Observer
+import javax.inject.Inject
 
 
-class AddEdit : Fragment(), DatePickerDialog.OnDateSetListener{
+class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
 
-    private val expenseApplication by lazy {  requireActivity().application as ExpenseApplication}
-    private val insertExpenseUseCase by lazy {   InsertExpenseUseCase(expenseApplication.expenseRepo)}
-    private val updateExpenseUseCase by lazy {  UpdateExpenseUseCase(expenseApplication.expenseRepo)}
-    private val deleteExpenseUseCase by lazy {   DeleteExpenseUseCase(expenseApplication.expenseRepo)}
-    private val getAllUseCase by lazy {   GetAllUseCase(expenseApplication.expenseRepo)}
-    private val getByCatUseCase by lazy { GetByCatUseCase(expenseApplication.expenseRepo) }
-    private val getCatUseCase by lazy { GetCatUseCase(expenseApplication.expenseRepo) }
+
 
     private val navigationArgs: AddEditArgs by navArgs()
+
+    @Inject
+    lateinit var expenseViewModelFactory: ExpenseViewModelFactory
 
 
 
     private val viewModel: ExpenseViewModel by activityViewModels {
-        ExpenseViewModelFactory(
-            insertExpenseUseCase,updateExpenseUseCase,deleteExpenseUseCase,getAllUseCase , getByCatUseCase,getCatUseCase
-        )
+        expenseViewModelFactory
     }
 
     private var _binding: FragmentAddEditBinding? = null
