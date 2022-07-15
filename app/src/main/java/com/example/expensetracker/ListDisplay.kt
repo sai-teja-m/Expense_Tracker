@@ -2,37 +2,36 @@ package com.example.expensetracker
 
 import android.app.Application
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import android.util.Log
+import android.view.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentListDisplayBinding
 import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.expense_view.*
 import javax.inject.Inject
 
 
 class ListDisplay : DaggerFragment() {
 
 
-    private val expenseAdapter:ExpenseAdapter by lazy { ExpenseAdapter(::onClickEdit, ::onClickDlt) }
+    private val expenseAdapter:ExpenseAdapter by lazy { ExpenseAdapter(::onClickEdit, ::onDelete) }
 
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
 
     @Inject
     lateinit var application: Application
+
+    private lateinit var menu: Menu
 
     private val viewModel: ExpenseViewModel by lazy {
         ViewModelProvider((requireActivity().viewModelStore), expenseViewModelFactory)[ExpenseViewModel::class.java]
@@ -47,7 +46,45 @@ class ListDisplay : DaggerFragment() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.list_menu, menu)
+    }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        this.menu = menu
+        setFilterIcon()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.total_expense->{
+                showSnackBarTotalExp()
+                true
+            }
+            R.id.category_total->{
+                if(viewModel.selectedCategory.value.isNullOrEmpty()){
+                    showSnackBarCategoryExp(null)
+                }
+                else {
+                    viewModel.getCategoryExpense(viewModel.selectedCategory.value.toString())
+                }
+                true
+            }
+
+            R.id.filter->{
+                onClickFilter()
+                true
+            }
+            else->super.onOptionsItemSelected(item)
+        }
+    }
+
+
+
+    private fun onClickFilter(){
+        findNavController().navigate(ListDisplayDirections.actionListDisplayToCategoryFragment())
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,41 +108,82 @@ class ListDisplay : DaggerFragment() {
             recyclerView.layoutManager = LinearLayoutManager(context)
 
             recyclerView.adapter = expenseAdapter
+            val itemTouchHelper = ItemTouchHelper(SwipeDeleteCallBack(expenseAdapter,requireContext()))
+            itemTouchHelper.attachToRecyclerView(recyclerView)
             addButton.setOnClickListener{
-                findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit(null ))
+                findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit(getString(R.string.add_expense),null))
             }
-            filter.setOnClickListener{
-                findNavController().navigate(ListDisplayDirections.actionListDisplayToCategoryFragment())
-            }
-            clearFilter.setOnClickListener{
-                viewModel.selectCategory("")
-            }
+
             viewModel.allExpense.observe(viewLifecycleOwner, Observer { expenseAdapter.submitList(it)})
             viewModel.selectedCategory.observe(viewLifecycleOwner) {
-                filter.text = if (it.isEmpty()) {
-                    viewModel.getAll()
-                    clearFilter.visibility = View.GONE
-                    getString(R.string.filter)
+                setFilterIcon()
+                if (it.isEmpty()) {
+                    //DO NOTHING
                 } else {
+
                     viewModel.filterByCategory(it)
-                    clearFilter.visibility = View.VISIBLE
-                    it
+
                 }
             }
+
+            viewModel.categoryExpense.observe(viewLifecycleOwner) {
+                if(it != null) {
+
+                    showSnackBarCategoryExp(it)
+                    viewModel.clearCategoryExpense()
+                }
+            }
+
             viewModel.getAll()
             viewModel.getCat()
+            viewModel.getTotalExpense()
+
+
         }
     }
-    private fun onClickEdit(expense:Expense){
-        findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit( expense ))
+
+    private fun showSnackBarTotalExp(){
+        binding?.let {
+            Snackbar.make(it.listDisplay, "Total Expense is ${viewModel.totalExpense.value}", Snackbar.LENGTH_LONG)
+                .show()
+        }
     }
-    private fun onClickDlt(expense: Expense){
+
+    private fun showSnackBarCategoryExp(categoryExpense: Int?){
+        binding?.let {
+
+            if(categoryExpense == null){
+                Snackbar.make(it.listDisplay, "No Filter Applied", Snackbar.LENGTH_LONG)
+                    .show()
+            }
+            else{
+
+            Snackbar.make(it.listDisplay, "Expense for ${viewModel.selectedCategory.value.toString()} is $categoryExpense", Snackbar.LENGTH_LONG)
+                .show()
+        }
+        }
+    }
+
+    private fun onClickEdit(expense:Expense){
+        findNavController().navigate(ListDisplayDirections.actionListDisplayToAddEdit(getString(R.string.edit_expense), expense))
+    }
+    private fun onDelete(expense: Expense){
         viewModel.deleteItem(expense)
     }
 
 
-    private fun totalExpense(){
-
+    private fun setFilterIcon() {
+        if (::menu.isInitialized) {
+            val item = menu.findItem(R.id.filter)
+            val filterSelected = !viewModel.selectedCategory.value.isNullOrEmpty()
+            if (item != null) {
+                if (filterSelected) {
+                    item.setIcon(R.drawable.ic_filter_list_enabled)
+                } else {
+                    item.setIcon(R.drawable.ic_filter_list)
+                }
+            }
+        }
     }
 
 }

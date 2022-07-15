@@ -2,9 +2,7 @@ package com.example.expensetracker
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -27,7 +25,7 @@ class CategoryFragment : DaggerFragment() {
 
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
-
+    private lateinit var menu: Menu
     private val viewModel: ExpenseViewModel by activityViewModels {
         expenseViewModelFactory
     }
@@ -52,6 +50,27 @@ class CategoryFragment : DaggerFragment() {
         return binding?.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if(!viewModel.selectedCategory.value.isNullOrEmpty())
+             inflater.inflate(R.menu.category_menu, menu)
+        else
+            super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.clear_filter->{
+                onClearFilter()
+                true
+            }
+            else->super.onOptionsItemSelected(item)
+        }
+    }
+    private fun onClearFilter(){
+        viewModel.selectCategory("")
+        findNavController().navigateUp()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding?.run{
@@ -61,12 +80,16 @@ class CategoryFragment : DaggerFragment() {
 
             categoryRecycler.adapter = categoryAdapter
 
-            viewModel.categoryList.observe(viewLifecycleOwner, Observer { categoryAdapter.submitList(it)})
+            viewModel.categoryList.observe(viewLifecycleOwner, Observer {
+                categoryAdapter.setCurrentCategory(viewModel.selectedCategory.value?:"")
+                categoryAdapter.submitList(it)})
+
         }
     }
 
     private fun onClick(str:String){
         viewModel.selectCategory(str)
+
         findNavController().navigateUp()
     }
 

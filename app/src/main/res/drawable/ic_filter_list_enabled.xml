@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:width="5dp" android:height="5dp" android:drawable="@drawable/ic_highlight_dot" android:gravity="top|end" />
+    <item android:drawable="@drawable/ic_filter_enabled" android:gravity="center" />
+</layer-list>

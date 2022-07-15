@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/listDisplay"
         android:name="com.example.expensetracker.ListDisplay"
-        android:label="fragment_list_display"
+        android:label="Expense Tracker"
         tools:layout="@layout/fragment_list_display" >
         <action
             android:id="@+id/action_listDisplay_to_addEdit"
@@ -22,8 +22,12 @@
     <fragment
         android:id="@+id/addEdit"
         android:name="com.example.expensetracker.AddEdit"
-        android:label="fragment_add_edit"
+        android:label="@string/add_edit_label"
         tools:layout="@layout/fragment_add_edit" >
+
+        <argument
+            android:name="action"
+            app:argType="string" />
 
         <argument
             android:name="expense"
@@ -37,6 +41,6 @@
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.example.expensetracker.CategoryFragment"
-        android:label="fragment_category"
+        android:label="Choose Category"
         tools:layout="@layout/fragment_category" />
 </navigation>

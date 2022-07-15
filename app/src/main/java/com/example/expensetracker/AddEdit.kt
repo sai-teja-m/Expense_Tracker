@@ -2,31 +2,46 @@ package com.example.expensetracker
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.DatePicker
 
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentAddEditBinding
-import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.expense_view.*
 import kotlinx.android.synthetic.main.fragment_add_edit.*
-import java.util.Observer
 import javax.inject.Inject
 
 
 class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
 
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if(navigationArgs.expense != null)
+            inflater.inflate(R.menu.edit_menu,menu)
+        else
+            super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when(item.itemId){
+            R.id.delete->{
+                navigationArgs.expense?.let {
+                    viewModel.deleteItem(it)
+                    findNavController().navigateUp()
+                }
+                true
+            }
+            else ->{
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
 
     private val navigationArgs: AddEditArgs by navArgs()
 
@@ -154,6 +169,15 @@ class AddEdit : DaggerFragment(), DatePickerDialog.OnDateSetListener{
         binding?.editWhen?.setText( "$day/$month/$year")
 
     }
+
+//    override fun onStart() {
+//        super.onStart()
+//        requireActivity().actionBar?.title = if (navigationArgs.expense == null) {
+//            getString(R.string.add_expense)
+//        } else {
+//            getString(R.string.edit_expense)
+//        }
+//    }
 
 
 }

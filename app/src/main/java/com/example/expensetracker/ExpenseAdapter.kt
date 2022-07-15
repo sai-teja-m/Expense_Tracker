@@ -1,23 +1,17 @@
 package com.example.expensetracker
 
-import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 
-import android.widget.ListView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.ExpenseViewBinding
-import com.example.expensetracker.databinding.FragmentListDisplayBinding
 
 
-class ExpenseAdapter( private val onClick: (Expense) -> Unit ,private  val onDelete: (Expense) -> Unit) : ListAdapter<Expense,ExpenseAdapter.ExpenseHolder>(
+class ExpenseAdapter( private val onClick: (Expense) -> Unit , val onDelete: (Expense) -> Unit) : ListAdapter<Expense,ExpenseAdapter.ExpenseHolder>(
     DIFF
 ) {
     companion object{
@@ -35,8 +29,14 @@ class ExpenseAdapter( private val onClick: (Expense) -> Unit ,private  val onDel
 
 
     inner class ExpenseHolder(private val binding: ExpenseViewBinding): RecyclerView.ViewHolder(binding.root){
-       fun bind(exp: Expense){
+       fun bind(position: Int){
+           val exp: Expense = getItem(position)
            binding.run {
+               if(position == itemCount -1)
+                   divider.visibility = View.INVISIBLE
+               else{
+                   divider.visibility = View.VISIBLE
+               }
                expenseTitle.text = exp.expenseTitle
                expense.text = exp.expense.toString()
                `when`.text = exp.`when`
@@ -44,12 +44,13 @@ class ExpenseAdapter( private val onClick: (Expense) -> Unit ,private  val onDel
                root.setOnClickListener{
                    onClick(exp)
                }
-               deleteButton.setOnClickListener {
-                   onDelete(exp)
-               }
-           }
 
+//               deleteButton.setOnClickListener {
+//                   onDelete(exp)
+           }
        }
+
+
     }
 
 
@@ -64,7 +65,11 @@ class ExpenseAdapter( private val onClick: (Expense) -> Unit ,private  val onDel
 
 
     override fun onBindViewHolder(holder: ExpenseHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(position)
+    }
+
+    fun getItemAtPosition(position: Int):Expense{
+        return getItem(position)
     }
 
 
