@@ -8,18 +8,18 @@ import javax.inject.Inject
 
 
 class UpdateExpenseUseCase @Inject constructor(
-    private val expenseRepo : ExpenseRepository
-) : CompletableUseCaseParams<Expense>{
+    private val expenseRepo: ExpenseRepository
+) : CompletableUseCaseParams<Expense> {
 
-    override fun execute(data:Expense): Completable {
+    override fun execute(data: Expense): Completable {
         return expenseRepo.updateExpense(data)
     }
 
 }
 
 class InsertExpenseUseCase @Inject constructor(
-    private val expenseRepo : ExpenseRepository
-) : CompletableUseCaseParams<Expense>{
+    private val expenseRepo: ExpenseRepository
+) : CompletableUseCaseParams<Expense> {
 
     override fun execute(data: Expense): Completable {
         return expenseRepo.insertExpense(data)
@@ -28,31 +28,31 @@ class InsertExpenseUseCase @Inject constructor(
 
 class DeleteExpenseUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-):CompletableUseCaseParams<Expense>{
+) : CompletableUseCaseParams<Expense> {
     override fun execute(data: Expense): Completable {
         return expenseRepo.deleteExpense(data)
     }
 }
 
-class GetAllUseCase  @Inject constructor(
+class GetAllUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-):SingleUseCase<List<Expense>>{
+) : SingleUseCase<List<Expense>> {
     override fun execute(): Single<List<Expense>> {
-        return expenseRepo.getAll()
+        return expenseRepo.getAllExpense()
     }
 }
 
-class GetByCatUseCase  @Inject constructor(
+class GetByCatUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-):SingleUseCaseListParams<List<Expense>>{
-    override fun execute(data:String): Single<List<Expense>> {
-        return expenseRepo.getByCat(data)
+) : SingleUseCaseListParams<List<Expense>> {
+    override fun execute(data: String): Single<List<Expense>> {
+        return expenseRepo.getByCategory(data)
     }
 }
 
-class GetByIdUseCase  @Inject constructor(
+class GetByIdUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-):SingleUseCaseParams<Expense>{
+) : SingleUseCaseParams<Expense> {
     override fun execute(data: Int): Single<Expense> {
         return expenseRepo.getById(data)
     }
@@ -60,7 +60,7 @@ class GetByIdUseCase  @Inject constructor(
 
 class GetTotalExpenseUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-): SingleUseCase<Int>{
+) : SingleUseCase<Int> {
     override fun execute(): Single<Int> {
         return expenseRepo.getTotalExpense()
     }
@@ -68,36 +68,37 @@ class GetTotalExpenseUseCase @Inject constructor(
 
 class GetCategoryExpenseUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-): SingleUseCaseListParams<Int>{
+) : SingleUseCaseListParams<Int> {
     override fun execute(data: String): Single<Int> {
         return expenseRepo.getCategoryExpense(data)
     }
 }
 
-class GetCatUseCase  @Inject constructor(
+class GetCatUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-):SingleUseCaseString<String>{
+) : SingleUseCaseString<String> {
     override fun execute(): Single<List<String>> {
-        return expenseRepo.getCat()
+        return expenseRepo.getCategory()
     }
 }
 
 interface SingleUseCase<T> {
-    fun execute() : Single<T>
+    fun execute(): Single<T>
 }
 
 
 interface CompletableUseCaseParams<P> {
-    fun execute(data : P): Completable
+    fun execute(data: P): Completable
 }
 
-interface SingleUseCaseListParams<P>{
-    fun execute(data:String) : Single<P>
-}
-interface SingleUseCaseParams<P>{
-    fun execute(data:Int) : Single<P>
+interface SingleUseCaseListParams<P> {
+    fun execute(data: String): Single<P>
 }
 
-interface SingleUseCaseString<P>{
+interface SingleUseCaseParams<P> {
+    fun execute(data: Int): Single<P>
+}
+
+interface SingleUseCaseString<P> {
     fun execute(): Single<List<P>>
 }

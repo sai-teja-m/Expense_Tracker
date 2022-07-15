@@ -1,17 +1,13 @@
 package com.example.expensetracker
 
-import android.app.Application
 import com.example.expensetracker.database.expense.ExpenseDatabase
 import com.example.expensetracker.di.ApplicationComponent
 import com.example.expensetracker.di.DaggerApplicationComponent
-
 import com.example.expensetracker.domain.repository.ExpenseRepository
 import com.example.expensetracker.domain.repository.ExpenseRepositoryImpl
-import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
 

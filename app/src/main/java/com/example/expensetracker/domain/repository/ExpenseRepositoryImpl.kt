@@ -21,12 +21,12 @@ class ExpenseRepositoryImpl @Inject constructor(
         return dao.deleteExpense(exp)
     }
 
-    override fun getAll(): Single<List<Expense>> {
-        return dao.getAll()
+    override fun getAllExpense(): Single<List<Expense>> {
+        return dao.getAllExpense()
     }
 
-    override fun getCat() : Single<List<String>>{
-        return dao.getCat()
+    override fun getCategory() : Single<List<String>>{
+        return dao.getCategory()
     }
 
     override fun getTotalExpense(): Single<Int> {
@@ -37,8 +37,8 @@ class ExpenseRepositoryImpl @Inject constructor(
        return dao.getCategoryExpense(category)
     }
 
-    override fun getByCat(category: String): Single<List<Expense>> {
-        return dao.getByCat(category)
+    override fun getByCategory(category: String): Single<List<Expense>> {
+        return dao.getByCategory(category)
     }
     override fun getById(id: Int): Single<Expense> {
         return dao.getById(id)

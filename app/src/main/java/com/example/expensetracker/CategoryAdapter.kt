@@ -1,24 +1,21 @@
 package com.example.expensetracker
 
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.ItemCategoryBinding
-import com.google.android.material.resources.TextAppearance
 
 
-class CategoryAdapter(private val onClick: (String) -> Unit ) : ListAdapter<String, CategoryAdapter.ExpenseHolder>(
-DIFF
-) {
-    companion object{
-        val DIFF = object: DiffUtil.ItemCallback<String>(){
+class CategoryAdapter(private val onClick: (String) -> Unit) :
+    ListAdapter<String, CategoryAdapter.ExpenseHolder>(
+        DIFF
+    ) {
+    companion object {
+        val DIFF = object : DiffUtil.ItemCallback<String>() {
             override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
                 return oldItem == newItem
             }
@@ -28,29 +25,32 @@ DIFF
             }
         }
     }
-    private var currentSelectedCategory : String = ""
 
-    fun setCurrentCategory(category: String){
+    private var currentSelectedCategory: String = ""
+
+    fun setCurrentCategory(category: String) {
         currentSelectedCategory = category
     }
-    inner class ExpenseHolder(private val binding: ItemCategoryBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(position: Int){
+
+    inner class ExpenseHolder(private val binding: ItemCategoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(position: Int) {
             binding.run {
                 val category: String = getItem(position)
-                if(position == itemCount -1)
+                if (position == itemCount - 1)
                     divider.visibility = View.INVISIBLE
-                else{
+                else {
                     divider.visibility = View.VISIBLE
                 }
-                if(category == currentSelectedCategory){
+                if (category == currentSelectedCategory) {
                     TextViewCompat.setTextAppearance(itemText, R.style.selectedCategoryStyle)
                     ivSelection.visibility = View.VISIBLE
-                } else{
+                } else {
                     TextViewCompat.setTextAppearance(itemText, R.style.unSelectedCategoryStyle)
                     ivSelection.visibility = View.GONE
                 }
                 itemText.text = category
-                root.setOnClickListener{
+                root.setOnClickListener {
 
                     onClick(category)
                 }
@@ -58,7 +58,11 @@ DIFF
 
         }
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryAdapter.ExpenseHolder {
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): CategoryAdapter.ExpenseHolder {
         val binding = ItemCategoryBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
