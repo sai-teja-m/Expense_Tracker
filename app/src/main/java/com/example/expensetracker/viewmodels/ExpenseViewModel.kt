@@ -19,7 +19,7 @@ class ExpenseViewModel(
     private val updateUse: UpdateExpenseUseCase,
     private val deleteCase: DeleteExpenseUseCase,
     private val getAllUse: GetAllUseCase,
-    private val getByCatUseCase: GetByCatUseCase,
+    private val getByCatUseCase: GetByCategoryUseCase,
     private val getCatUseCase: GetCategoryUseCase,
     private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
     private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase
@@ -192,7 +192,7 @@ class ExpenseViewModelFactory @Inject constructor(
     private val updateUse: UpdateExpenseUseCase,
     private val deleteCase: DeleteExpenseUseCase,
     private val getAllUse: GetAllUseCase,
-    private val getByCatUseCase: GetByCatUseCase,
+    private val getByCatUseCase: GetByCategoryUseCase,
     private val getCatUseCase: GetCategoryUseCase,
     private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
     private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase

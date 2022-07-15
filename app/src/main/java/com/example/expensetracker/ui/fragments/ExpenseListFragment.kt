@@ -158,7 +158,7 @@ class ExpenseListFragment : DaggerFragment() {
         binding?.let {
             Snackbar.make(
                 it.listDisplay,
-                "${R.string.total_expense_is} ${viewModel.totalExpense.value}",
+                "${getString(R.string.total_expense_is)} ${viewModel.totalExpense.value}",
                 Snackbar.LENGTH_LONG
             )
                 .show()
@@ -169,13 +169,13 @@ class ExpenseListFragment : DaggerFragment() {
         binding?.let {
 
             if (categoryExpense == null) {
-                Snackbar.make(it.listDisplay, "${R.string.no_filter_applied}", Snackbar.LENGTH_LONG)
+                Snackbar.make(it.listDisplay, "${getString(R.string.no_filter_applied)}", Snackbar.LENGTH_LONG)
                     .show()
             } else {
 
                 Snackbar.make(
                     it.listDisplay,
-                    "${R.string.expense_for} ${viewModel.selectedCategory.value.toString()} ${R.string.`is`} $categoryExpense",
+                    "${getString(R.string.expense_for)} ${viewModel.selectedCategory.value.toString()} ${getString(R.string.`is`)} $categoryExpense",
                     Snackbar.LENGTH_LONG
                 )
                     .show()

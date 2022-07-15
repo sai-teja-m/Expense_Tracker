@@ -43,7 +43,7 @@ class GetAllUseCase @Inject constructor(
     }
 }
 
-class GetByCatUseCase @Inject constructor(
+class GetByCategoryUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ) : SingleUseCaseListParams<List<Expense>> {
     override fun execute(data: String): Single<List<Expense>> {

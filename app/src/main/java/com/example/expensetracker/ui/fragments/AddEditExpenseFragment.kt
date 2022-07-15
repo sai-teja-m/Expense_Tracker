@@ -61,9 +61,6 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
-
-
     }
 
     override fun onCreateView(
