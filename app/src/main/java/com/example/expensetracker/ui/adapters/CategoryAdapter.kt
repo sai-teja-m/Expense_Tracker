@@ -1,4 +1,4 @@
-package com.example.expensetracker
+package com.example.expensetracker.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.expensetracker.R
 import com.example.expensetracker.databinding.ItemCategoryBinding
 
 
@@ -62,7 +63,7 @@ class CategoryAdapter(private val onClick: (String) -> Unit) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CategoryAdapter.ExpenseHolder {
+    ): ExpenseHolder {
         val binding = ItemCategoryBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -72,7 +73,7 @@ class CategoryAdapter(private val onClick: (String) -> Unit) :
     }
 
 
-    override fun onBindViewHolder(holder: CategoryAdapter.ExpenseHolder, position: Int) {
+    override fun onBindViewHolder(holder: ExpenseHolder, position: Int) {
         holder.bind(position)
 
     }

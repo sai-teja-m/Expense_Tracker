@@ -1,4 +1,4 @@
-package com.example.expensetracker
+package com.example.expensetracker.utils
 
 import android.content.Context
 import android.graphics.Canvas
@@ -8,9 +8,11 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.expensetracker.R
+import com.example.expensetracker.ui.adapters.ExpenseAdapter
 import kotlin.math.abs
 
-class SwipeDeleteCallBack(private val adapter: ExpenseAdapter, private val context: Context) :
+class SwipeToDeleteCallBack(private val adapter: ExpenseAdapter, private val context: Context) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
     private var deleteIcon: Drawable? =
         ContextCompat.getDrawable(context, R.drawable.ic_delete_expense)

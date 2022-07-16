@@ -1,7 +1,11 @@
 package com.example.expensetracker.di
 
-import com.example.expensetracker.*
 import com.example.expensetracker.domain.usecase.*
+import com.example.expensetracker.ui.activity.MainActivity
+import com.example.expensetracker.ui.fragments.AddEditExpenseFragment
+import com.example.expensetracker.ui.fragments.CategoryFragment
+import com.example.expensetracker.ui.fragments.DatePickerFragment
+import com.example.expensetracker.ui.fragments.ExpenseListFragment
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -10,28 +14,21 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class UIModule {
 
-//    @Binds
-//    internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
-
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(ExpenseViewModel::class)
-//    abstract fun provideExpenseViewModel(viewModel: ExpenseViewModel) : ViewModel
 
     @ContributesAndroidInjector
-    abstract  fun bindsListDisplay() : ListDisplay
+    abstract fun bindsListDisplay(): ExpenseListFragment
 
     @ContributesAndroidInjector
-    abstract  fun bindsAddEdit() : AddEdit
+    abstract fun bindsAddEdit(): AddEditExpenseFragment
 
     @ContributesAndroidInjector
-    abstract fun bindsCategoryFragment() : CategoryFragment
+    abstract fun bindsCategoryFragment(): CategoryFragment
 
     @ContributesAndroidInjector
-    abstract fun bindsDatePickerFragment() : DatePickerFragment
+    abstract fun bindsDatePickerFragment(): DatePickerFragment
 
     @ContributesAndroidInjector
-    abstract fun bindsMainActivity() : MainActivity
+    abstract fun bindsMainActivity(): MainActivity
 
     companion object {
         @Provides
@@ -41,8 +38,8 @@ abstract class UIModule {
             updateExpenseUseCase: UpdateExpenseUseCase,
             deleteExpenseUseCase: DeleteExpenseUseCase,
             getAllExpensesUseCase: GetAllUseCase,
-            getByCatUseCase: GetByCatUseCase,
-            getCatUseCase: GetCatUseCase,
+            getByCaegorytUseCase: GetByCategoryUseCase,
+            getCategoryUseCase: GetCategoryUseCase,
             getTotalExpenseUseCase: GetTotalExpenseUseCase,
             getCategoryExpenseUseCase: GetCategoryExpenseUseCase
         ) = ExpenseViewModelFactory(
@@ -50,8 +47,8 @@ abstract class UIModule {
             updateExpenseUseCase,
             deleteExpenseUseCase,
             getAllExpensesUseCase,
-            getByCatUseCase,
-            getCatUseCase,
+            getByCaegorytUseCase,
+            getCategoryUseCase,
             getTotalExpenseUseCase,
             getCategoryExpenseUseCase
         )

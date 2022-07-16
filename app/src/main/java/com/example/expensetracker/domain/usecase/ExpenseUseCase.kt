@@ -3,6 +3,7 @@ package com.example.expensetracker.domain.usecase
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.domain.repository.ExpenseRepository
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -42,7 +43,7 @@ class GetAllUseCase @Inject constructor(
     }
 }
 
-class GetByCatUseCase @Inject constructor(
+class GetByCategoryUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ) : SingleUseCaseListParams<List<Expense>> {
     override fun execute(data: String): Single<List<Expense>> {
@@ -74,10 +75,10 @@ class GetCategoryExpenseUseCase @Inject constructor(
     }
 }
 
-class GetCatUseCase @Inject constructor(
+class GetCategoryUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-) : SingleUseCaseString<String> {
-    override fun execute(): Single<List<String>> {
+) : FlowableUseCaseString<String> {
+    override fun execute(): Flowable<List<String>> {
         return expenseRepo.getCategory()
     }
 }
@@ -101,4 +102,8 @@ interface SingleUseCaseParams<P> {
 
 interface SingleUseCaseString<P> {
     fun execute(): Single<List<P>>
+}
+
+interface FlowableUseCaseString<P> {
+    fun execute(): Flowable<List<P>>
 }

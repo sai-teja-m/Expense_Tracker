@@ -1,7 +1,6 @@
 package com.example.expensetracker.di
 
 import android.app.Application
-import com.example.expensetracker.AppScope
 import com.example.expensetracker.database.expense.ExpenseDao
 import com.example.expensetracker.database.expense.ExpenseDatabase
 import com.example.expensetracker.domain.repository.ExpenseRepository
@@ -13,18 +12,18 @@ import javax.inject.Singleton
 
 @Module
 abstract class DomainModule {
-    companion object{
+    companion object {
         @Provides
         @Singleton
         @JvmStatic
-        fun provideExpenseDatabase(app: Application) : ExpenseDatabase {
+        fun provideExpenseDatabase(app: Application): ExpenseDatabase {
             return ExpenseDatabase.getDatabase(app)
         }
 
         @Provides
         @Singleton
         @JvmStatic
-        fun provideExpenseDao(db : ExpenseDatabase): ExpenseDao {
+        fun provideExpenseDao(db: ExpenseDatabase): ExpenseDao {
             return db.expenseDao()
         }
     }
@@ -32,5 +31,5 @@ abstract class DomainModule {
 
     @Binds
     @Singleton
-    abstract fun bindsExpenseRepository(expenseRepo : ExpenseRepositoryImpl) : ExpenseRepository
+    abstract fun bindsExpenseRepository(expenseRepo: ExpenseRepositoryImpl): ExpenseRepository
 }

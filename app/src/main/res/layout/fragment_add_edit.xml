@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
-    tools:context=".AddEdit">
+    tools:context=".ui.fragments.AddEditExpenseFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edit_title_label"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-
-        android:layout_height="85dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="What is the Expense Title?"
+        android:hint="@string/expense_title_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,19 +21,21 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="textAutoComplete|textCapWords"
+            android:paddingVertical="25dp"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edit_expense_label"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="What is the Expense?"
+        android:hint="@string/expense_amount_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_title_label">
@@ -42,8 +43,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_expense"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="number"
+            android:paddingVertical="25dp"
             android:singleLine="true"
 
             />
@@ -52,31 +54,38 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edit_category_label"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="what is category?"
+        android:hint="@string/expense_category_hint"
         app:layout_constraintEnd_toEndOf="parent"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_expense_label">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
             android:id="@+id/edit_category"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="textAutoComplete|textCapWords"
-            android:singleLine="true" />
+            android:paddingVertical="25dp" />
+
+        <!--        <com.google.android.material.textfield.TextInputEditText-->
+        <!--            android:id="@+id/edit_category"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="65dp"-->
+        <!--            android:inputType="textAutoComplete|textCapWords"-->
+        <!--            android:singleLine="true" />-->
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edit_when_label"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:hint="When did you spend?"
+        android:hint="@string/expense_date_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_category_label">
@@ -84,9 +93,10 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_when"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:editable="false"
             android:focusableInTouchMode="false"
+            android:paddingVertical="25dp"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
