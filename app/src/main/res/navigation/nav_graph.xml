@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_listDisplay_to_categoryFragment"
             app:destination="@id/categoryFragment" />
+        <action
+            android:id="@+id/action_listDisplay_to_graphFragment"
+            app:destination="@id/graphFragment" />
 
     </fragment>
     <fragment
@@ -40,6 +43,11 @@
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.example.expensetracker.ui.fragments.CategoryFragment"
-        android:label="Choose Category"
+        android:label="@string/filter_by_category"
         tools:layout="@layout/fragment_category" />
+    <fragment
+        android:id="@+id/graphFragment"
+        android:name="com.example.expensetracker.ui.fragments.GraphFragment"
+        android:label="fragment_graph"
+        tools:layout="@layout/fragment_graph" />
 </navigation>

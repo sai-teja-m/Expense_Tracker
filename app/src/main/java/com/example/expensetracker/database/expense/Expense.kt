@@ -17,3 +17,8 @@ data class Expense(
     @NotNull @ColumnInfo(name = "when") val `when`: String,
     @NotNull @ColumnInfo(name = "category") val category: String
 ):Parcelable
+
+class CategoryAmount(
+    val category: String,
+    val categoryAmount: Int
+)

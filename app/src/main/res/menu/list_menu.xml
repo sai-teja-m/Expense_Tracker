@@ -16,4 +16,9 @@
         android:id="@+id/category_total"
         android:title="@string/category_exp"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/make_graph"
+        android:title="@string/make_graph"
+        app:showAsAction="never"/>
 </menu>

@@ -22,6 +22,9 @@ interface ExpenseDao {
     @Query("SELECT DISTINCT category FROM Expense ")
     fun getCategory(): Flowable<List<String>>
 
+    @Query("SELECT category as category,SUM(expense) as categoryAmount FROM Expense GROUP BY category")
+    fun getCategoryAndAmount() : Single<List<CategoryAmount>>
+
     @Query("SELECT * FROM Expense ORDER BY `when` ASC")
     fun getAllExpense(): Single<List<Expense>>
 

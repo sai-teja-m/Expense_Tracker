@@ -1,5 +1,6 @@
 package com.example.expensetracker.domain.usecase
 
+import com.example.expensetracker.database.expense.CategoryAmount
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.domain.repository.ExpenseRepository
 import io.reactivex.Completable
@@ -83,6 +84,15 @@ class GetCategoryUseCase @Inject constructor(
     }
 }
 
+class GetCategoryAndAmountUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+): SingleUseCaseParam<CategoryAmount>{
+    override fun execute(): Single<List<CategoryAmount>> {
+        return expenseRepo.getCategoryAndAmount()
+    }
+}
+
+
 interface SingleUseCase<T> {
     fun execute(): Single<T>
 }
@@ -100,10 +110,11 @@ interface SingleUseCaseParams<P> {
     fun execute(data: Int): Single<P>
 }
 
-interface SingleUseCaseString<P> {
-    fun execute(): Single<List<P>>
-}
 
 interface FlowableUseCaseString<P> {
     fun execute(): Flowable<List<P>>
+}
+
+interface SingleUseCaseParam<P> {
+    fun execute(): Single<List<P>>
 }

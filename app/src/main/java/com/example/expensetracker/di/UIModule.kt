@@ -2,10 +2,7 @@ package com.example.expensetracker.di
 
 import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.ui.activity.MainActivity
-import com.example.expensetracker.ui.fragments.AddEditExpenseFragment
-import com.example.expensetracker.ui.fragments.CategoryFragment
-import com.example.expensetracker.ui.fragments.DatePickerFragment
-import com.example.expensetracker.ui.fragments.ExpenseListFragment
+import com.example.expensetracker.ui.fragments.*
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -28,6 +25,9 @@ abstract class UIModule {
     abstract fun bindsDatePickerFragment(): DatePickerFragment
 
     @ContributesAndroidInjector
+    abstract fun bindsGraphFragment() : GraphFragment
+
+    @ContributesAndroidInjector
     abstract fun bindsMainActivity(): MainActivity
 
     companion object {
@@ -38,19 +38,21 @@ abstract class UIModule {
             updateExpenseUseCase: UpdateExpenseUseCase,
             deleteExpenseUseCase: DeleteExpenseUseCase,
             getAllExpensesUseCase: GetAllUseCase,
-            getByCaegorytUseCase: GetByCategoryUseCase,
+            getByCategoryUseCase: GetByCategoryUseCase,
             getCategoryUseCase: GetCategoryUseCase,
             getTotalExpenseUseCase: GetTotalExpenseUseCase,
-            getCategoryExpenseUseCase: GetCategoryExpenseUseCase
+            getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
+            getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase
         ) = ExpenseViewModelFactory(
             insertExpenseUseCase,
             updateExpenseUseCase,
             deleteExpenseUseCase,
             getAllExpensesUseCase,
-            getByCaegorytUseCase,
+            getByCategoryUseCase,
             getCategoryUseCase,
             getTotalExpenseUseCase,
-            getCategoryExpenseUseCase
+            getCategoryExpenseUseCase,
+            getCategoryAndAmountUseCase
         )
     }
 }

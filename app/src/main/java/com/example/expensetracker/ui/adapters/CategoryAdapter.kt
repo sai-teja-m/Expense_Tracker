@@ -12,7 +12,7 @@ import com.example.expensetracker.databinding.ItemCategoryBinding
 
 
 class CategoryAdapter(private val onClick: (String) -> Unit) :
-    ListAdapter<String, CategoryAdapter.ExpenseHolder>(
+    ListAdapter<String, CategoryAdapter.CategoryHolder>(
         DIFF
     ) {
     companion object {
@@ -33,7 +33,7 @@ class CategoryAdapter(private val onClick: (String) -> Unit) :
         currentSelectedCategory = category
     }
 
-    inner class ExpenseHolder(private val binding: ItemCategoryBinding) :
+    inner class CategoryHolder(private val binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             binding.run {
@@ -63,17 +63,17 @@ class CategoryAdapter(private val onClick: (String) -> Unit) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ExpenseHolder {
+    ): CategoryHolder {
         val binding = ItemCategoryBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return ExpenseHolder(binding)
+        return CategoryHolder(binding)
     }
 
 
-    override fun onBindViewHolder(holder: ExpenseHolder, position: Int) {
+    override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
         holder.bind(position)
 
     }

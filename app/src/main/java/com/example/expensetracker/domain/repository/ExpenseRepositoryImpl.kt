@@ -1,5 +1,6 @@
 package com.example.expensetracker.domain.repository
 
+import com.example.expensetracker.database.expense.CategoryAmount
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.database.expense.ExpenseDao
 import io.reactivex.Completable
@@ -28,6 +29,10 @@ class ExpenseRepositoryImpl @Inject constructor(
 
     override fun getCategory() : Flowable<List<String>>{
         return dao.getCategory()
+    }
+
+    override fun getCategoryAndAmount(): Single<List<CategoryAmount>> {
+        return dao.getCategoryAndAmount()
     }
 
     override fun getTotalExpense(): Single<Int> {

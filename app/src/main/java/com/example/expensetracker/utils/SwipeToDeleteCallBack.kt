@@ -15,7 +15,7 @@ import kotlin.math.abs
 class SwipeToDeleteCallBack(private val adapter: ExpenseAdapter, private val context: Context) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
     private var deleteIcon: Drawable? =
-        ContextCompat.getDrawable(context, R.drawable.ic_delete_expense)
+        ContextCompat.getDrawable(context, R.drawable.ic_delete_white)
     private var deleteBackground: ColorDrawable? = ColorDrawable(Color.RED)
     override fun onMove(
         recyclerView: RecyclerView,

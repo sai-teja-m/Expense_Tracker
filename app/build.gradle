@@ -92,5 +92,7 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    implementation "com.github.blackfizz:eazegraph:1.2.5l@aar"
+    implementation "com.nineoldandroids:library:2.4.0"
 
 }

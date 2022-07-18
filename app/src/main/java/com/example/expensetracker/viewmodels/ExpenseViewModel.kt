@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.expensetracker.R
+import com.example.expensetracker.database.expense.CategoryAmount
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.domain.usecase.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,7 +23,8 @@ class ExpenseViewModel(
     private val getByCatUseCase: GetByCategoryUseCase,
     private val getCatUseCase: GetCategoryUseCase,
     private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
-    private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase
+    private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
+    private val getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase
 ) : ViewModel() {
 
     private val uiScheduler by lazy { AndroidSchedulers.mainThread() }
@@ -41,6 +43,9 @@ class ExpenseViewModel(
     val totalExpense: LiveData<Int> = _totalExpense
     private val _categoryExpense: MutableLiveData<Int> = MutableLiveData()
     val categoryExpense: LiveData<Int> = _categoryExpense
+
+    private val _categoryAndAmount : MutableLiveData<List<CategoryAmount>> = MutableLiveData()
+    val categoryAndAmount: LiveData<List<CategoryAmount>> = _categoryAndAmount
 
     fun isEntryValid(
         expenseTitle: String,
@@ -89,6 +94,17 @@ class ExpenseViewModel(
                 _categoryExpense.postValue(it)
             }, {
                 Log.e("CategoryExpenseVM", "Error in Getting Category Expense")
+            }).let {
+                compositeDisposable.add(it)
+            }
+    }
+
+    fun getCategoryAndAmount(){
+        getCategoryAndAmountUseCase.execute().subscribeOn(ioScheduler).observeOn(uiScheduler)
+            .subscribe({
+                _categoryAndAmount.postValue(it)
+            },{
+                Log.e("CategoryAndAmount", "error in getting categories and amounts")
             }).let {
                 compositeDisposable.add(it)
             }
@@ -185,7 +201,17 @@ class ExpenseViewModel(
         )
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        if (disposableDelegate.isInitialized()) {
+            compositeDisposable.dispose()
+            compositeDisposable.clear()
+        }
+    }
+
 }
+
+
 
 class ExpenseViewModelFactory @Inject constructor(
     private val insertUse: InsertExpenseUseCase,
@@ -195,7 +221,8 @@ class ExpenseViewModelFactory @Inject constructor(
     private val getByCatUseCase: GetByCategoryUseCase,
     private val getCatUseCase: GetCategoryUseCase,
     private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
-    private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase
+    private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
+    private val getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ExpenseViewModel::class.java)) {
@@ -208,7 +235,8 @@ class ExpenseViewModelFactory @Inject constructor(
                 getByCatUseCase,
                 getCatUseCase,
                 getTotalExpenseUseCase,
-                getCategoryExpenseUseCase
+                getCategoryExpenseUseCase,
+                getCategoryAndAmountUseCase
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

@@ -1,6 +1,5 @@
 package com.example.expensetracker.ui.fragments
 
-import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.Observer
@@ -76,6 +75,11 @@ class ExpenseListFragment : DaggerFragment() {
                 onClickFilter()
                 true
             }
+            R.id.make_graph -> {
+                viewModel.getCategoryAndAmount()
+                findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToGraphFragment())
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -97,7 +101,6 @@ class ExpenseListFragment : DaggerFragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
