@@ -77,7 +77,8 @@ class ExpenseListFragment : DaggerFragment() {
             }
             R.id.make_graph -> {
                 viewModel.getCategoryAndAmount()
-                findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToGraphFragment())
+
+
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -148,6 +149,10 @@ class ExpenseListFragment : DaggerFragment() {
                     showSnackBarCategoryExp(it)
                     viewModel.clearCategoryExpense()
                 }
+            }
+
+            viewModel.categoryAndAmount.observe(viewLifecycleOwner){
+                findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToGraphFragment())
             }
 
             viewModel.getAllExpenses()

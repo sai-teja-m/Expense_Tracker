@@ -1,5 +1,6 @@
 package com.example.expensetracker.viewmodels
 
+import SingleLiveEvent
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -44,7 +45,7 @@ class ExpenseViewModel(
     private val _categoryExpense: MutableLiveData<Int> = MutableLiveData()
     val categoryExpense: LiveData<Int> = _categoryExpense
 
-    private val _categoryAndAmount : MutableLiveData<List<CategoryAmount>> = MutableLiveData()
+    private val _categoryAndAmount : SingleLiveEvent<List<CategoryAmount>> = SingleLiveEvent()
     val categoryAndAmount: LiveData<List<CategoryAmount>> = _categoryAndAmount
 
     fun isEntryValid(
