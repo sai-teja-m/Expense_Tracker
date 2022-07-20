@@ -1,6 +1,7 @@
 package com.example.expensetracker.ui.fragments
 
 import android.annotation.SuppressLint
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.expensetracker.R
 import com.example.expensetracker.databinding.FragmentGraphBinding
@@ -41,6 +43,9 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
     private var _binding: FragmentGraphBinding? = null
     private val binding get() = _binding
 
+    private val entries: ArrayList<PieEntry> = ArrayList()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -54,7 +59,7 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
         return binding?.root
     }
 
-    private val entries: ArrayList<PieEntry> = ArrayList()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         viewModel.categoryAndAmount.value?.let {
@@ -97,6 +102,7 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
         l?.verticalAlignment = Legend.LegendVerticalAlignment.TOP
         l?.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
         l?.orientation = Legend.LegendOrientation.VERTICAL
+        l?.textColor = ContextCompat.getColor(requireContext(),R.color.graph_legend)
         l?.setDrawInside(false)
         l?.isEnabled = true
 
@@ -117,15 +123,17 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
             "Value: " + e.y + ", index: " + h.x
                     + ", DataSet index: " + h.dataSetIndex
         )
-        val textView: TextView? = binding?.pieValue
-        textView?.text = getString(R.string.pie_chart_text, e.y.toInt(),entries[h.x.toInt()].label.toString())
-
+         val textView: TextView? = binding?.pieValue
+        viewModel.getTotalExpense()
+        textView?.text = getString(R.string.pie_chart_text, e.y.toInt(),entries[h.x.toInt()].label.toString(),e.y*100/ viewModel.totalExpense.value!!)
+        textView?.visibility = View.VISIBLE
 
 
     }
 
     override fun onNothingSelected() {
-        Log.i("PieChart", "nothing selected")
+         val textView: TextView? = binding?.pieValue
+        textView?.visibility = View.GONE
     }
 
 }
