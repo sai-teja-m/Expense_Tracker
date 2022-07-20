@@ -2,6 +2,7 @@ package com.example.expensetracker.ui.fragments
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
@@ -227,8 +228,14 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {
-        binding?.editWhen?.setText("$day/$month/$year")
-
+        val months:List<String> = listOf("Jan","Feb","Mar" ,"Apr" ,"May","Jun" , "Jul","Aug","Sep","Oct","Nov","Dec")
+        val m = months[month]
+        val str:String ="$day $m $year"
+        binding?.editWhen?.setText(str)
+        val arr = str.split( " ")
+        val date = arr[0]
+        val mon = arr[1]
+        val yr= arr[2]
     }
 
 }

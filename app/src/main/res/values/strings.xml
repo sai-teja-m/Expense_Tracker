@@ -24,7 +24,9 @@
     <string name="expense_title_hint">Expense Title</string>
     <string name="expense_amount_hint">Amount</string>
     <string name="expense_category_hint">Category</string>
-    <string name="expense_date_hint">Date</string>
+    <string name="expense_date_month_hint">Month</string>
+    <string name="expense_date_date_hint">Date</string>
+    <string name="expense_date_year_hint">Year</string>I
     <string name="travel">Travel</string>
     <string name="food">Food</string>
     <string name="entertainment">Entertainment</string>

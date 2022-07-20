@@ -10,4 +10,6 @@
     <color name="red">#C31313</color>
     <color name="grey">#80AEACAC</color>
     <color name="graph_legend">@color/black</color>
+    <color name="card_grey">@color/white</color>
+    <color name="list_background">#F0F3F7</color>
 </resources>

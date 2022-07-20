@@ -1,95 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="10dp"
-
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="5dp"
     >
 
-    <FrameLayout xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="0dp"
-        card_view:layout_constraintBottom_toBottomOf="parent"
-        card_view:layout_constraintEnd_toEndOf="parent"
-        card_view:layout_constraintStart_toStartOf="parent"
-        card_view:layout_constraintTop_toTopOf="parent">
+        android:minHeight="60dp"
+        app:cardElevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="10dp"
+        android:layout_marginHorizontal="2dp"
+        android:layout_marginVertical="2dp"
+        android:backgroundTint="@color/card_grey"
+        >
 
         <LinearLayout
-            android:id="@+id/title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="60dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/edit_layout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:paddingVertical="6dp"
+            android:layout_marginVertical="10dp"
+            >
 
-            <TextView
-                android:id="@+id/expense_title"
-                style="@style/TextAppearance.Material3.TitleMedium"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
+                android:layout_weight="1.2"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.5"
-                tools:text="@string/expense_title_hint" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/expense"
-                style="@style/TextAppearance.Material3.TitleMedium"
+                <TextView
+                    android:id="@+id/when_month"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    tools:text="@string/expense_date_month_hint"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/when_date"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    />
+                <TextView
+                    android:id="@+id/when_date"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment= "center"
+                    tools:text="@string/expense_date_date_hint"
+                    app:layout_constraintTop_toBottomOf="@+id/when_month"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/when_year"
+                    />
+                <TextView
+                    android:id="@+id/when_year"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment= "center"
+                    tools:text="@string/expense_date_year_hint"
+                    app:layout_constraintTop_toBottomOf="@+id/when_date"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grey"
+                />
+            <LinearLayout
+                android:id="@+id/title_layout"
                 android:layout_width="0dp"
+                android:layout_weight="3.5"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="textEnd"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                >
+                <TextView
+                    android:id="@+id/category"
+                    style="@style/TextAppearance.Material3.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    app:layout_constraintTop_toBottomOf="@+id/expense_title"
+                    tools:text="@string/expense_category_hint" />
+
+                <TextView
+                    android:id="@+id/expense_title"
+                    style="@style/TextAppearance.Material3.TitleMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    tools:text="this is large text so "/>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/edit_layout"
+                android:layout_width="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/expense_title"
-                tools:text="@string/expense_amount_hint" />
+                app:layout_constraintTop_toBottomOf="@+id/title_layout"
+                android:paddingHorizontal="10dp"
+                android:layout_gravity="center_vertical"
+                >
 
+                <TextView
+                    android:id="@+id/expense"
+                    style="@style/TextAppearance.Material3.TitleMedium"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintStart_toEndOf="@+id/expense_title"
+                    tools:text="@string/expense_amount_hint"
+                    android:textAlignment="textEnd"
+                    android:layout_gravity="end"
+                    android:layout_marginRight="5dp"
+
+                    />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/edit_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_layout">
+    </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/category"
-                style="@style/TextAppearance.Material3.BodyMedium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.5"
-                app:layout_constraintTop_toBottomOf="@+id/expense_title"
-                tools:text="@string/expense_category_hint" />
-
-            <TextView
-                android:id="@+id/when"
-                style="@style/TextAppearance.Material3.BodyMedium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="textEnd"
-                app:layout_constraintTop_toBottomOf="@+id/expense_title"
-                tools:text="@string/expense_date_hint" />
-        </LinearLayout>
-
-
-    </FrameLayout>
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/grey"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_view" />
+<!--    <View-->
+<!--        android:id="@+id/divider"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="2dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:background="@color/grey"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/card_view" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
