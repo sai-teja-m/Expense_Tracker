@@ -1,6 +1,7 @@
 package com.example.expensetracker.di
 
 import android.app.Application
+import com.example.expensetracker.database.expense.DateConverter
 import com.example.expensetracker.database.expense.ExpenseDao
 import com.example.expensetracker.database.expense.ExpenseDatabase
 import com.example.expensetracker.domain.repository.ExpenseRepository
@@ -26,10 +27,17 @@ abstract class DomainModule {
         fun provideExpenseDao(db: ExpenseDatabase): ExpenseDao {
             return db.expenseDao()
         }
+
+        @Provides
+        @JvmStatic
+        fun provideDateConverter(): DateConverter{
+            return DateConverter()
+        }
     }
 
 
     @Binds
     @Singleton
     abstract fun bindsExpenseRepository(expenseRepo: ExpenseRepositoryImpl): ExpenseRepository
+
 }

@@ -25,7 +25,7 @@ interface ExpenseDao {
     @Query("SELECT category as category,SUM(expense) as categoryAmount FROM Expense GROUP BY category")
     fun getCategoryAndAmount() : Single<List<CategoryAmount>>
 
-    @Query("SELECT * FROM Expense ORDER BY `when` ASC")
+    @Query("SELECT * FROM Expense ORDER BY date(`when`) DESC")
     fun getAllExpense(): Single<List<Expense>>
 
     @Query("SELECT SUM(expense) FROM Expense ")

@@ -1,17 +1,20 @@
 package com.example.expensetracker.ui.fragments
 
 import android.app.DatePickerDialog
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import androidx.annotation.RequiresApi
 import androidx.core.widget.doOnTextChanged
 
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.expensetracker.R
+import com.example.expensetracker.database.expense.DateConverter
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentAddEditBinding
 import com.example.expensetracker.viewmodels.ExpenseViewModel
@@ -52,6 +55,9 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
 
+    @Inject
+    lateinit var dateConverter: DateConverter
+
     private val viewModel: ExpenseViewModel by activityViewModels {
         expenseViewModelFactory
     }
@@ -78,22 +84,21 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
             editTitle.setText(expense.expenseTitle)
             editExpense.setText(expense.expense.toString())
             editCategory.setText(expense.category)
-            editWhen.setText(expense.`when`)
+            editWhen.setText(dateConverter.fromDate(expense.`when`))
             editDone.text = getString(R.string.update)
         }
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun addNewExpense() {
-
-
+        val date = dateConverter.toDate(binding?.editWhen?.text.toString())
         if (isEntryValid()) {
             binding?.run {
-
                 viewModel.addNewExpense(
                     editTitle.text.toString(),
                     editExpense.text.toString(),
-                    editWhen.text.toString(),
+                    dateConverter.toDate(editWhen.text.toString()),
                     editCategory.text.toString()
                 )
             }
@@ -104,6 +109,7 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateExpense() {
 
 
@@ -112,7 +118,7 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
                 val exp = navigationArgs.expense?.copy(
                     expenseTitle = editTitle.text.toString(),
                     expense = editExpense.text.toString().toInt(),
-                    `when` = editWhen.text.toString(),
+                    `when` = dateConverter.toDate(editWhen.text.toString()),
                     category = editCategory.text.toString()
 
                 )
@@ -126,6 +132,7 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
@@ -153,7 +160,7 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
         binding?.run {
             editTitle.doOnTextChanged { _, _, _, _ ->
 
-                editTitleLabel.isErrorEnabled =   false
+                editTitleLabel.isErrorEnabled = false
             }
             editExpense.doOnTextChanged { _, _, _, _ ->
                 editExpenseLabel.isErrorEnabled = false
@@ -166,17 +173,20 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
             }
         }
         binding?.run {
-            val categoryList:MutableList<String> = (viewModel.categoryList.value?.toMutableList()?: mutableListOf()).apply {
-                addAll(getDefaultCategoryList())
+            val categoryList: MutableList<String> =
+                (viewModel.categoryList.value?.toMutableList() ?: mutableListOf()).apply {
+                    addAll(getDefaultCategoryList())
 
-            }
-            val adapter = ArrayAdapter(requireContext(),
-                R.layout.dropdown_category_list, categoryList.distinct())
+                }
+            val adapter = ArrayAdapter(
+                requireContext(),
+                R.layout.dropdown_category_list, categoryList.distinct()
+            )
             editCategory.setAdapter(adapter)
         }
     }
 
-    private fun getDefaultCategoryList():List<String>{
+    private fun getDefaultCategoryList(): List<String> {
         return listOf(
             getString(R.string.food),
             getString(R.string.grocery),
@@ -186,6 +196,7 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
             getString(R.string.travel)
         )
     }
+
     private fun isEntryValid(): Boolean {
         var temp = false
         val errorMap: MutableMap<Int, Int> = mutableMapOf()
@@ -214,28 +225,41 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
             }
             if (errorMap.containsKey(2)) {
                 errorMap[2]?.let {
-                    editExpenseLabel.error = getString(it) }
+                    editExpenseLabel.error = getString(it)
+                }
             }
             if (errorMap.containsKey(3)) {
                 errorMap[3]?.let {
-                    editCategoryLabel.error = getString(it) }
+                    editCategoryLabel.error = getString(it)
+                }
             }
             if (errorMap.containsKey(4)) {
                 errorMap[4]?.let {
-                    editWhenLabel.error = getString(it) }
+                    editWhenLabel.error = getString(it)
+                }
             }
         }
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {
-        val months:List<String> = listOf("Jan","Feb","Mar" ,"Apr" ,"May","Jun" , "Jul","Aug","Sep","Oct","Nov","Dec")
+        val months: List<String> = listOf(
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec"
+        )
         val m = months[month]
-        val str:String ="$day $m $year"
+        Log.d("month" , "$m")
+        val str: String = "$m $day $year"
         binding?.editWhen?.setText(str)
-        val arr = str.split( " ")
-        val date = arr[0]
-        val mon = arr[1]
-        val yr= arr[2]
     }
 
 }

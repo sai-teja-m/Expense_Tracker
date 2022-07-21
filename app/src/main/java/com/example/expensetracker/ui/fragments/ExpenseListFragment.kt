@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.expensetracker.R
+import com.example.expensetracker.database.expense.DateConverter
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentListDisplayBinding
 import com.example.expensetracker.ui.adapters.ExpenseAdapter
@@ -22,11 +23,13 @@ import javax.inject.Inject
 class ExpenseListFragment : DaggerFragment() {
 
 
-    private val expenseAdapter: ExpenseAdapter by lazy { ExpenseAdapter(::onClickEdit, ::onDelete) }
+    private val expenseAdapter: ExpenseAdapter by lazy { ExpenseAdapter(::onClickEdit, ::onDelete,dateConverter) }
 
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
 
+    @Inject
+    lateinit var dateConverter: DateConverter
 
     private lateinit var menu: Menu
 
@@ -59,7 +62,11 @@ class ExpenseListFragment : DaggerFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.total_expense -> {
-                showSnackBarTotalExp()
+                if(viewModel.allExpense.value.isNullOrEmpty()){
+                    showSnackBarTotalExpEmpty()
+                }else {
+                    showSnackBarTotalExp()
+                }
                 true
             }
             R.id.category_total -> {
@@ -162,6 +169,18 @@ class ExpenseListFragment : DaggerFragment() {
 
         }
     }
+
+    private fun showSnackBarTotalExpEmpty() {
+        binding?.let {
+            Snackbar.make(
+                it.listDisplay,
+                getString(R.string.empty_list),
+                Snackbar.LENGTH_LONG
+            )
+                .show()
+        }
+    }
+
 
     private fun showSnackBarTotalExp() {
         binding?.let {

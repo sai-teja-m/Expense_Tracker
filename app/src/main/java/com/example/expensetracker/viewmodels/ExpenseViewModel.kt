@@ -1,18 +1,22 @@
 package com.example.expensetracker.viewmodels
 
 import SingleLiveEvent
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.expensetracker.R
 import com.example.expensetracker.database.expense.CategoryAmount
+import com.example.expensetracker.database.expense.DateConverter
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.domain.usecase.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 import javax.inject.Inject
 
 
@@ -25,7 +29,8 @@ class ExpenseViewModel(
     private val getCatUseCase: GetCategoryUseCase,
     private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
     private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
-    private val getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase
+    private val getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase,
+    private val converters: DateConverter
 ) : ViewModel() {
 
     private val uiScheduler by lazy { AndroidSchedulers.mainThread() }
@@ -60,12 +65,18 @@ class ExpenseViewModel(
             errorMap[1] = R.string.empty_title_msg
             validEntry = false
         }
-        if (expense.isBlank()) {
-            errorMap[2] = R.string.empty_amount_msg
+        if (expense.isBlank() || expense.toInt()> 2147483646) {
+            if(expense.isBlank())
+                errorMap[2] = R.string.empty_amount_msg
+            else
+                errorMap[2] = R.string.exceed_amount_msg
             validEntry = false
         }
-        if (category.isBlank()) {
-            errorMap[3] = R.string.empty_category_msg
+        if (category.isBlank() || category.contains(" ") || category.contains(",")) {
+            if(category.isBlank())
+                errorMap[3] = R.string.empty_category_msg
+            else
+                errorMap[3] = R.string.space_category_msg
             validEntry = false
         }
         if (`when`.isBlank()) {
@@ -135,15 +146,15 @@ class ExpenseViewModel(
         getAllUse
             .execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({ list ->
                 _allExpense.postValue(list)
-            }, {
-                Log.e("getAllError", "error in loading DB in getALL")
+            }, {err ->
+                Log.e("get ALL Exp",err.toString())
             }
             ).let {
                 compositeDisposable.add(it)
             }
     }
 
-    fun addNewExpense(expenseTitle: String, expense: String, `when`: String, category: String) {
+    fun addNewExpense(expenseTitle: String, expense: String, `when`: Date?, category: String) {
         Log.d("addExp", "$expenseTitle")
         val newExpense = getNewExpenseEntry(expenseTitle, expense, `when`, category)
         insertUse.execute(newExpense).subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
@@ -191,7 +202,7 @@ class ExpenseViewModel(
     private fun getNewExpenseEntry(
         expenseTitle: String,
         expense: String,
-        `when`: String,
+        `when`: Date?,
         category: String
     ): Expense {
         return Expense(
@@ -223,7 +234,8 @@ class ExpenseViewModelFactory @Inject constructor(
     private val getCatUseCase: GetCategoryUseCase,
     private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
     private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
-    private val getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase
+    private val getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase,
+    private val converters: DateConverter
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ExpenseViewModel::class.java)) {
@@ -237,7 +249,8 @@ class ExpenseViewModelFactory @Inject constructor(
                 getCatUseCase,
                 getTotalExpenseUseCase,
                 getCategoryExpenseUseCase,
-                getCategoryAndAmountUseCase
+                getCategoryAndAmountUseCase,
+                converters
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

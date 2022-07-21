@@ -15,7 +15,9 @@
     <string name="clear_filter">Clear Filter</string>
     <string name="empty_title_msg">Title cannot be empty</string>
     <string name="empty_amount_msg">Amount cannot be empty</string>
+    <string name="exceed_amount_msg">Amount Exceeding the limit</string>
     <string name="empty_category_msg">Category cannot be empty</string>
+    <string name="space_category_msg">There can\'t be multiple Categories</string>
     <string name="empty_date_msg">Date cannot be empty</string>
     <string name="expense_amount">₹ %d</string>
     <string name="expense_title">%s</string>
@@ -36,6 +38,7 @@
     <string name="shopping">Shopping</string>
     <string name="no_items_found">No Expenses Found</string>
     <string name="total_expense_is">Total Expense is %s</string>
+    <string name="empty_list">No Expense Found</string>
     <string name="no_filter_applied">No Filter Applied</string>
     <string name="expense_for">Expense for %s is %s</string>
     <string name="make_graph">Category wise Expense</string>

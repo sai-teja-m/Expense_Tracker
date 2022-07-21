@@ -1,5 +1,6 @@
 package com.example.expensetracker.di
 
+import com.example.expensetracker.database.expense.DateConverter
 import com.example.expensetracker.domain.usecase.*
 import com.example.expensetracker.ui.activity.MainActivity
 import com.example.expensetracker.ui.fragments.*
@@ -42,7 +43,8 @@ abstract class UIModule {
             getCategoryUseCase: GetCategoryUseCase,
             getTotalExpenseUseCase: GetTotalExpenseUseCase,
             getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
-            getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase
+            getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase,
+            dateConverter: DateConverter
         ) = ExpenseViewModelFactory(
             insertExpenseUseCase,
             updateExpenseUseCase,
@@ -52,7 +54,8 @@ abstract class UIModule {
             getCategoryUseCase,
             getTotalExpenseUseCase,
             getCategoryExpenseUseCase,
-            getCategoryAndAmountUseCase
+            getCategoryAndAmountUseCase,
+            dateConverter
         )
     }
 }
