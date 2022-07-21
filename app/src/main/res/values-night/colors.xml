@@ -4,4 +4,5 @@
     <color name="graph_legend">@color/white</color>
     <color name="card_grey">#222327</color>
     <color name="list_background">@color/black</color>
+    <color name="not_found_icon_color">#D3D3D3</color>
 </resources>

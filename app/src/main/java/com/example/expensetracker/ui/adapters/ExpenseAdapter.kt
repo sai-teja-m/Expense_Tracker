@@ -1,9 +1,7 @@
 package com.example.expensetracker.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -33,11 +31,11 @@ class ExpenseAdapter(private val onClick: (Expense) -> Unit, val onDelete: (Expe
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             val exp: Expense = getItem(position)
-            val str:String = exp.`when`
-            val arr = str.split( " ")
+            val str: String = exp.`when`
+            val arr = str.split(" ")
             val date = arr[0]
             val mon = arr[1]
-            val yr= arr[2]
+            val yr = arr[2]
 
             binding.run {
 //                if (position == itemCount - 1)
@@ -47,7 +45,7 @@ class ExpenseAdapter(private val onClick: (Expense) -> Unit, val onDelete: (Expe
 //                }
                 expenseTitle.text = root.context.getString(R.string.expense_title, exp.expenseTitle)
                 expense.text = root.context.getString(R.string.expense_amount, exp.expense)
-                whenMonth.text =  mon
+                whenMonth.text = mon
                 whenDate.text = date
                 whenYear.text = yr
 //                `when`.text = root.context.getString(R.string.expense_date, exp.`when`)
@@ -57,8 +55,6 @@ class ExpenseAdapter(private val onClick: (Expense) -> Unit, val onDelete: (Expe
                 }
             }
         }
-
-
     }
 
 
