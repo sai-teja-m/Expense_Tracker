@@ -23,7 +23,13 @@ import javax.inject.Inject
 class ExpenseListFragment : DaggerFragment() {
 
 
-    private val expenseAdapter: ExpenseAdapter by lazy { ExpenseAdapter(::onClickEdit, ::onDelete,dateConverter) }
+    private val expenseAdapter: ExpenseAdapter by lazy {
+        ExpenseAdapter(
+            ::onClickEdit,
+            ::onDelete,
+            dateConverter
+        )
+    }
 
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
@@ -62,9 +68,9 @@ class ExpenseListFragment : DaggerFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.total_expense -> {
-                if(viewModel.allExpense.value.isNullOrEmpty()){
+                if (viewModel.allExpense.value.isNullOrEmpty()) {
                     showSnackBarTotalExpEmpty()
-                }else {
+                } else {
                     showSnackBarTotalExp()
                 }
                 true
@@ -158,7 +164,7 @@ class ExpenseListFragment : DaggerFragment() {
                 }
             }
 
-            viewModel.categoryAndAmount.observe(viewLifecycleOwner){
+            viewModel.categoryAndAmount.observe(viewLifecycleOwner) {
                 findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToGraphFragment())
             }
 
@@ -186,7 +192,7 @@ class ExpenseListFragment : DaggerFragment() {
         binding?.let {
             Snackbar.make(
                 it.listDisplay,
-                getString(R.string.total_expense_is,viewModel.totalExpense.value.toString()),
+                getString(R.string.total_expense_is, viewModel.totalExpense.value.toString()),
                 Snackbar.LENGTH_LONG
             )
                 .show()
@@ -197,13 +203,21 @@ class ExpenseListFragment : DaggerFragment() {
         binding?.let {
 
             if (categoryExpense == null) {
-                Snackbar.make(it.listDisplay, getString(R.string.no_filter_applied), Snackbar.LENGTH_LONG)
+                Snackbar.make(
+                    it.listDisplay,
+                    getString(R.string.no_filter_applied),
+                    Snackbar.LENGTH_LONG
+                )
                     .show()
             } else {
 
                 Snackbar.make(
                     it.listDisplay,
-                    getString(R.string.expense_for ,viewModel.selectedCategory.value.toString(), categoryExpense.toString()),
+                    getString(
+                        R.string.expense_for,
+                        viewModel.selectedCategory.value.toString(),
+                        categoryExpense.toString()
+                    ),
                     Snackbar.LENGTH_LONG
                 )
                     .show()
@@ -223,7 +237,6 @@ class ExpenseListFragment : DaggerFragment() {
     private fun onDelete(expense: Expense) {
         viewModel.deleteExpense(expense)
     }
-
 
     private fun setFilterIcon() {
         if (::menu.isInitialized) {

@@ -7,7 +7,7 @@ import java.util.*
 class DateConverter {
 
 
-    private val formatter = SimpleDateFormat("MMM D yyyy", Locale.getDefault())
+    private val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     @TypeConverter
     fun toDate(value: String?): Date? {

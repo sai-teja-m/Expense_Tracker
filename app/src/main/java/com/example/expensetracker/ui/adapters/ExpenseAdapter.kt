@@ -12,7 +12,11 @@ import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.ExpenseViewBinding
 
 
-class ExpenseAdapter(private val onClick: (Expense) -> Unit, val onDelete: (Expense) -> Unit, private val dateConverter: DateConverter) :
+class ExpenseAdapter(
+    private val onClick: (Expense) -> Unit,
+    val onDelete: (Expense) -> Unit,
+    private val dateConverter: DateConverter
+) :
     ListAdapter<Expense, ExpenseAdapter.ExpenseHolder>(
         DIFF
     ) {
@@ -34,13 +38,27 @@ class ExpenseAdapter(private val onClick: (Expense) -> Unit, val onDelete: (Expe
         fun bind(position: Int) {
             val exp: Expense = getItem(position)
             val str: String? = dateConverter.fromDate(exp.`when`)
-            if(str != null)
-            Log.d("date",str)
-            val arr = str?.split(" ")
-            if(str != null && arr != null) {
-                val mon = arr[0]
-                val date = arr[1]
-                val yr = arr[2]
+            if (str != null)
+                Log.d("date", str)
+            val arr = str?.split("-")
+            if (str != null && arr != null) {
+                val months: List<String> = listOf(
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec"
+                )
+                val mon = months[arr[1].toInt() - 1]
+                val date = arr[2]
+                val yr = arr[0]
 
                 binding.run {
 //                if (position == itemCount - 1)

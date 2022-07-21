@@ -3,13 +3,11 @@ package com.example.expensetracker.ui.fragments
 import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doOnTextChanged
-
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -92,7 +90,6 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addNewExpense() {
-        val date = dateConverter.toDate(binding?.editWhen?.text.toString())
         if (isEntryValid()) {
             binding?.run {
                 viewModel.addNewExpense(
@@ -242,23 +239,7 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, day: Int) {
-        val months: List<String> = listOf(
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec"
-        )
-        val m = months[month]
-        Log.d("month" , "$m")
-        val str: String = "$m $day $year"
+        val str: String = "$year-${month + 1}-$day"
         binding?.editWhen?.setText(str)
     }
 

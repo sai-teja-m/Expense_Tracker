@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.expensetracker.R
 import com.example.expensetracker.databinding.FragmentGraphBinding
@@ -33,11 +34,8 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
 
-    private val viewModel: ExpenseViewModel by lazy {
-        ViewModelProvider(
-            (requireActivity().viewModelStore),
-            expenseViewModelFactory
-        )[ExpenseViewModel::class.java]
+    private val viewModel: ExpenseViewModel by activityViewModels {
+        expenseViewModelFactory
     }
 
     private var _binding: FragmentGraphBinding? = null
@@ -82,7 +80,7 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
             colors.add(color)
         for (color in ColorTemplate.VORDIPLOM_COLORS)
             colors.add(color)
-        val dataset: PieDataSet = PieDataSet(entries, "Expenses and Category")
+        val dataset: PieDataSet = PieDataSet(entries, getString(R.string.expenses_and_category))
         dataset.colors = colors
 
         val data: PieData = PieData(dataset)
@@ -94,7 +92,7 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
         pieChart?.setDrawEntryLabels(false)
         pieChart?.isDrawHoleEnabled = true
         pieChart?.setCenterTextSize(24f)
-        pieChart?.centerText = "Expenses by \n Category"
+        pieChart?.centerText = getString(R.string.expenses_and_category_nl)
         pieChart?.description = null
 
         //legend attributes
@@ -113,19 +111,15 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
     }
 
     override fun onValueSelected(e: Entry?, h: Highlight?) {
-        Log.d("here", "Im here")
         if (e == null || h == null) {
             Toast.makeText(requireContext(), "empty", Toast.LENGTH_LONG)
             return
         }
-        Log.d(
-            "VAL SELECTED",
-            "Value: " + e.y + ", index: " + h.x
-                    + ", DataSet index: " + h.dataSetIndex
-        )
          val textView: TextView? = binding?.pieValue
         viewModel.getTotalExpense()
-        textView?.text = getString(R.string.pie_chart_text, e.y.toInt(),entries[h.x.toInt()].label.toString(),e.y*100/ viewModel.totalExpense.value!!)
+        viewModel.totalExpense?.value?.let {
+            textView?.text = getString(R.string.pie_chart_text, e.y.toInt(),entries[h.x.toInt()].label.toString(),e.y*100/it)}
+
         textView?.visibility = View.VISIBLE
 
 
