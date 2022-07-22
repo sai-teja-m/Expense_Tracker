@@ -1,9 +1,6 @@
 package com.example.expensetracker.ui.fragments
 
-import android.annotation.SuppressLint
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +8,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.expensetracker.R
 import com.example.expensetracker.databinding.FragmentGraphBinding
 import com.example.expensetracker.viewmodels.ExpenseViewModel
@@ -94,14 +90,13 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
         pieChart?.setCenterTextSize(24f)
         pieChart?.centerText = getString(R.string.expenses_and_category_nl)
         pieChart?.description = null
-
         //legend attributes
         val l: Legend? = pieChart?.legend
         l?.verticalAlignment = Legend.LegendVerticalAlignment.TOP
         l?.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
         l?.orientation = Legend.LegendOrientation.VERTICAL
-        l?.textColor = ContextCompat.getColor(requireContext(),R.color.graph_legend)
-        l?.setDrawInside(false)
+        l?.textColor = ContextCompat.getColor(requireContext(), R.color.graph_legend)
+        l?.setDrawInside(true)
         l?.isEnabled = true
 
 
@@ -115,10 +110,16 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
             Toast.makeText(requireContext(), "empty", Toast.LENGTH_LONG)
             return
         }
-         val textView: TextView? = binding?.pieValue
+        val textView: TextView? = binding?.pieValue
         viewModel.getTotalExpense()
         viewModel.totalExpense?.value?.let {
-            textView?.text = getString(R.string.pie_chart_text, e.y.toInt(),entries[h.x.toInt()].label.toString(),e.y*100/it)}
+            textView?.text = getString(
+                R.string.pie_chart_text,
+                e.y.toInt(),
+                entries[h.x.toInt()].label.toString(),
+                e.y * 100 / it
+            )
+        }
 
         textView?.visibility = View.VISIBLE
 
@@ -126,7 +127,7 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
     }
 
     override fun onNothingSelected() {
-         val textView: TextView? = binding?.pieValue
+        val textView: TextView? = binding?.pieValue
         textView?.visibility = View.GONE
     }
 
