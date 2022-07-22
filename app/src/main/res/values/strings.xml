@@ -43,6 +43,7 @@
     <string name="expense_for">Expense for %s is %s</string>
     <string name="make_graph">Category wise Expense</string>
     <string name="filter_by_category">Filter By Category</string>
+    <string name="graph_fragment">Category wise Expense</string>
     <string name="pie_chart_text">Spent ₹%d for %s \n accounting for %.2f%% of Total Expense</string>
     <string name="expenses_and_category_nl">Expenses and \n Category</string>
     <string name="expenses_and_category">Expenses and Category</string>

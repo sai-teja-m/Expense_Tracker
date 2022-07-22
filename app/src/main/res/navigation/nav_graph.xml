@@ -48,6 +48,6 @@
     <fragment
         android:id="@+id/graphFragment"
         android:name="com.example.expensetracker.ui.fragments.GraphFragment"
-        android:label="fragment_graph"
+        android:label="@string/graph_fragment"
         tools:layout="@layout/fragment_graph" />
 </navigation>
