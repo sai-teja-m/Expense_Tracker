@@ -50,7 +50,7 @@ class ExpenseViewModel(
     private val _categoryExpense: MutableLiveData<Int> = MutableLiveData()
     val categoryExpense: LiveData<Int> = _categoryExpense
 
-    private val _categoryAndAmount : SingleLiveEvent<List<CategoryAmount>> = SingleLiveEvent()
+    private val _categoryAndAmount: SingleLiveEvent<List<CategoryAmount>> = SingleLiveEvent()
     val categoryAndAmount: LiveData<List<CategoryAmount>> = _categoryAndAmount
 
     fun isEntryValid(
@@ -65,18 +65,15 @@ class ExpenseViewModel(
             errorMap[1] = R.string.empty_title_msg
             validEntry = false
         }
-        if (expense.isBlank() || expense.toInt()> 2147483646) {
-            if(expense.isBlank())
+        if (expense.isBlank() || expense.toInt() > 2147483646) {
+            if (expense.isBlank())
                 errorMap[2] = R.string.empty_amount_msg
             else
                 errorMap[2] = R.string.exceed_amount_msg
             validEntry = false
         }
-        if (category.isBlank() || category.contains(" ") || category.contains(",")) {
-            if(category.isBlank())
-                errorMap[3] = R.string.empty_category_msg
-            else
-                errorMap[3] = R.string.space_category_msg
+        if (category.isBlank()) {
+            errorMap[3] = R.string.empty_category_msg
             validEntry = false
         }
         if (`when`.isBlank()) {
@@ -111,11 +108,11 @@ class ExpenseViewModel(
             }
     }
 
-    fun getCategoryAndAmount(){
+    fun getCategoryAndAmount() {
         getCategoryAndAmountUseCase.execute().subscribeOn(ioScheduler).observeOn(uiScheduler)
             .subscribe({
                 _categoryAndAmount.postValue(it)
-            },{
+            }, {
                 Log.e("CategoryAndAmount", "error in getting categories and amounts")
             }).let {
                 compositeDisposable.add(it)
@@ -146,8 +143,8 @@ class ExpenseViewModel(
         getAllUse
             .execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({ list ->
                 _allExpense.postValue(list)
-            }, {err ->
-                Log.e("get ALL Exp",err.toString())
+            }, { err ->
+                Log.e("get ALL Exp", err.toString())
             }
             ).let {
                 compositeDisposable.add(it)
@@ -222,7 +219,6 @@ class ExpenseViewModel(
     }
 
 }
-
 
 
 class ExpenseViewModelFactory @Inject constructor(

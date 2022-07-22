@@ -61,11 +61,6 @@ class ExpenseAdapter(
                 val yr = arr[0]
 
                 binding.run {
-//                if (position == itemCount - 1)
-//                    divider.visibility = View.INVISIBLE
-//                else {
-//                    divider.visibility = View.VISIBLE
-//                }
                     expenseTitle.text =
                         root.context.getString(R.string.expense_title, exp.expenseTitle)
                     expense.text = root.context.getString(R.string.expense_amount, exp.expense)

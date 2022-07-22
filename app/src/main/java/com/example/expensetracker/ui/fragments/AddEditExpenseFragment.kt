@@ -87,8 +87,6 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
         }
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun addNewExpense() {
         if (isEntryValid()) {
             binding?.run {
@@ -106,7 +104,6 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateExpense() {
 
 
@@ -129,7 +126,6 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
