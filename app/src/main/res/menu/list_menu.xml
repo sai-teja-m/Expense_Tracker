@@ -6,12 +6,19 @@
         android:icon="@drawable/ic_filter_list"
         android:title="@string/filter"
         app:showAsAction="ifRoom" />
-    <item
 
+    <item
+        android:id="@+id/date_range"
+        android:title="Choose Date Range"
+        app:showAsAction="never"
+        />
+
+    <item
         android:id="@+id/total_expense"
         android:icon="@drawable/ic_calculate"
         android:title="@string/total_expense"
         app:showAsAction="never" />
+
     <item
         android:id="@+id/category_total"
         android:title="@string/category_exp"

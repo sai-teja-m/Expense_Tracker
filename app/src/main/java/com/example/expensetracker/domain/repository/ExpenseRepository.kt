@@ -6,6 +6,7 @@ import com.example.expensetracker.database.expense.Expense
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import java.util.*
 
 interface ExpenseRepository {
 
@@ -31,5 +32,7 @@ interface ExpenseRepository {
     fun getCategoryExpense(category: String): Single<Int>
 
     fun getById(id: Int): Single<Expense>
+
+    fun getByDateRange(start: Date, end : Date): Single<List<Expense>>
 
 }

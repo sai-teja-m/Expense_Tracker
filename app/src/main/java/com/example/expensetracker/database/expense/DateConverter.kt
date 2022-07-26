@@ -21,4 +21,10 @@ class DateConverter {
     fun fromDate(date: Date?): String? {
         return formatter.format(date)
     }
+
+    @TypeConverter
+    fun longToDate(value: Long): Date? {
+        val temp =  formatter.format(value)
+        return formatter.parse(temp)
+    }
 }

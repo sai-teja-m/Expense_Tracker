@@ -4,6 +4,7 @@ import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import java.util.*
 
 @Dao
 interface ExpenseDao {
@@ -36,4 +37,8 @@ interface ExpenseDao {
 
     @Query("SELECT * FROM Expense WHERE Id = :id ")
     fun getById(id: Int): Single<Expense>
+
+    @Query("SELECT * FROM Expense WHERE `when` BETWEEN :start AND :end")
+    fun getByDateRange(start: Date, end :Date): Single<List<Expense>>
+
 }

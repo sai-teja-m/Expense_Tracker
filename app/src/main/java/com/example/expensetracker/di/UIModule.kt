@@ -44,6 +44,7 @@ abstract class UIModule {
             getTotalExpenseUseCase: GetTotalExpenseUseCase,
             getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
             getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase,
+            getByDateRangeUseCase: getByDateRangeUseCase,
             dateConverter: DateConverter
         ) = ExpenseViewModelFactory(
             insertExpenseUseCase,
@@ -55,6 +56,7 @@ abstract class UIModule {
             getTotalExpenseUseCase,
             getCategoryExpenseUseCase,
             getCategoryAndAmountUseCase,
+            getByDateRangeUseCase,
             dateConverter
         )
     }

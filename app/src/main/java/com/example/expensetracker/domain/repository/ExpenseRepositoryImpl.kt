@@ -6,6 +6,7 @@ import com.example.expensetracker.database.expense.ExpenseDao
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import java.util.*
 import javax.inject.Inject
 
 class ExpenseRepositoryImpl @Inject constructor(
@@ -48,6 +49,10 @@ class ExpenseRepositoryImpl @Inject constructor(
     }
     override fun getById(id: Int): Single<Expense> {
         return dao.getById(id)
+    }
+
+    override fun getByDateRange(start: Date, end: Date): Single<List<Expense>> {
+        return dao.getByDateRange(start, end)
     }
 
 

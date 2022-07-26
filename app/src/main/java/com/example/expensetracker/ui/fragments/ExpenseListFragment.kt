@@ -2,7 +2,10 @@ package com.example.expensetracker.ui.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import androidx.core.util.Pair
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,8 +18,12 @@ import com.example.expensetracker.ui.adapters.ExpenseAdapter
 import com.example.expensetracker.utils.SwipeToDeleteCallBack
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import java.util.*
 import javax.inject.Inject
 
 
@@ -64,8 +71,9 @@ class ExpenseListFragment : DaggerFragment() {
         this.menu = menu
         setFilterIcon()
     }
-
+    var t:Int =0
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         return when (item.itemId) {
             R.id.total_expense -> {
                 if (viewModel.allExpense.value.isNullOrEmpty()) {
@@ -75,6 +83,22 @@ class ExpenseListFragment : DaggerFragment() {
                 }
                 true
             }
+
+            R.id.date_range ->{
+                if(t==0){
+                    t=1
+                    showDateRangePicker()
+                    item.title = "Clear Range"
+                }
+                else{
+                    t=0
+                    viewModel.getAllExpenses()
+                    item.title = "Choose Date Range"
+                }
+
+                true
+            }
+
             R.id.category_total -> {
                 if (viewModel.selectedCategory.value.isNullOrEmpty()) {
                     showSnackBarCategoryExp(null)
@@ -250,6 +274,40 @@ class ExpenseListFragment : DaggerFragment() {
                 }
             }
         }
+    }
+
+    private fun showDateRangePicker(){
+        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+            .setTitleText("Filter By Date")
+            .setSelection(
+                Pair(
+                    MaterialDatePicker.thisMonthInUtcMilliseconds(),
+                    MaterialDatePicker.todayInUtcMilliseconds()
+                )
+            )
+            .setCalendarConstraints(
+                CalendarConstraints.Builder()
+                    .setValidator(DateValidatorPointBackward.now())
+                    .build())
+            .build()
+
+        dateRangePicker.show(
+            childFragmentManager,
+            "date Range Picker"
+        )
+
+        dateRangePicker.addOnPositiveButtonClickListener{
+            datePicked->
+            val startDate = datePicked.first
+            val endDate = datePicked.second
+            dateConverter.longToDate(startDate)
+                ?.let { start->
+                    dateConverter.longToDate(endDate)?.let{end->
+                        viewModel.filterByDateRange(start, end) }
+                    }
+//            Toast.makeText(requireContext(), "${dateConverter.longToDate(startDate)}", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
 }

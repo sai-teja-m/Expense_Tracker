@@ -30,6 +30,7 @@ class ExpenseViewModel(
     private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
     private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
     private val getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase,
+    private val getByDateRangeUseCase: getByDateRangeUseCase,
     private val converters: DateConverter
 ) : ViewModel() {
 
@@ -195,6 +196,15 @@ class ExpenseViewModel(
         }
     }
 
+    fun filterByDateRange(start: Date, end: Date){
+        getByDateRangeUseCase.execute(start,end).subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
+            _allExpense.postValue(it)
+        },{
+            Log.e("filter by date range","error in collecting")
+        }).let {
+            compositeDisposable.add(it)
+        }
+    }
 
     private fun getNewExpenseEntry(
         expenseTitle: String,
@@ -231,6 +241,7 @@ class ExpenseViewModelFactory @Inject constructor(
     private val getTotalExpenseUseCase: GetTotalExpenseUseCase,
     private val getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
     private val getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase,
+    private val getByDateRangeUseCase: getByDateRangeUseCase,
     private val converters: DateConverter
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -246,6 +257,7 @@ class ExpenseViewModelFactory @Inject constructor(
                 getTotalExpenseUseCase,
                 getCategoryExpenseUseCase,
                 getCategoryAndAmountUseCase,
+                getByDateRangeUseCase,
                 converters
             ) as T
         }

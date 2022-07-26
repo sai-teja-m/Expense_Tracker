@@ -6,23 +6,21 @@ import com.example.expensetracker.domain.repository.ExpenseRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import java.util.*
 import javax.inject.Inject
 
 
 class UpdateExpenseUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ) : CompletableUseCaseParams<Expense> {
-
     override fun execute(data: Expense): Completable {
         return expenseRepo.updateExpense(data)
     }
-
 }
 
 class InsertExpenseUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ) : CompletableUseCaseParams<Expense> {
-
     override fun execute(data: Expense): Completable {
         return expenseRepo.insertExpense(data)
     }
@@ -86,9 +84,17 @@ class GetCategoryUseCase @Inject constructor(
 
 class GetCategoryAndAmountUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-): SingleUseCaseParam<CategoryAmount>{
+) : SingleUseCaseParam<CategoryAmount> {
     override fun execute(): Single<List<CategoryAmount>> {
         return expenseRepo.getCategoryAndAmount()
+    }
+}
+
+class getByDateRangeUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+) : SingleUseCaseDateRange<List<Expense>>{
+    override fun execute(start:Date ,end: Date): Single<List<Expense>>{
+        return expenseRepo.getByDateRange(start, end)
     }
 }
 
@@ -109,7 +115,9 @@ interface SingleUseCaseListParams<P> {
 interface SingleUseCaseParams<P> {
     fun execute(data: Int): Single<P>
 }
-
+interface SingleUseCaseDateRange<P> {
+    fun execute(start:Date ,end: Date): Single<P>
+}
 
 interface FlowableUseCaseString<P> {
     fun execute(): Flowable<List<P>>
