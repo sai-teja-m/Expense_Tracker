@@ -44,7 +44,15 @@ abstract class UIModule {
             getTotalExpenseUseCase: GetTotalExpenseUseCase,
             getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
             getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase,
-            getByDateRangeUseCase: getByDateRangeUseCase,
+            getByDateRangeUseCase: GetByDateRangeUseCase,
+            getByFilterDateRangeUseCase: GetByFilterDateRangeUseCase,
+            getByFilterDateRangeExpAscUseCase:GetByFilterDateRangeExpAscUseCase,
+            getByFilterExpAscUseCase:GetByFilterExpAscUseCase,
+            getByDateRangeExpAscUseCase:GetByDateRangeExpAscUseCase,
+            getByFilterDateRangeExpDescUseCase:GetByFilterDateRangeExpDescUseCase,
+            getByFilterExpDescUseCase:GetByFilterExpDescUseCase,
+            GetByDateRangeExpDescUseCase:GetByDateRangeExpDescUseCase,
+
             dateConverter: DateConverter
         ) = ExpenseViewModelFactory(
             insertExpenseUseCase,
@@ -57,6 +65,13 @@ abstract class UIModule {
             getCategoryExpenseUseCase,
             getCategoryAndAmountUseCase,
             getByDateRangeUseCase,
+            getByFilterDateRangeUseCase,
+            getByFilterDateRangeExpAscUseCase,
+            getByFilterExpAscUseCase,
+            getByDateRangeExpAscUseCase,
+            getByFilterDateRangeExpDescUseCase,
+            getByFilterExpDescUseCase,
+            GetByDateRangeExpDescUseCase,
             dateConverter
         )
     }

@@ -10,8 +10,8 @@ import java.util.*
 import javax.inject.Inject
 
 class ExpenseRepositoryImpl @Inject constructor(
-    private val dao:ExpenseDao
-) : ExpenseRepository{
+    private val dao: ExpenseDao
+) : ExpenseRepository {
     override fun updateExpense(exp: Expense): Completable {
         return dao.updateExpense(exp)
     }
@@ -28,7 +28,7 @@ class ExpenseRepositoryImpl @Inject constructor(
         return dao.getAllExpense()
     }
 
-    override fun getCategory() : Flowable<List<String>>{
+    override fun getCategory(): Flowable<List<String>> {
         return dao.getCategory()
     }
 
@@ -41,18 +41,59 @@ class ExpenseRepositoryImpl @Inject constructor(
     }
 
     override fun getCategoryExpense(category: String): Single<Int> {
-       return dao.getCategoryExpense(category)
+        return dao.getCategoryExpense(category)
     }
 
     override fun getByCategory(category: String): Single<List<Expense>> {
         return dao.getByCategory(category)
     }
+
     override fun getById(id: Int): Single<Expense> {
         return dao.getById(id)
     }
 
     override fun getByDateRange(start: Date, end: Date): Single<List<Expense>> {
         return dao.getByDateRange(start, end)
+    }
+
+    override fun getByFilterDateRange(
+        category: String,
+        start: Date,
+        end: Date
+    ): Single<List<Expense>> {
+        return dao.getByFilterDateRange(category, start, end)
+    }
+
+    override fun getByFilterDateRangeExpAsc(
+        category: String,
+        start: Date,
+        end: Date
+    ): Single<List<Expense>> {
+        return dao.getByFilterDateRangeExpAsc(category,start, end)
+    }
+
+    override fun getByFilterExpAsc(category: String): Single<List<Expense>> {
+        return dao.getByFilterExpAsc(category)
+    }
+
+    override fun getByDateRangeExpAsc(start: Date, end: Date): Single<List<Expense>> {
+        return dao.getByDateRangeExpAsc(start, end)
+    }
+
+    override fun getByFilterDateRangeExpDesc(
+        category: String,
+        start: Date,
+        end: Date
+    ): Single<List<Expense>> {
+        return dao.getByFilterDateRangeExpDesc(category, start, end)
+    }
+
+    override fun getByFilterExpDesc(category: String): Single<List<Expense>> {
+        return dao.getByFilterExpDesc(category)
+    }
+
+    override fun getByDateRangeExpDesc(start: Date, end: Date): Single<List<Expense>> {
+        return dao.getByDateRangeExpDesc(start, end)
     }
 
 

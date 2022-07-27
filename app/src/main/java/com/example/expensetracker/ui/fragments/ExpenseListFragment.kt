@@ -59,6 +59,9 @@ class ExpenseListFragment : DaggerFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        viewModel.getAllExpenses()
+        viewModel.getCategory()
+        viewModel.getTotalExpense()
 
     }
 
@@ -70,6 +73,7 @@ class ExpenseListFragment : DaggerFragment() {
         super.onPrepareOptionsMenu(menu)
         this.menu = menu
         setFilterIcon()
+        setDateRangeTitle()
     }
     var t:Int =0
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -85,15 +89,19 @@ class ExpenseListFragment : DaggerFragment() {
             }
 
             R.id.date_range ->{
-                if(t==0){
+                if(viewModel.startDate.value != null && viewModel.endDate.value != null){
+                    viewModel.selectDateRange(null,null)
+
+                    viewModel.filter(viewModel.selectedCategory.value,null,null)
+//                    item.title = "Choose Date Range"
                     t=1
-                    showDateRangePicker()
-                    item.title = "Clear Range"
+
                 }
                 else{
                     t=0
-                    viewModel.getAllExpenses()
-                    item.title = "Choose Date Range"
+                    showDateRangePicker()
+                    setDateRangeTitle()
+//                    item.title = "Clear Range"
                 }
 
                 true
@@ -174,15 +182,12 @@ class ExpenseListFragment : DaggerFragment() {
                 if (it.isEmpty()) {
                     //DO NOTHING
                 } else {
-
-                    viewModel.filterByCategory(it)
-
+                    viewModel.filter(it,viewModel.startDate.value , viewModel.endDate.value)
                 }
             }
 
             viewModel.categoryExpense.observe(viewLifecycleOwner) {
                 if (it != null) {
-
                     showSnackBarCategoryExp(it)
                     viewModel.clearCategoryExpense()
                 }
@@ -192,9 +197,9 @@ class ExpenseListFragment : DaggerFragment() {
                 findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToGraphFragment())
             }
 
-            viewModel.getAllExpenses()
-            viewModel.getCategory()
-            viewModel.getTotalExpense()
+            viewModel.startDate.observe(viewLifecycleOwner){
+                setDateRangeTitle()
+            }
 
 
         }
@@ -276,6 +281,17 @@ class ExpenseListFragment : DaggerFragment() {
         }
     }
 
+    private fun setDateRangeTitle(){
+        if (::menu.isInitialized){
+            val item = menu.findItem(R.id.date_range)
+            if(item!=null) {
+                if (viewModel.startDate.value == null )
+                    item.title = "Choose a Date Range"
+                else item.title = "Clear Date Range"
+            }
+        }
+    }
+
     private fun showDateRangePicker(){
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
             .setTitleText("Filter By Date")
@@ -298,14 +314,14 @@ class ExpenseListFragment : DaggerFragment() {
 
         dateRangePicker.addOnPositiveButtonClickListener{
             datePicked->
-            val startDate = datePicked.first
-            val endDate = datePicked.second
-            dateConverter.longToDate(startDate)
-                ?.let { start->
-                    dateConverter.longToDate(endDate)?.let{end->
-                        viewModel.filterByDateRange(start, end) }
-                    }
-//            Toast.makeText(requireContext(), "${dateConverter.longToDate(startDate)}", Toast.LENGTH_SHORT).show()
+            dateConverter.longToDate(datePicked.first)
+                ?.let {
+                    dateConverter.longToDate(datePicked.second)
+                        ?.let { endDate->
+                            viewModel.selectDateRange(it, endDate)
+                            viewModel.filter(viewModel.selectedCategory.value,start = it, end = endDate)
+                        }
+                }
         }
 
     }

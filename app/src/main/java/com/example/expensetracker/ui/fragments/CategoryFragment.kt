@@ -63,6 +63,7 @@ class CategoryFragment : DaggerFragment() {
 
     private fun onClearFilter() {
         viewModel.selectCategory("")
+        viewModel.filter("",viewModel.startDate.value,viewModel.endDate.value)
         findNavController().navigateUp()
     }
 

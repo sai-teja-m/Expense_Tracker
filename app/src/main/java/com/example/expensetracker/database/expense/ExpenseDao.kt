@@ -17,7 +17,7 @@ interface ExpenseDao {
     @Delete
     fun deleteExpense(exp: Expense): Completable
 
-    @Query("SELECT * FROM Expense WHERE category = :category")
+    @Query("SELECT * FROM Expense WHERE category = :category ORDER BY date(`when`) DESC")
     fun getByCategory(category: String): Single<List<Expense>>
 
     @Query("SELECT DISTINCT category FROM Expense ")
@@ -38,7 +38,31 @@ interface ExpenseDao {
     @Query("SELECT * FROM Expense WHERE Id = :id ")
     fun getById(id: Int): Single<Expense>
 
-    @Query("SELECT * FROM Expense WHERE `when` BETWEEN :start AND :end")
+    //Date Range Filters
+    @Query("SELECT * FROM Expense WHERE `when` BETWEEN :start AND :end ORDER BY date(`when`) DESC")
     fun getByDateRange(start: Date, end :Date): Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE category = :category AND (`when` BETWEEN :start AND :end) ORDER BY date(`when`) DESC")
+    fun getByFilterDateRange(category: String,start: Date, end :Date): Single<List<Expense>>
+
+    // Exp Ascending order
+    @Query("SELECT * FROM Expense WHERE category= :category AND (`when` BETWEEN :start AND :end) ORDER BY expense ASC")
+    fun getByFilterDateRangeExpAsc(category: String, start: Date ,end: Date) : Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE category= :category  ORDER BY expense ASC")
+    fun getByFilterExpAsc(category: String) : Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE  (`when` BETWEEN :start AND :end) ORDER BY expense ASC")
+    fun getByDateRangeExpAsc(start: Date ,end: Date) : Single<List<Expense>>
+
+    //Exp Descending Order
+    @Query("SELECT * FROM Expense WHERE category= :category AND (`when` BETWEEN :start AND :end) ORDER BY expense DESC")
+    fun getByFilterDateRangeExpDesc(category: String, start: Date ,end: Date) : Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE category= :category  ORDER BY expense DESC")
+    fun getByFilterExpDesc(category: String) : Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE  (`when` BETWEEN :start AND :end) ORDER BY expense DESC")
+    fun getByDateRangeExpDesc(start: Date ,end: Date) : Single<List<Expense>>
 
 }

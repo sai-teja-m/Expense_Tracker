@@ -1,6 +1,7 @@
 package com.example.expensetracker.domain.repository
 
 
+import androidx.room.Query
 import com.example.expensetracker.database.expense.CategoryAmount
 import com.example.expensetracker.database.expense.Expense
 import io.reactivex.Completable
@@ -35,4 +36,17 @@ interface ExpenseRepository {
 
     fun getByDateRange(start: Date, end : Date): Single<List<Expense>>
 
+    fun getByFilterDateRange(category: String,start: Date, end :Date): Single<List<Expense>>
+
+    fun getByFilterDateRangeExpAsc(category: String, start: Date ,end: Date) : Single<List<Expense>>
+
+    fun getByFilterExpAsc(category: String) : Single<List<Expense>>
+
+    fun getByDateRangeExpAsc(start: Date ,end: Date) : Single<List<Expense>>
+
+    fun getByFilterDateRangeExpDesc(category: String, start: Date ,end: Date) : Single<List<Expense>>
+
+    fun getByFilterExpDesc(category: String) : Single<List<Expense>>
+
+    fun getByDateRangeExpDesc(start: Date ,end: Date) : Single<List<Expense>>
 }
