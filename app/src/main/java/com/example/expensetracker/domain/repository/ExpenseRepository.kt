@@ -36,13 +36,17 @@ interface ExpenseRepository {
 
     fun getByDateRange(start: Date, end : Date): Single<List<Expense>>
 
+    fun getByExpenseAsc() : Single<List<Expense>>
+
     fun getByFilterDateRange(category: String,start: Date, end :Date): Single<List<Expense>>
 
     fun getByFilterDateRangeExpAsc(category: String, start: Date ,end: Date) : Single<List<Expense>>
 
-    fun getByFilterExpAsc(category: String) : Single<List<Expense>>
+    fun getByFilterExpenseAsc(category: String) : Single<List<Expense>>
 
     fun getByDateRangeExpAsc(start: Date ,end: Date) : Single<List<Expense>>
+
+    fun getByExpenseDesc() : Single<List<Expense>>
 
     fun getByFilterDateRangeExpDesc(category: String, start: Date ,end: Date) : Single<List<Expense>>
 

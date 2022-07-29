@@ -51,8 +51,9 @@ abstract class UIModule {
             getByDateRangeExpAscUseCase:GetByDateRangeExpAscUseCase,
             getByFilterDateRangeExpDescUseCase:GetByFilterDateRangeExpDescUseCase,
             getByFilterExpDescUseCase:GetByFilterExpDescUseCase,
-            GetByDateRangeExpDescUseCase:GetByDateRangeExpDescUseCase,
-
+            getByDateRangeExpDescUseCase:GetByDateRangeExpDescUseCase,
+            getByExpenseAsc:GetByExpenseAsc,
+            getByExpenseDesc: GetByExpenseDesc,
             dateConverter: DateConverter
         ) = ExpenseViewModelFactory(
             insertExpenseUseCase,
@@ -71,7 +72,9 @@ abstract class UIModule {
             getByDateRangeExpAscUseCase,
             getByFilterDateRangeExpDescUseCase,
             getByFilterExpDescUseCase,
-            GetByDateRangeExpDescUseCase,
+            getByDateRangeExpDescUseCase,
+            getByExpenseAsc,
+            getByExpenseDesc,
             dateConverter
         )
     }

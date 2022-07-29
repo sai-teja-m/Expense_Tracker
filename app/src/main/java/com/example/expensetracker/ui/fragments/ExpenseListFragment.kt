@@ -2,10 +2,9 @@ package com.example.expensetracker.ui.fragments
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
+import android.widget.*
 import androidx.core.util.Pair
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -23,11 +22,11 @@ import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
-import java.util.*
 import javax.inject.Inject
+import kotlin.math.exp
 
 
-class ExpenseListFragment : DaggerFragment() {
+class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListener{
 
 
     private val expenseAdapter: ExpenseAdapter by lazy {
@@ -172,9 +171,13 @@ class ExpenseListFragment : DaggerFragment() {
                 if (it.isNullOrEmpty()) {
                     noItems.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
+                    spinnerText.visibility = View.GONE
+                    expOrder.visibility=View.GONE
                 } else {
                     noItems.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
+                    spinnerText.visibility = View.VISIBLE
+                    expOrder.visibility = View.VISIBLE
                 }
             })
             viewModel.selectedCategory.observe(viewLifecycleOwner) {
@@ -201,7 +204,17 @@ class ExpenseListFragment : DaggerFragment() {
                 setDateRangeTitle()
             }
 
+            val spinner: Spinner = expOrder
+            spinner.onItemSelectedListener = this@ExpenseListFragment
+            val listOrder:List<String> = listOf("none","Low to High"," High to Low")
+            val adapter = ArrayAdapter(
+                requireContext(),
+                R.layout.dropdown_category_list, listOrder
+            )
 
+            spinner.adapter = adapter
+
+            viewModel.expenseOrder.observe(viewLifecycleOwner){}
         }
     }
 
@@ -286,15 +299,15 @@ class ExpenseListFragment : DaggerFragment() {
             val item = menu.findItem(R.id.date_range)
             if(item!=null) {
                 if (viewModel.startDate.value == null )
-                    item.title = "Choose a Date Range"
-                else item.title = "Clear Date Range"
+                    item.title = getString(R.string.choose_date_range)
+                else item.title = getString(R.string.clear_date_range)
             }
         }
     }
 
     private fun showDateRangePicker(){
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText("Filter By Date")
+            .setTitleText(R.string.filter_by_date)
             .setSelection(
                 Pair(
                     MaterialDatePicker.thisMonthInUtcMilliseconds(),
@@ -326,4 +339,20 @@ class ExpenseListFragment : DaggerFragment() {
 
     }
 
+    override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+        var expOrder :Int
+        if(position == 0) expOrder =-1
+        else if(position == 1) expOrder = 0
+        else expOrder =1
+
+        viewModel.setExpenseOrder(expOrder)
+        viewModel.filter(viewModel.selectedCategory.value,viewModel.startDate.value,viewModel.endDate.value,expOrder)
+        Toast.makeText(requireContext(), "${parent?.getItemAtPosition(position)}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        TODO("Not yet implemented")
+    }
+
 }
+

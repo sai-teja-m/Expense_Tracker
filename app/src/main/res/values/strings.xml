@@ -47,4 +47,8 @@
     <string name="pie_chart_text">Spent ₹%d for %s \n accounting for %.2f%% of Total Expense</string>
     <string name="expenses_and_category_nl">Expenses and \n Category</string>
     <string name="expenses_and_category">Expenses and Category</string>
+    <string name="clear_date_range">Clear Date Range</string>
+    <string name="choose_date_range">Choose Date Range</string>
+    <string name="filter_by_date">Filter By Date</string>
+    <string name="expense_order">Expense Order</string>
 </resources>

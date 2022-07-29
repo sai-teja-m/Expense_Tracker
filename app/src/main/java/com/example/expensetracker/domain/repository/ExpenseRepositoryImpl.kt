@@ -56,6 +56,10 @@ class ExpenseRepositoryImpl @Inject constructor(
         return dao.getByDateRange(start, end)
     }
 
+    override fun getByExpenseAsc(): Single<List<Expense>> {
+        return dao.getByFilterExpAsc()
+    }
+
     override fun getByFilterDateRange(
         category: String,
         start: Date,
@@ -63,6 +67,9 @@ class ExpenseRepositoryImpl @Inject constructor(
     ): Single<List<Expense>> {
         return dao.getByFilterDateRange(category, start, end)
     }
+
+
+
 
     override fun getByFilterDateRangeExpAsc(
         category: String,
@@ -72,12 +79,16 @@ class ExpenseRepositoryImpl @Inject constructor(
         return dao.getByFilterDateRangeExpAsc(category,start, end)
     }
 
-    override fun getByFilterExpAsc(category: String): Single<List<Expense>> {
+    override fun getByFilterExpenseAsc(category: String): Single<List<Expense>> {
         return dao.getByFilterExpAsc(category)
     }
 
     override fun getByDateRangeExpAsc(start: Date, end: Date): Single<List<Expense>> {
         return dao.getByDateRangeExpAsc(start, end)
+    }
+
+    override fun getByExpenseDesc(): Single<List<Expense>> {
+        return dao.getByFilterExpDesc()
     }
 
     override fun getByFilterDateRangeExpDesc(

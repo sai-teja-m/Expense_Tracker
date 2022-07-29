@@ -46,6 +46,9 @@ interface ExpenseDao {
     fun getByFilterDateRange(category: String,start: Date, end :Date): Single<List<Expense>>
 
     // Exp Ascending order
+    @Query("SELECT * FROM Expense ORDER BY expense ASC")
+    fun getByFilterExpAsc() : Single<List<Expense>>
+
     @Query("SELECT * FROM Expense WHERE category= :category AND (`when` BETWEEN :start AND :end) ORDER BY expense ASC")
     fun getByFilterDateRangeExpAsc(category: String, start: Date ,end: Date) : Single<List<Expense>>
 
@@ -56,6 +59,9 @@ interface ExpenseDao {
     fun getByDateRangeExpAsc(start: Date ,end: Date) : Single<List<Expense>>
 
     //Exp Descending Order
+    @Query("SELECT * FROM Expense ORDER BY expense DESC")
+    fun getByFilterExpDesc() : Single<List<Expense>>
+
     @Query("SELECT * FROM Expense WHERE category= :category AND (`when` BETWEEN :start AND :end) ORDER BY expense DESC")
     fun getByFilterDateRangeExpDesc(category: String, start: Date ,end: Date) : Single<List<Expense>>
 
