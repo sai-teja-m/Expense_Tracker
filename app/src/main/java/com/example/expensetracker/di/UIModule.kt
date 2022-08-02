@@ -29,6 +29,9 @@ abstract class UIModule {
     abstract fun bindsGraphFragment() : GraphFragment
 
     @ContributesAndroidInjector
+    abstract fun bindsFilterFragment() : FilterFragment
+
+    @ContributesAndroidInjector
     abstract fun bindsMainActivity(): MainActivity
 
     companion object {
@@ -54,6 +57,15 @@ abstract class UIModule {
             getByDateRangeExpDescUseCase:GetByDateRangeExpDescUseCase,
             getByExpenseAsc:GetByExpenseAsc,
             getByExpenseDesc: GetByExpenseDesc,
+            sortByDateAscUseCase: SortByDateAscUseCase,
+            sortByCategoryDateRangeDateAscUseCase:SortByCategoryDateRangDateAscUseCase,
+            sortByCategoryDateAscUseCase:SortByCategoryDateAscUseCase,
+            sortByDateRangeDateAscUseCase: SortByDateRangeDateAscUseCase,
+            sortByDateDescUseCase: SortByDateDescUseCase,
+            sortByCategoryDateRangeDateDescUseCase:SortByCategoryDateRangDateDescUseCase,
+            sortByCategoryDateDescUseCase:SortByCategoryDateDescUseCase,
+            sortByDateRangeDateDescUseCase: SortByDateRangeDateDescUseCase,
+
             dateConverter: DateConverter
         ) = ExpenseViewModelFactory(
             insertExpenseUseCase,
@@ -75,6 +87,14 @@ abstract class UIModule {
             getByDateRangeExpDescUseCase,
             getByExpenseAsc,
             getByExpenseDesc,
+            sortByDateAscUseCase,
+            sortByCategoryDateRangeDateAscUseCase,
+            sortByCategoryDateAscUseCase,
+            sortByDateRangeDateAscUseCase,
+            sortByDateDescUseCase,
+            sortByCategoryDateRangeDateDescUseCase,
+            sortByCategoryDateDescUseCase,
+            sortByDateRangeDateDescUseCase,
             dateConverter
         )
     }

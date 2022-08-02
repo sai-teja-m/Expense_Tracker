@@ -53,58 +53,98 @@ class ExpenseRepositoryImpl @Inject constructor(
     }
 
     override fun getByDateRange(start: Date, end: Date): Single<List<Expense>> {
-        return dao.getByDateRange(start, end)
+        return dao.sortByDateRange(start, end)
     }
 
-    override fun getByExpenseAsc(): Single<List<Expense>> {
-        return dao.getByFilterExpAsc()
+    override fun sortByExpenseAsc(): Single<List<Expense>> {
+        return dao.sortByExpAsc()
     }
 
-    override fun getByFilterDateRange(
+    override fun sortByCategoryDateRange(
         category: String,
         start: Date,
         end: Date
     ): Single<List<Expense>> {
-        return dao.getByFilterDateRange(category, start, end)
+        return dao.sortByFilterDateRange(category, start, end)
     }
 
 
 
 
-    override fun getByFilterDateRangeExpAsc(
+    override fun sortByCategoryDateRangeExpAsc(
         category: String,
         start: Date,
         end: Date
     ): Single<List<Expense>> {
-        return dao.getByFilterDateRangeExpAsc(category,start, end)
+        return dao.sortByFilterDateRangeExpAsc(category,start, end)
     }
 
-    override fun getByFilterExpenseAsc(category: String): Single<List<Expense>> {
-        return dao.getByFilterExpAsc(category)
+    override fun sortByCategoryExpenseAsc(category: String): Single<List<Expense>> {
+        return dao.sortByCategoryExpAsc(category)
     }
 
-    override fun getByDateRangeExpAsc(start: Date, end: Date): Single<List<Expense>> {
-        return dao.getByDateRangeExpAsc(start, end)
+    override fun sortByDateRangeExpAsc(start: Date, end: Date): Single<List<Expense>> {
+        return dao.sortByDateRangeExpAsc(start, end)
     }
 
-    override fun getByExpenseDesc(): Single<List<Expense>> {
-        return dao.getByFilterExpDesc()
+    override fun sortByExpenseDesc(): Single<List<Expense>> {
+        return dao.sortByExpDesc()
     }
 
-    override fun getByFilterDateRangeExpDesc(
+    override fun sortByCategoryDateRangeExpDesc(
         category: String,
         start: Date,
         end: Date
     ): Single<List<Expense>> {
-        return dao.getByFilterDateRangeExpDesc(category, start, end)
+        return dao.sortByCategoryDateRangeExpDesc(category, start, end)
     }
 
-    override fun getByFilterExpDesc(category: String): Single<List<Expense>> {
-        return dao.getByFilterExpDesc(category)
+    override fun sortByCategoryExpDesc(category: String): Single<List<Expense>> {
+        return dao.sortByCategoryExpDesc(category)
     }
 
-    override fun getByDateRangeExpDesc(start: Date, end: Date): Single<List<Expense>> {
-        return dao.getByDateRangeExpDesc(start, end)
+    override fun sortByDateRangeExpDesc(start: Date, end: Date): Single<List<Expense>> {
+        return dao.sortByDateRangeExpDesc(start, end)
+    }
+
+    override fun sortByDateAsc(): Single<List<Expense>> {
+        return dao.sortByDateAsc()
+    }
+
+    override fun sortByCategoryDateRangeDateAsc(
+        category: String,
+        start: Date,
+        end: Date
+    ): Single<List<Expense>> {
+        return dao.sortByCategoryDateRangeDateAsc(category, start, end)
+    }
+
+    override fun sortByCategoryDateAsc(category: String): Single<List<Expense>> {
+        return dao.sortByCategoryDateAsc(category)
+    }
+
+    override fun sortByDateRangeDateAsc(start: Date, end: Date): Single<List<Expense>> {
+        return dao.sortByDateRangeDateAsc(start, end)
+    }
+
+    override fun sortByDateDesc(): Single<List<Expense>> {
+        return dao.sortByDateDesc()
+    }
+
+    override fun sortByCategoryDateRangeDateDesc(
+        category: String,
+        start: Date,
+        end: Date
+    ): Single<List<Expense>> {
+        return dao.sortByCategoryDateRangeExpDesc(category, start, end)
+    }
+
+    override fun sortByCategoryDateDesc(category: String): Single<List<Expense>> {
+        return dao.sortByCategoryDateDesc(category)
+    }
+
+    override fun sortByDateRangeDateDesc(start: Date, end: Date): Single<List<Expense>> {
+        return dao.sortByDateRangeDateDesc(start, end)
     }
 
 

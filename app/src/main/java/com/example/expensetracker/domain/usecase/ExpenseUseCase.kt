@@ -102,7 +102,7 @@ class GetByFilterDateRangeUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ):SingleUseCaseDateRangeFilter<List<Expense>>{
     override fun execute(category: String,start: Date,end: Date): Single<List<Expense>> {
-        return expenseRepo.getByFilterDateRange(category, start, end)
+        return expenseRepo.sortByCategoryDateRange(category, start, end)
     }
 }
 
@@ -110,7 +110,7 @@ class GetByExpenseAsc @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ): SingleUseCase<List<Expense>>{
     override fun execute(): Single<List<Expense>> {
-        return expenseRepo.getByExpenseAsc()
+        return expenseRepo.sortByExpenseAsc()
     }
 }
 
@@ -118,7 +118,7 @@ class GetByFilterDateRangeExpAscUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ): SingleUseCaseDateRangeFilter<List<Expense>>{
     override fun execute(category: String, start: Date, end: Date): Single<List<Expense>> {
-        return expenseRepo.getByFilterDateRangeExpAsc(category, start, end)
+        return expenseRepo.sortByCategoryDateRangeExpAsc(category, start, end)
     }
 }
 
@@ -126,7 +126,7 @@ class GetByFilterExpAscUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ):SingleUseCaseListParams<List<Expense>>{
     override fun execute(data: String): Single<List<Expense>> {
-        return expenseRepo.getByFilterExpenseAsc(data)
+        return expenseRepo.sortByCategoryExpenseAsc(data)
     }
 }
 
@@ -134,7 +134,7 @@ class GetByDateRangeExpAscUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ) : SingleUseCaseDateRange<List<Expense>>{
     override fun execute(start: Date, end: Date): Single<List<Expense>> {
-        return expenseRepo.getByDateRangeExpAsc(start, end)
+        return expenseRepo.sortByDateRangeExpAsc(start, end)
     }
 }
 
@@ -142,7 +142,7 @@ class GetByExpenseDesc @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ): SingleUseCase<List<Expense>>{
     override fun execute(): Single<List<Expense>> {
-        return expenseRepo.getByExpenseDesc()
+        return expenseRepo.sortByExpenseDesc()
     }
 }
 
@@ -150,7 +150,7 @@ class GetByFilterDateRangeExpDescUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ): SingleUseCaseDateRangeFilter<List<Expense>>{
     override fun execute(category: String, start: Date, end: Date): Single<List<Expense>> {
-        return expenseRepo.getByFilterDateRangeExpDesc(category, start, end)
+        return expenseRepo.sortByCategoryDateRangeExpDesc(category, start, end)
     }
 }
 
@@ -158,7 +158,7 @@ class GetByFilterExpDescUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ): SingleUseCaseListParams<List<Expense>>{
     override fun execute(data: String): Single<List<Expense>> {
-        return expenseRepo.getByFilterExpDesc(data)
+        return expenseRepo.sortByCategoryExpDesc(data)
     }
 }
 
@@ -166,9 +166,78 @@ class GetByDateRangeExpDescUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
 ): SingleUseCaseDateRange<List<Expense>>{
     override fun execute(start: Date, end: Date): Single<List<Expense>> {
-        return  expenseRepo.getByDateRangeExpDesc(start, end)
+        return  expenseRepo.sortByDateRangeExpDesc(start, end)
     }
 }
+
+//SOrt Asc Use cases
+class SortByDateAscUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+): SingleUseCase<List<Expense>>{
+    override fun execute(): Single<List<Expense>> {
+        return expenseRepo.sortByDateAsc()
+    }
+}
+
+class SortByCategoryDateRangDateAscUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+): SingleUseCaseDateRangeFilter<List<Expense>>{
+    override fun execute(category: String, start: Date, end: Date): Single<List<Expense>> {
+        return expenseRepo.sortByCategoryDateRangeDateAsc(category, start, end)
+    }
+}
+
+class SortByCategoryDateAscUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+):SingleUseCaseListParams<List<Expense>>{
+    override fun execute(data: String): Single<List<Expense>> {
+        return expenseRepo.sortByCategoryDateAsc(data)
+    }
+}
+
+class SortByDateRangeDateAscUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+) : SingleUseCaseDateRange<List<Expense>>{
+    override fun execute(start: Date, end: Date): Single<List<Expense>> {
+        return expenseRepo.sortByDateRangeDateAsc(start, end)
+    }
+}
+
+//sort Desc Use Cases
+class SortByDateDescUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+): SingleUseCase<List<Expense>>{
+    override fun execute(): Single<List<Expense>> {
+        return expenseRepo.sortByDateDesc()
+    }
+}
+
+class SortByCategoryDateRangDateDescUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+): SingleUseCaseDateRangeFilter<List<Expense>>{
+    override fun execute(category: String, start: Date, end: Date): Single<List<Expense>> {
+        return expenseRepo.sortByCategoryDateRangeDateDesc(category, start, end)
+    }
+}
+
+class SortByCategoryDateDescUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+):SingleUseCaseListParams<List<Expense>>{
+    override fun execute(data: String): Single<List<Expense>> {
+        return expenseRepo.sortByCategoryDateDesc(data)
+    }
+}
+
+class SortByDateRangeDateDescUseCase @Inject constructor(
+    private val expenseRepo: ExpenseRepository
+) : SingleUseCaseDateRange<List<Expense>>{
+    override fun execute(start: Date, end: Date): Single<List<Expense>> {
+        return expenseRepo.sortByDateRangeDateDesc(start, end)
+    }
+}
+
+
+
 
 
 interface SingleUseCase<T> {

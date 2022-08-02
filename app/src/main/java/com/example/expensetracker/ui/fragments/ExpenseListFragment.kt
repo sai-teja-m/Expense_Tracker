@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidx.core.util.Pair
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -23,18 +24,13 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
-import kotlin.math.exp
+import kotlin.reflect.KProperty
 
 
-class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListener{
-
+class ExpenseListFragment : DaggerFragment() {
 
     private val expenseAdapter: ExpenseAdapter by lazy {
-        ExpenseAdapter(
-            ::onClickEdit,
-            ::onDelete,
-            dateConverter
-        )
+        ExpenseAdapter(::onClickEdit, ::onDelete, dateConverter)
     }
 
     @Inject
@@ -45,16 +41,14 @@ class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListene
 
     private lateinit var menu: Menu
 
-    private val viewModel: ExpenseViewModel by lazy {
-        ViewModelProvider(
-            (requireActivity().viewModelStore),
-            expenseViewModelFactory
-        )[ExpenseViewModel::class.java]
+    private val viewModel: ExpenseViewModel by activityViewModels {
+        expenseViewModelFactory
     }
 
 
     private var _binding: FragmentListDisplayBinding? = null
     private val binding get() = _binding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -74,7 +68,8 @@ class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListene
         setFilterIcon()
         setDateRangeTitle()
     }
-    var t:Int =0
+
+    var t: Int = 0
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
@@ -87,17 +82,16 @@ class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListene
                 true
             }
 
-            R.id.date_range ->{
-                if(viewModel.startDate.value != null && viewModel.endDate.value != null){
-                    viewModel.selectDateRange(null,null)
+            R.id.date_range -> {
+                if (viewModel.startDate.value != null && viewModel.endDate.value != null) {
+                    viewModel.selectDateRange(null, null)
 
-                    viewModel.filter(viewModel.selectedCategory.value,null,null)
+                    viewModel.filter(viewModel.selectedCategory.value, null, null)
 //                    item.title = "Choose Date Range"
-                    t=1
+                    t = 1
 
-                }
-                else{
-                    t=0
+                } else {
+                    t = 0
                     showDateRangePicker()
                     setDateRangeTitle()
 //                    item.title = "Clear Range"
@@ -131,7 +125,7 @@ class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListene
 
 
     private fun onClickFilter() {
-        findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToCategoryFragment())
+        findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToFilterFragment())
     }
 
     override fun onCreateView(
@@ -171,13 +165,9 @@ class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListene
                 if (it.isNullOrEmpty()) {
                     noItems.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
-                    spinnerText.visibility = View.GONE
-                    expOrder.visibility=View.GONE
                 } else {
                     noItems.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
-                    spinnerText.visibility = View.VISIBLE
-                    expOrder.visibility = View.VISIBLE
                 }
             })
             viewModel.selectedCategory.observe(viewLifecycleOwner) {
@@ -185,7 +175,7 @@ class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListene
                 if (it.isEmpty()) {
                     //DO NOTHING
                 } else {
-                    viewModel.filter(it,viewModel.startDate.value , viewModel.endDate.value)
+                    viewModel.filter(it, viewModel.startDate.value, viewModel.endDate.value)
                 }
             }
 
@@ -200,21 +190,21 @@ class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListene
                 findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToGraphFragment())
             }
 
-            viewModel.startDate.observe(viewLifecycleOwner){
+            viewModel.startDate.observe(viewLifecycleOwner) {
                 setDateRangeTitle()
             }
 
-            val spinner: Spinner = expOrder
-            spinner.onItemSelectedListener = this@ExpenseListFragment
-            val listOrder:List<String> = listOf("none","Low to High"," High to Low")
-            val adapter = ArrayAdapter(
-                requireContext(),
-                R.layout.dropdown_category_list, listOrder
-            )
+//            val spinner: Spinner = expOrder
+//            spinner.onItemSelectedListener = this@ExpenseListFragment
+//            val listOrder: List<String> = listOf("none", "Low to High", " High to Low")
+//            val adapter = ArrayAdapter(
+//                requireContext(),
+//                R.layout.dropdown_category_list, listOrder
+//            )
+//
+//            spinner.adapter = adapter
 
-            spinner.adapter = adapter
-
-            viewModel.expenseOrder.observe(viewLifecycleOwner){}
+            viewModel.expenseOrder.observe(viewLifecycleOwner) {}
         }
     }
 
@@ -294,18 +284,18 @@ class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListene
         }
     }
 
-    private fun setDateRangeTitle(){
-        if (::menu.isInitialized){
+    private fun setDateRangeTitle() {
+        if (::menu.isInitialized) {
             val item = menu.findItem(R.id.date_range)
-            if(item!=null) {
-                if (viewModel.startDate.value == null )
+            if (item != null) {
+                if (viewModel.startDate.value == null)
                     item.title = getString(R.string.choose_date_range)
                 else item.title = getString(R.string.clear_date_range)
             }
         }
     }
 
-    private fun showDateRangePicker(){
+    private fun showDateRangePicker() {
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
             .setTitleText(R.string.filter_by_date)
             .setSelection(
@@ -317,7 +307,8 @@ class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListene
             .setCalendarConstraints(
                 CalendarConstraints.Builder()
                     .setValidator(DateValidatorPointBackward.now())
-                    .build())
+                    .build()
+            )
             .build()
 
         dateRangePicker.show(
@@ -325,34 +316,46 @@ class ExpenseListFragment : DaggerFragment() , AdapterView.OnItemSelectedListene
             "date Range Picker"
         )
 
-        dateRangePicker.addOnPositiveButtonClickListener{
-            datePicked->
+        dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
             dateConverter.longToDate(datePicked.first)
                 ?.let {
                     dateConverter.longToDate(datePicked.second)
-                        ?.let { endDate->
+                        ?.let { endDate ->
                             viewModel.selectDateRange(it, endDate)
-                            viewModel.filter(viewModel.selectedCategory.value,start = it, end = endDate)
+                            viewModel.filter(
+                                viewModel.selectedCategory.value,
+                                start = it,
+                                end = endDate
+                            )
                         }
                 }
         }
 
     }
 
-    override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-        var expOrder :Int
-        if(position == 0) expOrder =-1
-        else if(position == 1) expOrder = 0
-        else expOrder =1
+//    override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+//        var expOrder: Int
+//        if (position == 0) expOrder = -1
+//        else if (position == 1) expOrder = 0
+//        else expOrder = 1
+//
+////        1viewModel.setExpenseOrder(expOrder)
+//        viewModel.filter(
+//            viewModel.selectedCategory.value,
+//            viewModel.startDate.value,
+//            viewModel.endDate.value,
+//            expOrder
+//        )
+//        Toast.makeText(
+//            requireContext(),
+//            "${parent?.getItemAtPosition(position)}",
+//            Toast.LENGTH_SHORT
+//        ).show()
+//    }
 
-        viewModel.setExpenseOrder(expOrder)
-        viewModel.filter(viewModel.selectedCategory.value,viewModel.startDate.value,viewModel.endDate.value,expOrder)
-        Toast.makeText(requireContext(), "${parent?.getItemAtPosition(position)}", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-        TODO("Not yet implemented")
-    }
+//    override fun onNothingSelected(p0: AdapterView<*>?) {
+//        TODO("Not yet implemented")
+//    }
 
 }
 

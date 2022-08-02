@@ -36,21 +36,38 @@ interface ExpenseRepository {
 
     fun getByDateRange(start: Date, end : Date): Single<List<Expense>>
 
-    fun getByExpenseAsc() : Single<List<Expense>>
+    fun sortByExpenseAsc() : Single<List<Expense>>
 
-    fun getByFilterDateRange(category: String,start: Date, end :Date): Single<List<Expense>>
+    fun sortByCategoryDateRange(category: String, start: Date, end :Date): Single<List<Expense>>
 
-    fun getByFilterDateRangeExpAsc(category: String, start: Date ,end: Date) : Single<List<Expense>>
+    fun sortByCategoryDateRangeExpAsc(category: String, start: Date, end: Date) : Single<List<Expense>>
 
-    fun getByFilterExpenseAsc(category: String) : Single<List<Expense>>
+    fun sortByCategoryExpenseAsc(category: String) : Single<List<Expense>>
 
-    fun getByDateRangeExpAsc(start: Date ,end: Date) : Single<List<Expense>>
+    fun sortByDateRangeExpAsc(start: Date, end: Date) : Single<List<Expense>>
 
-    fun getByExpenseDesc() : Single<List<Expense>>
+    fun sortByExpenseDesc() : Single<List<Expense>>
 
-    fun getByFilterDateRangeExpDesc(category: String, start: Date ,end: Date) : Single<List<Expense>>
+    fun sortByCategoryDateRangeExpDesc(category: String, start: Date, end: Date) : Single<List<Expense>>
 
-    fun getByFilterExpDesc(category: String) : Single<List<Expense>>
+    fun sortByCategoryExpDesc(category: String) : Single<List<Expense>>
 
-    fun getByDateRangeExpDesc(start: Date ,end: Date) : Single<List<Expense>>
+    fun sortByDateRangeExpDesc(start: Date, end: Date) : Single<List<Expense>>
+
+    fun sortByDateAsc() : Single<List<Expense>>
+
+    fun sortByCategoryDateRangeDateAsc(category: String, start: Date, end: Date) : Single<List<Expense>>
+
+    fun sortByCategoryDateAsc(category: String) : Single<List<Expense>>
+
+    fun sortByDateRangeDateAsc(start: Date, end: Date) : Single<List<Expense>>
+
+    fun sortByDateDesc() : Single<List<Expense>>
+
+    fun sortByCategoryDateRangeDateDesc(category: String, start: Date, end: Date) : Single<List<Expense>>
+
+    fun sortByCategoryDateDesc(category: String) : Single<List<Expense>>
+
+    fun sortByDateRangeDateDesc(start: Date, end: Date) : Single<List<Expense>>
+
 }

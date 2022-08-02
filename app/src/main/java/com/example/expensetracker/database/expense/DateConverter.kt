@@ -8,6 +8,7 @@ class DateConverter {
 
 
     private val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val spf = SimpleDateFormat("MMM dd, yyyy hh:mm:ss aaa" ,Locale.getDefault())
 
     @TypeConverter
     fun toDate(value: String?): Date? {
@@ -21,6 +22,7 @@ class DateConverter {
     fun fromDate(date: Date?): String? {
         return formatter.format(date)
     }
+
 
     @TypeConverter
     fun longToDate(value: Long): Date? {

@@ -40,35 +40,62 @@ interface ExpenseDao {
 
     //Date Range Filters
     @Query("SELECT * FROM Expense WHERE `when` BETWEEN :start AND :end ORDER BY date(`when`) DESC")
-    fun getByDateRange(start: Date, end :Date): Single<List<Expense>>
+    fun sortByDateRange(start: Date, end :Date): Single<List<Expense>>
 
     @Query("SELECT * FROM Expense WHERE category = :category AND (`when` BETWEEN :start AND :end) ORDER BY date(`when`) DESC")
-    fun getByFilterDateRange(category: String,start: Date, end :Date): Single<List<Expense>>
+    fun sortByFilterDateRange(category: String, start: Date, end :Date): Single<List<Expense>>
 
     // Exp Ascending order
     @Query("SELECT * FROM Expense ORDER BY expense ASC")
-    fun getByFilterExpAsc() : Single<List<Expense>>
+    fun sortByExpAsc() : Single<List<Expense>>
 
     @Query("SELECT * FROM Expense WHERE category= :category AND (`when` BETWEEN :start AND :end) ORDER BY expense ASC")
-    fun getByFilterDateRangeExpAsc(category: String, start: Date ,end: Date) : Single<List<Expense>>
+    fun sortByFilterDateRangeExpAsc(category: String, start: Date, end: Date) : Single<List<Expense>>
 
     @Query("SELECT * FROM Expense WHERE category= :category  ORDER BY expense ASC")
-    fun getByFilterExpAsc(category: String) : Single<List<Expense>>
+    fun sortByCategoryExpAsc(category: String) : Single<List<Expense>>
 
     @Query("SELECT * FROM Expense WHERE  (`when` BETWEEN :start AND :end) ORDER BY expense ASC")
-    fun getByDateRangeExpAsc(start: Date ,end: Date) : Single<List<Expense>>
+    fun sortByDateRangeExpAsc(start: Date, end: Date) : Single<List<Expense>>
 
     //Exp Descending Order
     @Query("SELECT * FROM Expense ORDER BY expense DESC")
-    fun getByFilterExpDesc() : Single<List<Expense>>
+    fun sortByExpDesc() : Single<List<Expense>>
 
     @Query("SELECT * FROM Expense WHERE category= :category AND (`when` BETWEEN :start AND :end) ORDER BY expense DESC")
-    fun getByFilterDateRangeExpDesc(category: String, start: Date ,end: Date) : Single<List<Expense>>
+    fun sortByCategoryDateRangeExpDesc(category: String, start: Date, end: Date) : Single<List<Expense>>
 
     @Query("SELECT * FROM Expense WHERE category= :category  ORDER BY expense DESC")
-    fun getByFilterExpDesc(category: String) : Single<List<Expense>>
+    fun sortByCategoryExpDesc(category: String) : Single<List<Expense>>
 
     @Query("SELECT * FROM Expense WHERE  (`when` BETWEEN :start AND :end) ORDER BY expense DESC")
-    fun getByDateRangeExpDesc(start: Date ,end: Date) : Single<List<Expense>>
+    fun sortByDateRangeExpDesc(start: Date, end: Date) : Single<List<Expense>>
+
+    //Date Ascending Order
+    @Query("SELECT * FROM Expense ORDER BY date(`when`) ASC")
+    fun sortByDateAsc() : Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE category= :category AND (`when` BETWEEN :start AND :end) ORDER BY date(`when`) ASC")
+    fun sortByCategoryDateRangeDateAsc(category: String, start: Date, end: Date) : Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE category= :category  ORDER BY date(`when`) ASC")
+    fun sortByCategoryDateAsc(category: String) : Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE  (`when` BETWEEN :start AND :end) ORDER BY date(`when`) ASC")
+    fun sortByDateRangeDateAsc(start: Date, end: Date) : Single<List<Expense>>
+
+    //date Descending order
+    @Query("SELECT * FROM Expense ORDER BY date(`when`) DESC")
+    fun sortByDateDesc() : Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE category= :category AND (`when` BETWEEN :start AND :end) ORDER BY date(`when`) DESC")
+    fun sortByFilterDateRangeDatepDesc(category: String, start: Date, end: Date) : Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE category= :category  ORDER BY date(`when`) DESC")
+    fun sortByCategoryDateDesc(category: String) : Single<List<Expense>>
+
+    @Query("SELECT * FROM Expense WHERE  (`when` BETWEEN :start AND :end) ORDER BY date(`when`) DESC")
+    fun sortByDateRangeDateDesc(start: Date, end: Date) : Single<List<Expense>>
+
 
 }

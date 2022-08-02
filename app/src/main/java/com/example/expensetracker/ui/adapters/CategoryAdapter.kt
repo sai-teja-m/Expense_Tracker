@@ -52,7 +52,6 @@ class CategoryAdapter(private val onClick: (String) -> Unit) :
                 }
                 itemText.text = category
                 root.setOnClickListener {
-
                     onClick(category)
                 }
             }
