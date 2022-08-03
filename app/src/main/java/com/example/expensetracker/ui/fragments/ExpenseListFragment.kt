@@ -66,7 +66,6 @@ class ExpenseListFragment : DaggerFragment() {
         super.onPrepareOptionsMenu(menu)
         this.menu = menu
         setFilterIcon()
-        setDateRangeTitle()
     }
 
     var t: Int = 0
@@ -82,29 +81,12 @@ class ExpenseListFragment : DaggerFragment() {
                 true
             }
 
-            R.id.date_range -> {
-                if (viewModel.startDate.value != null && viewModel.endDate.value != null) {
-                    viewModel.selectDateRange(null, null)
-
-                    viewModel.filter(viewModel.selectedCategory.value, null, null)
-//                    item.title = "Choose Date Range"
-                    t = 1
-
-                } else {
-                    t = 0
-                    showDateRangePicker()
-                    setDateRangeTitle()
-//                    item.title = "Clear Range"
-                }
-
-                true
-            }
 
             R.id.category_total -> {
                 if (viewModel.selectedCategory.value.isNullOrEmpty()) {
                     showSnackBarCategoryExp(null)
                 } else {
-                    viewModel.getCategoryExpense(viewModel.selectedCategory.value.toString())
+                    viewModel.getCategoryExpense(viewModel.selectedCategory.value!!.toList())
                 }
                 true
             }
@@ -191,7 +173,6 @@ class ExpenseListFragment : DaggerFragment() {
             }
 
             viewModel.startDate.observe(viewLifecycleOwner) {
-                setDateRangeTitle()
             }
 
 //            val spinner: Spinner = expOrder
@@ -273,89 +254,17 @@ class ExpenseListFragment : DaggerFragment() {
     private fun setFilterIcon() {
         if (::menu.isInitialized) {
             val item = menu.findItem(R.id.filter)
-            val filterSelected = !viewModel.selectedCategory.value.isNullOrEmpty()
+            val filterSelected = (!viewModel.selectedCategory.value.isNullOrEmpty() || viewModel.startDate.value != null || viewModel.expenseOrder.value !=-1)
             if (item != null) {
                 if (filterSelected) {
                     item.setIcon(R.drawable.ic_filter_list_enabled)
                 } else {
                     item.setIcon(R.drawable.ic_filter_list)
+                    item.icon.setTint(resources.getColor(R.color.card_grey))
                 }
             }
         }
     }
-
-    private fun setDateRangeTitle() {
-        if (::menu.isInitialized) {
-            val item = menu.findItem(R.id.date_range)
-            if (item != null) {
-                if (viewModel.startDate.value == null)
-                    item.title = getString(R.string.choose_date_range)
-                else item.title = getString(R.string.clear_date_range)
-            }
-        }
-    }
-
-    private fun showDateRangePicker() {
-        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText(R.string.filter_by_date)
-            .setSelection(
-                Pair(
-                    MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                    MaterialDatePicker.todayInUtcMilliseconds()
-                )
-            )
-            .setCalendarConstraints(
-                CalendarConstraints.Builder()
-                    .setValidator(DateValidatorPointBackward.now())
-                    .build()
-            )
-            .build()
-
-        dateRangePicker.show(
-            childFragmentManager,
-            "date Range Picker"
-        )
-
-        dateRangePicker.addOnPositiveButtonClickListener { datePicked ->
-            dateConverter.longToDate(datePicked.first)
-                ?.let {
-                    dateConverter.longToDate(datePicked.second)
-                        ?.let { endDate ->
-                            viewModel.selectDateRange(it, endDate)
-                            viewModel.filter(
-                                viewModel.selectedCategory.value,
-                                start = it,
-                                end = endDate
-                            )
-                        }
-                }
-        }
-
-    }
-
-//    override fun onItemSelected(parent: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-//        var expOrder: Int
-//        if (position == 0) expOrder = -1
-//        else if (position == 1) expOrder = 0
-//        else expOrder = 1
-//
-////        1viewModel.setExpenseOrder(expOrder)
-//        viewModel.filter(
-//            viewModel.selectedCategory.value,
-//            viewModel.startDate.value,
-//            viewModel.endDate.value,
-//            expOrder
-//        )
-//        Toast.makeText(
-//            requireContext(),
-//            "${parent?.getItemAtPosition(position)}",
-//            Toast.LENGTH_SHORT
-//        ).show()
-//    }
-
-//    override fun onNothingSelected(p0: AdapterView<*>?) {
-//        TODO("Not yet implemented")
-//    }
 
 }
 

@@ -62,8 +62,8 @@ class CategoryFragment : DaggerFragment() {
     }
 
     private fun onClearFilter() {
-        viewModel.selectCategory("")
-        viewModel.filter("",viewModel.startDate.value,viewModel.endDate.value)
+        viewModel.selectCategory(emptyList())
+        viewModel.filter(emptyList(),viewModel.startDate.value,viewModel.endDate.value)
         findNavController().navigateUp()
     }
 
@@ -75,14 +75,15 @@ class CategoryFragment : DaggerFragment() {
             categoryRecycler.adapter = categoryAdapter
 
             viewModel.categoryList.observe(viewLifecycleOwner, Observer {
-                categoryAdapter.setCurrentCategory(viewModel.selectedCategory.value ?: "")
+                categoryAdapter.setCurrentCategory(viewModel.selectedCategory.value ?: emptyList<String>())
                 categoryAdapter.submitList(it)
             })
 
         }
     }
 
-    private fun onClick(str: String) {
+
+    private fun onClick(str: List<String>) {
         viewModel.selectCategory(str)
 
         findNavController().navigateUp()

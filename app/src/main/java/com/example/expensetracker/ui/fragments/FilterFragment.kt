@@ -2,9 +2,11 @@ package com.example.expensetracker.ui.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.CheckBox
 import androidx.core.util.Pair
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.expensetracker.R
 import com.example.expensetracker.database.expense.DateConverter
@@ -28,13 +30,14 @@ class FilterFragment : DaggerFragment() {
 
     @Inject
     lateinit var expenseViewModelFactory: ExpenseViewModelFactory
-    private val categoryAdapter: CategoryAdapter by lazy { CategoryAdapter(::onClickCategory) }
+    private val categoryAdapter: CategoryAdapter by lazy { CategoryAdapter() }
     private val viewModel: ExpenseViewModel by activityViewModels {
         expenseViewModelFactory
     }
     private lateinit var menu: Menu
-    private lateinit var startDate: Date
-    private lateinit var endDate: Date
+    private  var startDate: Date?=null
+    private  var endDate: Date?=null
+    private var categoryList : List<String>? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,7 +81,7 @@ class FilterFragment : DaggerFragment() {
             categoryRecycler.layoutManager = LinearLayoutManager(context)
             categoryRecycler.adapter = categoryAdapter
             viewModel.categoryList.observe(viewLifecycleOwner) {
-                categoryAdapter.setCurrentCategory(viewModel.selectedCategory.value ?: "")
+                categoryAdapter.setCurrentCategory(viewModel.selectedCategory.value ?: emptyList())
                 categoryAdapter.submitList(it)
             }
             setDateRangeInit()
@@ -110,7 +113,7 @@ class FilterFragment : DaggerFragment() {
             }
 
             viewModel.categoryList.observe(viewLifecycleOwner) {
-                categoryAdapter.setCurrentCategory(viewModel.selectedCategory.value ?: "")
+                categoryAdapter.setCurrentCategory(viewModel.selectedCategory.value ?: emptyList())
                 categoryAdapter.submitList(it)
             }
 
@@ -128,6 +131,9 @@ class FilterFragment : DaggerFragment() {
                 }
             }
 
+            viewModel.selectedCategory.observe(viewLifecycleOwner){
+                categoryAdapter.setCurrentCategory(it)
+            }
 
             dateRange.setOnClickListener {
                 if (dateRange.text == getString(R.string.select_date_range))
@@ -137,10 +143,12 @@ class FilterFragment : DaggerFragment() {
             }
 
             applyFilters.setOnClickListener {
-                viewModel.selectDateRange(startDate, endDate)
+                setSelectCategory(categoryAdapter.getSelectedCategories())
+                if(startDate!= null )
+                    viewModel.selectDateRange(startDate, endDate)
                 onRadioButtonClicked()
                 viewModel.filter(
-                    viewModel.selectedCategory.value,
+                    categoryList,
                     startDate, endDate,
                     expOrder
                 )
@@ -190,15 +198,15 @@ class FilterFragment : DaggerFragment() {
     }
 
     private fun setRadio(){
-        val order = viewModel.expenseOrder.value
-        if(order == -1 || order == 3 || order == null){
+//        val order = viewModel.expenseOrder.value
+        if(expOrder == -1 || expOrder == 3 || expOrder == null){
             binding?.radioSortNewestFirst?.isChecked = true
         }
-        if(order == 2)
+        if(expOrder == 2)
             binding?.radioSortOldestFirst?.isChecked = true
-        if(order == 1)
+        if(expOrder == 1)
             binding?.radioExpenseAmountHighFirst?.isChecked =true
-        if (order == 0)
+        if (expOrder == 0)
             binding?.radioExpenseAmountLowFirst?.isChecked =true
     }
 
@@ -264,25 +272,23 @@ class FilterFragment : DaggerFragment() {
         setDateRange()
     }
 
-    private fun onClickCategory(str: String) {
-        if (viewModel.selectedCategory.value == str) {
-            viewModel.selectCategory("")
-        } else {
-            viewModel.selectCategory(str)
-        }
+    private fun setSelectCategory(str: List<String>) {
+        categoryList = str
+        viewModel.selectCategory(str)
     }
 
     private fun clearCategoryFilter() {
-        viewModel.selectCategory("")
-
+        viewModel.selectCategory(emptyList())
     }
 
     private fun clearAll() {
         clearDateRange()
         clearCategoryFilter()
-//        binding?.sortRadioGroup?.clearCheck()
+        categoryAdapter.removeAllSelection()
         viewModel.setExpenseOrder(-1)
+        expOrder = -1
         setRadio()
+        viewModel.getAllExpenses()
     }
 
 }

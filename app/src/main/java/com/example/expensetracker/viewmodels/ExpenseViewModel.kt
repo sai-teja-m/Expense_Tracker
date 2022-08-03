@@ -57,12 +57,16 @@ class ExpenseViewModel(
 
     private val _allExpense: MutableLiveData<List<Expense>> = MutableLiveData()
     val allExpense: LiveData<List<Expense>> = _allExpense
+
     private val _categoryList: MutableLiveData<List<String>> = MutableLiveData()
     val categoryList: LiveData<List<String>> = _categoryList
-    private val _selectedCategory: MutableLiveData<String> = MutableLiveData()
-    val selectedCategory: LiveData<String> = _selectedCategory
+
+    private val _selectedCategory: MutableLiveData<List<String>> = MutableLiveData()
+    val selectedCategory: LiveData<List<String>> = _selectedCategory
+
     private val _totalExpense: MutableLiveData<Int> = MutableLiveData()
     val totalExpense: LiveData<Int> = _totalExpense
+
     private val _categoryExpense: MutableLiveData<Int> = MutableLiveData()
     val categoryExpense: LiveData<Int> = _categoryExpense
 
@@ -108,8 +112,8 @@ class ExpenseViewModel(
         return validEntry
     }
 
-    fun selectCategory(category: String) {
-        _selectedCategory.postValue(category)
+    fun selectCategory(categories: List<String>) {
+        _selectedCategory.postValue(categories)
     }
 
     fun selectDateRange(start: Date? = null, end: Date? = null) {
@@ -132,7 +136,7 @@ class ExpenseViewModel(
         }
     }
 
-    fun getCategoryExpense(category: String) {
+    fun getCategoryExpense(category: List<String>) {
         getCategoryExpenseUseCase.execute(category).subscribeOn(ioScheduler).observeOn(uiScheduler)
             .subscribe({
                 _categoryExpense.postValue(it)
@@ -219,7 +223,7 @@ class ExpenseViewModel(
         }
     }
 
-    private fun filterByCategory(cat: String) {
+    private fun filterByCategory(cat: List<String>) {
         getByCatUseCase.execute(cat).subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
             _allExpense.postValue(it)
         }, {
@@ -240,7 +244,7 @@ class ExpenseViewModel(
         }
     }
 
-    private fun filterByDateRangeAndCategory(category: String, start: Date, end: Date) {
+    private fun filterByDateRangeAndCategory(category: List<String>, start: Date, end: Date) {
         getByFilterDateRangeUseCase.execute(category, start, end).subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe({
@@ -263,7 +267,7 @@ class ExpenseViewModel(
             }
     }
 
-    private fun filterByCategoryDateExpenseAsc(category: String, start: Date, end: Date) {
+    private fun filterByCategoryDateExpenseAsc(category: List<String>, start: Date, end: Date) {
         getByFilterDateRangeExpAscUseCase.execute(category, start, end).subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe({
@@ -275,7 +279,7 @@ class ExpenseViewModel(
             }
     }
 
-    private fun filterByCategoryAndExpAsc(category: String) {
+    private fun filterByCategoryAndExpAsc(category: List<String>) {
         getByFilterExpAscUseCase.execute(category).subscribeOn(ioScheduler).observeOn(uiScheduler)
             .subscribe({
                 _allExpense.postValue(it)
@@ -308,7 +312,7 @@ class ExpenseViewModel(
             }
     }
 
-    private fun filterByCategoryDateExpenseDesc(category: String, start: Date, end: Date) {
+    private fun filterByCategoryDateExpenseDesc(category: List<String>, start: Date, end: Date) {
         getByFilterDateRangeExpDescUseCase.execute(category, start, end).subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
             .subscribe({
@@ -320,7 +324,7 @@ class ExpenseViewModel(
             }
     }
 
-    private fun filterByCategoryAndExpDesc(category: String) {
+    private fun filterByCategoryAndExpDesc(category: List<String>) {
         getByFilterExpDescUseCase.execute(category).subscribeOn(ioScheduler).observeOn(uiScheduler)
             .subscribe({
                 _allExpense.postValue(it)
@@ -353,7 +357,7 @@ class ExpenseViewModel(
         }
     }
 
-    private fun sortByCategoryDateRangeDateAsc(category: String, start: Date, end: Date) {
+    private fun sortByCategoryDateRangeDateAsc(category: List<String>, start: Date, end: Date) {
         sortByCategoryDateRangeDateAscUseCase.execute(category, start, end).subscribeOn(ioScheduler)
             .observeOn(uiScheduler).subscribe({
             _allExpense.postValue(it)
@@ -367,7 +371,7 @@ class ExpenseViewModel(
         }
     }
 
-    private fun sortByCategoryDateAsc(category: String) {
+    private fun sortByCategoryDateAsc(category: List<String>) {
         sortByCategoryDateAscUseCase.execute(category).subscribeOn(ioScheduler)
             .observeOn(uiScheduler).subscribe({
             _allExpense.postValue(it)
@@ -400,7 +404,7 @@ class ExpenseViewModel(
         }
     }
 
-    private fun sortByCategoryDateRangeDateDesc(category: String, start: Date, end: Date) {
+    private fun sortByCategoryDateRangeDateDesc(category: List<String>, start: Date, end: Date) {
         sortByCategoryDateRangeDateDescUseCase.execute(category, start, end)
             .subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
             _allExpense.postValue(it)
@@ -414,7 +418,7 @@ class ExpenseViewModel(
         }
     }
 
-    private fun sortByCategoryDateDesc(category: String) {
+    private fun sortByCategoryDateDesc(category: List<String>) {
         sortByCategoryDateDescUseCase.execute(category).subscribeOn(ioScheduler)
             .observeOn(uiScheduler).subscribe({
             _allExpense.postValue(it)
@@ -460,15 +464,15 @@ class ExpenseViewModel(
     }
 
     fun filter(
-        category: String? = null,
+        category: List<String>? = null,
         start: Date? = null,
         end: Date? = null,
         expOrder: Int? = -1
     ) {
         if (expOrder == -1) {
-            if (category != null && category != "" && (start != null && end != null)) {
+            if (category != null && !category.isNullOrEmpty() && (start != null && end != null)) {
                 filterByDateRangeAndCategory(category, start, end)
-            } else if (category != null && category != "") {
+            } else if (category != null && !category.isNullOrEmpty()) {
                 filterByCategory(category)
             } else if (start != null && end != null) {
                 filterByDateRange(start, end)
@@ -476,36 +480,36 @@ class ExpenseViewModel(
                 getAllExpenses()
             }
         } else if (expOrder == 0) {
-            if (category != null && category != "" && (start != null && end != null)) {
+            if (category != null && !category.isNullOrEmpty() && (start != null && end != null)) {
                 filterByCategoryDateExpenseAsc(category, start, end)
-            } else if (category != null && category != "") {
+            } else if (category != null && !category.isNullOrEmpty()) {
                 filterByCategoryAndExpAsc(category)
             } else if (start != null && end != null) {
                 filterByDateRangeAndExpAsc(start, end)
             } else
                 getByExpenseAsc()
         } else if (expOrder == 1) {
-            if (category != null && category != "" && (start != null && end != null)) {
+            if (category != null && !category.isNullOrEmpty() && (start != null && end != null)) {
                 filterByCategoryDateExpenseDesc(category, start, end)
-            } else if (category != null && category != "") {
+            } else if (category != null && !category.isNullOrEmpty()) {
                 filterByCategoryAndExpDesc(category)
             } else if (start != null && end != null) {
                 filterByDateRangeAndExpDesc(start, end)
             } else
                 getByExpenseDesc()
         } else if (expOrder == 2) {
-            if (category != null && category != "" && (start != null && end != null)) {
+            if (category != null && !category.isNullOrEmpty() && (start != null && end != null)) {
                 sortByCategoryDateRangeDateAsc(category, start, end)
-            } else if (category != null && category != "") {
+            } else if (category != null && !category.isNullOrEmpty()) {
                 sortByCategoryDateAsc(category)
             } else if (start != null && end != null) {
                 sortByDateRangeDateAsc(start, end)
             } else
                 sortByDateAsc()
         } else if (expOrder == 3) {
-            if (category != null && category != "" && (start != null && end != null)) {
+            if (category != null && !category.isNullOrEmpty() && (start != null && end != null)) {
                 sortByCategoryDateRangeDateDesc(category, start, end)
-            } else if (category != null && category != "") {
+            } else if (category != null && !category.isNullOrEmpty()) {
                 sortByCategoryDateDesc(category)
             } else if (start != null && end != null) {
                 sortByDateRangeDateDesc(start, end)

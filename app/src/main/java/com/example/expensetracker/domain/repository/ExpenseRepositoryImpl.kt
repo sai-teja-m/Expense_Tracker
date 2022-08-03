@@ -40,12 +40,12 @@ class ExpenseRepositoryImpl @Inject constructor(
         return dao.getTotalExpense()
     }
 
-    override fun getCategoryExpense(category: String): Single<Int> {
-        return dao.getCategoryExpense(category)
+    override fun getCategoryExpense(categories: List<String>): Single<Int> {
+        return dao.getCategoryExpense(categories)
     }
 
-    override fun getByCategory(category: String): Single<List<Expense>> {
-        return dao.getByCategory(category)
+    override fun getByCategory(categories: List<String>): Single<List<Expense>> {
+        return dao.getByCategory(categories)
     }
 
     override fun getById(id: Int): Single<Expense> {
@@ -61,26 +61,26 @@ class ExpenseRepositoryImpl @Inject constructor(
     }
 
     override fun sortByCategoryDateRange(
-        category: String,
+        categories: List<String>,
         start: Date,
         end: Date
     ): Single<List<Expense>> {
-        return dao.sortByFilterDateRange(category, start, end)
+        return dao.sortByFilterDateRange(categories, start, end)
     }
 
 
 
 
     override fun sortByCategoryDateRangeExpAsc(
-        category: String,
+        categories: List<String>,
         start: Date,
         end: Date
     ): Single<List<Expense>> {
-        return dao.sortByFilterDateRangeExpAsc(category,start, end)
+        return dao.sortByFilterDateRangeExpAsc(categories,start, end)
     }
 
-    override fun sortByCategoryExpenseAsc(category: String): Single<List<Expense>> {
-        return dao.sortByCategoryExpAsc(category)
+    override fun sortByCategoryExpenseAsc(categories: List<String>): Single<List<Expense>> {
+        return dao.sortByCategoryExpAsc(categories)
     }
 
     override fun sortByDateRangeExpAsc(start: Date, end: Date): Single<List<Expense>> {
@@ -92,15 +92,15 @@ class ExpenseRepositoryImpl @Inject constructor(
     }
 
     override fun sortByCategoryDateRangeExpDesc(
-        category: String,
+        categories: List<String>,
         start: Date,
         end: Date
     ): Single<List<Expense>> {
-        return dao.sortByCategoryDateRangeExpDesc(category, start, end)
+        return dao.sortByCategoryDateRangeExpDesc(categories, start, end)
     }
 
-    override fun sortByCategoryExpDesc(category: String): Single<List<Expense>> {
-        return dao.sortByCategoryExpDesc(category)
+    override fun sortByCategoryExpDesc(categories: List<String>): Single<List<Expense>> {
+        return dao.sortByCategoryExpDesc(categories)
     }
 
     override fun sortByDateRangeExpDesc(start: Date, end: Date): Single<List<Expense>> {
@@ -112,15 +112,15 @@ class ExpenseRepositoryImpl @Inject constructor(
     }
 
     override fun sortByCategoryDateRangeDateAsc(
-        category: String,
+        categories: List<String>,
         start: Date,
         end: Date
     ): Single<List<Expense>> {
-        return dao.sortByCategoryDateRangeDateAsc(category, start, end)
+        return dao.sortByCategoryDateRangeDateAsc(categories, start, end)
     }
 
-    override fun sortByCategoryDateAsc(category: String): Single<List<Expense>> {
-        return dao.sortByCategoryDateAsc(category)
+    override fun sortByCategoryDateAsc(categories: List<String>): Single<List<Expense>> {
+        return dao.sortByCategoryDateAsc(categories)
     }
 
     override fun sortByDateRangeDateAsc(start: Date, end: Date): Single<List<Expense>> {
@@ -132,15 +132,15 @@ class ExpenseRepositoryImpl @Inject constructor(
     }
 
     override fun sortByCategoryDateRangeDateDesc(
-        category: String,
+        categories: List<String>,
         start: Date,
         end: Date
     ): Single<List<Expense>> {
-        return dao.sortByCategoryDateRangeExpDesc(category, start, end)
+        return dao.sortByCategoryDateRangeExpDesc(categories, start, end)
     }
 
-    override fun sortByCategoryDateDesc(category: String): Single<List<Expense>> {
-        return dao.sortByCategoryDateDesc(category)
+    override fun sortByCategoryDateDesc(categories: List<String>): Single<List<Expense>> {
+        return dao.sortByCategoryDateDesc(categories)
     }
 
     override fun sortByDateRangeDateDesc(start: Date, end: Date): Single<List<Expense>> {
