@@ -20,16 +20,13 @@ abstract class UIModule {
     abstract fun bindsAddEdit(): AddEditExpenseFragment
 
     @ContributesAndroidInjector
-    abstract fun bindsCategoryFragment(): CategoryFragment
-
-    @ContributesAndroidInjector
     abstract fun bindsDatePickerFragment(): DatePickerFragment
 
     @ContributesAndroidInjector
-    abstract fun bindsGraphFragment() : GraphFragment
+    abstract fun bindsGraphFragment(): GraphFragment
 
     @ContributesAndroidInjector
-    abstract fun bindsFilterFragment() : FilterFragment
+    abstract fun bindsFilterFragment(): FilterFragment
 
     @ContributesAndroidInjector
     abstract fun bindsMainActivity(): MainActivity
@@ -49,21 +46,21 @@ abstract class UIModule {
             getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase,
             getByDateRangeUseCase: GetByDateRangeUseCase,
             getByFilterDateRangeUseCase: GetByFilterDateRangeUseCase,
-            getByFilterDateRangeExpAscUseCase:GetByFilterDateRangeExpAscUseCase,
-            getByFilterExpAscUseCase:GetByFilterExpAscUseCase,
-            getByDateRangeExpAscUseCase:GetByDateRangeExpAscUseCase,
-            getByFilterDateRangeExpDescUseCase:GetByFilterDateRangeExpDescUseCase,
-            getByFilterExpDescUseCase:GetByFilterExpDescUseCase,
-            getByDateRangeExpDescUseCase:GetByDateRangeExpDescUseCase,
-            getByExpenseAsc:GetByExpenseAsc,
+            getByFilterDateRangeExpAscUseCase: GetByFilterDateRangeExpAscUseCase,
+            getByFilterExpAscUseCase: GetByFilterExpAscUseCase,
+            getByDateRangeExpAscUseCase: GetByDateRangeExpAscUseCase,
+            getByFilterDateRangeExpDescUseCase: GetByFilterDateRangeExpDescUseCase,
+            getByFilterExpDescUseCase: GetByFilterExpDescUseCase,
+            getByDateRangeExpDescUseCase: GetByDateRangeExpDescUseCase,
+            getByExpenseAsc: GetByExpenseAsc,
             getByExpenseDesc: GetByExpenseDesc,
             sortByDateAscUseCase: SortByDateAscUseCase,
-            sortByCategoryDateRangeDateAscUseCase:SortByCategoryDateRangDateAscUseCase,
-            sortByCategoryDateAscUseCase:SortByCategoryDateAscUseCase,
+            sortByCategoryDateRangeDateAscUseCase: SortByCategoryDateRangDateAscUseCase,
+            sortByCategoryDateAscUseCase: SortByCategoryDateAscUseCase,
             sortByDateRangeDateAscUseCase: SortByDateRangeDateAscUseCase,
             sortByDateDescUseCase: SortByDateDescUseCase,
-            sortByCategoryDateRangeDateDescUseCase:SortByCategoryDateRangDateDescUseCase,
-            sortByCategoryDateDescUseCase:SortByCategoryDateDescUseCase,
+            sortByCategoryDateRangeDateDescUseCase: SortByCategoryDateRangDateDescUseCase,
+            sortByCategoryDateDescUseCase: SortByCategoryDateDescUseCase,
             sortByDateRangeDateDescUseCase: SortByDateRangeDateDescUseCase,
 
             dateConverter: DateConverter

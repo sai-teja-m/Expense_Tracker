@@ -3,6 +3,7 @@ package com.example.expensetracker.ui.fragments
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.util.Pair
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -68,7 +69,6 @@ class ExpenseListFragment : DaggerFragment() {
         setFilterIcon()
     }
 
-    var t: Int = 0
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         return when (item.itemId) {
@@ -86,7 +86,8 @@ class ExpenseListFragment : DaggerFragment() {
                 if (viewModel.selectedCategory.value.isNullOrEmpty()) {
                     showSnackBarCategoryExp(null)
                 } else {
-                    viewModel.getCategoryExpense(viewModel.selectedCategory.value!!.toList())
+                    viewModel.selectedCategory.value?.toList()
+                        ?.let { viewModel.getCategoryExpense(it) }
                 }
                 true
             }
@@ -172,20 +173,6 @@ class ExpenseListFragment : DaggerFragment() {
                 findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToGraphFragment())
             }
 
-            viewModel.startDate.observe(viewLifecycleOwner) {
-            }
-
-//            val spinner: Spinner = expOrder
-//            spinner.onItemSelectedListener = this@ExpenseListFragment
-//            val listOrder: List<String> = listOf("none", "Low to High", " High to Low")
-//            val adapter = ArrayAdapter(
-//                requireContext(),
-//                R.layout.dropdown_category_list, listOrder
-//            )
-//
-//            spinner.adapter = adapter
-
-            viewModel.expenseOrder.observe(viewLifecycleOwner) {}
         }
     }
 
