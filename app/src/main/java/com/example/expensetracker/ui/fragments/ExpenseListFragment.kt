@@ -2,6 +2,10 @@ package com.example.expensetracker.ui.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.*
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.util.Pair
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,20 +19,19 @@ import com.example.expensetracker.ui.adapters.ExpenseAdapter
 import com.example.expensetracker.utils.SwipeToDeleteCallBack
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
+import kotlin.reflect.KProperty
 
 
 class ExpenseListFragment : DaggerFragment() {
 
-
     private val expenseAdapter: ExpenseAdapter by lazy {
-        ExpenseAdapter(
-            ::onClickEdit,
-            ::onDelete,
-            dateConverter
-        )
+        ExpenseAdapter(::onClickEdit, ::onDelete, dateConverter)
     }
 
     @Inject
@@ -39,19 +42,20 @@ class ExpenseListFragment : DaggerFragment() {
 
     private lateinit var menu: Menu
 
-    private val viewModel: ExpenseViewModel by lazy {
-        ViewModelProvider(
-            (requireActivity().viewModelStore),
-            expenseViewModelFactory
-        )[ExpenseViewModel::class.java]
+    private val viewModel: ExpenseViewModel by activityViewModels {
+        expenseViewModelFactory
     }
 
 
     private var _binding: FragmentListDisplayBinding? = null
     private val binding get() = _binding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        viewModel.getAllExpenses()
+        viewModel.getCategory()
+        viewModel.getTotalExpense()
 
     }
 
@@ -66,6 +70,7 @@ class ExpenseListFragment : DaggerFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         return when (item.itemId) {
             R.id.total_expense -> {
                 if (viewModel.allExpense.value.isNullOrEmpty()) {
@@ -75,11 +80,14 @@ class ExpenseListFragment : DaggerFragment() {
                 }
                 true
             }
+
+
             R.id.category_total -> {
                 if (viewModel.selectedCategory.value.isNullOrEmpty()) {
                     showSnackBarCategoryExp(null)
                 } else {
-                    viewModel.getCategoryExpense(viewModel.selectedCategory.value.toString())
+                    viewModel.selectedCategory.value?.toList()
+                        ?.let { viewModel.getCategoryExpense(it) }
                 }
                 true
             }
@@ -100,7 +108,7 @@ class ExpenseListFragment : DaggerFragment() {
 
 
     private fun onClickFilter() {
-        findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToCategoryFragment())
+        findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToFilterFragment())
     }
 
     override fun onCreateView(
@@ -150,15 +158,12 @@ class ExpenseListFragment : DaggerFragment() {
                 if (it.isEmpty()) {
                     //DO NOTHING
                 } else {
-
-                    viewModel.filterByCategory(it)
-
+                    viewModel.filter(it, viewModel.startDate.value, viewModel.endDate.value)
                 }
             }
 
             viewModel.categoryExpense.observe(viewLifecycleOwner) {
                 if (it != null) {
-
                     showSnackBarCategoryExp(it)
                     viewModel.clearCategoryExpense()
                 }
@@ -167,11 +172,6 @@ class ExpenseListFragment : DaggerFragment() {
             viewModel.categoryAndAmount.observe(viewLifecycleOwner) {
                 findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToGraphFragment())
             }
-
-            viewModel.getAllExpenses()
-            viewModel.getCategory()
-            viewModel.getTotalExpense()
-
 
         }
     }
@@ -241,15 +241,17 @@ class ExpenseListFragment : DaggerFragment() {
     private fun setFilterIcon() {
         if (::menu.isInitialized) {
             val item = menu.findItem(R.id.filter)
-            val filterSelected = !viewModel.selectedCategory.value.isNullOrEmpty()
+            val filterSelected = (!viewModel.selectedCategory.value.isNullOrEmpty() || viewModel.startDate.value != null || viewModel.expenseOrder.value !=-1)
             if (item != null) {
                 if (filterSelected) {
                     item.setIcon(R.drawable.ic_filter_list_enabled)
                 } else {
                     item.setIcon(R.drawable.ic_filter_list)
+                    item.icon.setTint(resources.getColor(R.color.card_grey))
                 }
             }
         }
     }
 
 }
+

@@ -1,17 +1,23 @@
 package com.example.expensetracker.ui.adapters
 
+import android.hardware.biometrics.BiometricManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.TextViewCompat
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.ItemKeyProvider
+import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.expensetracker.R
 import com.example.expensetracker.databinding.ItemCategoryBinding
+import com.github.mikephil.charting.utils.Utils.init
+import kotlinx.android.synthetic.main.expense_view.view.*
 
 
-class CategoryAdapter(private val onClick: (String) -> Unit) :
+class CategoryAdapter() :
     ListAdapter<String, CategoryAdapter.CategoryHolder>(
         DIFF
     ) {
@@ -27,10 +33,12 @@ class CategoryAdapter(private val onClick: (String) -> Unit) :
         }
     }
 
-    private var currentSelectedCategory: String = ""
+    private var currentSelectedCategories: MutableList<String> = mutableListOf()
 
-    fun setCurrentCategory(category: String) {
-        currentSelectedCategory = category
+
+    fun setCurrentCategory(categories: List<String>) {
+//        currentSelectedCategory = category
+        currentSelectedCategories.addAll(categories)
     }
 
     inner class CategoryHolder(private val binding: ItemCategoryBinding) :
@@ -38,32 +46,33 @@ class CategoryAdapter(private val onClick: (String) -> Unit) :
         fun bind(position: Int) {
             binding.run {
                 val category: String = getItem(position)
-                if (position == itemCount - 1)
-                    divider.visibility = View.INVISIBLE
-                else {
-                    divider.visibility = View.VISIBLE
+                if(currentSelectedCategories.contains(category)){
+                    itemText.isChecked = true
+                }else{
+                    itemText.isChecked =false
                 }
-                if (category == currentSelectedCategory) {
-                    TextViewCompat.setTextAppearance(itemText, R.style.selectedCategoryStyle)
-                    ivSelection.visibility = View.VISIBLE
-                } else {
-                    TextViewCompat.setTextAppearance(itemText, R.style.unSelectedCategoryStyle)
-                    ivSelection.visibility = View.GONE
-                }
+
                 itemText.text = category
-                root.setOnClickListener {
 
-                    onClick(category)
+                itemText.setOnCheckedChangeListener { _, isChecked ->
+                    if(isChecked) {
+                        addSelection(position)
+                    }
+                    else {
+                        removeSelection(position)
+                    }
+
+                    }
+
                 }
-            }
 
+            }
         }
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): CategoryHolder {
+    ): CategoryAdapter.CategoryHolder {
         val binding = ItemCategoryBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -73,8 +82,28 @@ class CategoryAdapter(private val onClick: (String) -> Unit) :
     }
 
 
-    override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
-        holder.bind(position)
 
+
+    override fun onBindViewHolder(holder: CategoryAdapter.CategoryHolder, position: Int) {
+        holder.bind(position)
+    }
+
+    fun addSelection(position: Int){
+        currentSelectedCategories.add(getItem(position))
+//        notifyItemChanged(position)
+    }
+
+    fun removeSelection(position: Int){
+        currentSelectedCategories.remove(getItem(position))
+//        notifyItemChanged(position)
+    }
+    fun removeAllSelection(){
+        currentSelectedCategories.clear()
+        notifyDataSetChanged()
+    }
+
+    fun getSelectedCategories():List<String> { return currentSelectedCategories}
+    fun isItemSelected(item : String):Boolean{
+        return currentSelectedCategories.contains(item)
     }
 }

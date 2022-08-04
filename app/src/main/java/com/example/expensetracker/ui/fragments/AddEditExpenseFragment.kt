@@ -131,10 +131,7 @@ class AddEditExpenseFragment : DaggerFragment(), DatePickerDialog.OnDateSetListe
 
         super.onViewCreated(view, savedInstanceState)
         navigationArgs.expense?.let {
-
             bind(it)
-
-
         }
         binding?.editWhen?.setOnClickListener {
             val newFragment = DatePickerFragment()

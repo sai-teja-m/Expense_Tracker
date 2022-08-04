@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginVertical="10dp">
+
+    <TextView
+        android:id="@+id/sort_text"
+        style="@style/TextAppearance.Material3.HeadlineSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sort"
+        app:layout_constraintBottom_toTopOf="@+id/sort_radio_group"
+        app:layout_constraintLeft_toRightOf="@id/sort_icon"
+        android:layout_marginLeft="10dp"/>
+
+    <ImageView
+        android:id="@+id/sort_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_sort"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/sort_text"
+        app:layout_constraintTop_toTopOf="@+id/sort_text" />
+
+    <ImageView
+        android:id="@+id/sort_drop_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="10dp"
+        android:src="@drawable/ic_up"
+        android:tag="@string/up"
+        app:layout_constraintBottom_toBottomOf="@+id/sort_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sort_text" />
+
+    <RadioGroup
+        android:id="@+id/sort_radio_group"
+        style="@style/Widget.Material3.CompoundButton.RadioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/sort_text"
+        >
+
+        <RadioButton
+            android:id="@+id/radio_sort_newest_first"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_by_date_newest_first"
+            />
+
+        <RadioButton
+            android:id="@+id/radio_sort_oldest_first"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_by_date_oldest_first"
+            />
+
+        <RadioButton
+            android:id="@+id/radio_expense_amount_high_first"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/expense_amount_greater_first"
+            />
+
+        <RadioButton
+            android:id="@+id/radio_expense_amount_low_first"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/expense_amount_lowest_first"
+            />
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/filter_text"
+        style="@style/TextAppearance.Material3.HeadlineSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/filter"
+        app:layout_constraintLeft_toRightOf="@id/filter_ic"
+        app:layout_constraintTop_toBottomOf="@+id/sort_radio_group"
+        android:layout_marginLeft="10dp"/>
+
+    <ImageView
+        android:id="@+id/filter_ic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_filter_list"
+        app:layout_constraintBottom_toBottomOf="@+id/filter_text"
+        app:layout_constraintTop_toTopOf="@+id/filter_text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/filter_drop_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="10dp"
+        android:src="@drawable/ic_up"
+        android:tag="@string/up"
+        app:layout_constraintBottom_toBottomOf="@+id/filter_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/filter_text" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/filter_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/apply_filters"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filter_text">
+
+        <TextView
+            android:id="@+id/filter_by_date"
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:text="@string/filter_by_date"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toTopOf="@id/date_range_constraint"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <Button
+            android:id="@+id/date_range"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_date_range"
+            android:textSize="9dp"
+            app:layout_constraintBottom_toBottomOf="@id/filter_by_date"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/filter_by_date"
+            app:layout_constraintBaseline_toBaselineOf="@id/filter_by_date"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/date_range_constraint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginLeft="3dp"
+            app:layout_constraintTop_toBottomOf="@id/filter_by_date"
+            android:layout_marginHorizontal="15dp"
+            >
+
+            <TextView
+                android:id="@+id/filter_start_date_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/start_date"
+                android:textSize="10dp"
+                app:layout_constraintLeft_toLeftOf="@+id/filter_start_date"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/filter_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_start_date_hint"
+                tools:text="Start Date" />
+
+            <TextView
+                android:id="@+id/date_to_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="to"
+                app:layout_constraintLeft_toRightOf="@id/filter_start_date"
+                app:layout_constraintRight_toLeftOf="@id/filter_end_date"
+                app:layout_constraintTop_toTopOf="@id/filter_start_date"
+                android:layout_marginHorizontal="40dp"/>
+            <TextView
+                android:id="@+id/filter_end_date_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/end_date"
+                android:textSize="10dp"
+                app:layout_constraintLeft_toLeftOf="@+id/filter_end_date"
+                app:layout_constraintTop_toTopOf="@id/filter_start_date_hint" />
+
+            <TextView
+                android:id="@+id/filter_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/filter_start_date"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/filter_start_date"
+                tools:text="End Date" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="15dp"
+            android:background="@color/grey"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date_range_constraint"
+            app:layout_constraintBottom_toTopOf="@id/filter_by_category_text"
+            />
+        <TextView
+            android:id="@+id/filter_by_category_text"
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_by_category"
+            android:textSize="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            android:layout_marginTop="15dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/category_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filter_by_category_text" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/apply_filters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:text="@string/apply_filters"
+        app:layout_constraintTop_toBottomOf="@id/filter_layout" />
+</androidx.constraintlayout.widget.ConstraintLayout>

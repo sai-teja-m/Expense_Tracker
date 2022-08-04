@@ -20,13 +20,13 @@ abstract class UIModule {
     abstract fun bindsAddEdit(): AddEditExpenseFragment
 
     @ContributesAndroidInjector
-    abstract fun bindsCategoryFragment(): CategoryFragment
-
-    @ContributesAndroidInjector
     abstract fun bindsDatePickerFragment(): DatePickerFragment
 
     @ContributesAndroidInjector
-    abstract fun bindsGraphFragment() : GraphFragment
+    abstract fun bindsGraphFragment(): GraphFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindsFilterFragment(): FilterFragment
 
     @ContributesAndroidInjector
     abstract fun bindsMainActivity(): MainActivity
@@ -44,6 +44,25 @@ abstract class UIModule {
             getTotalExpenseUseCase: GetTotalExpenseUseCase,
             getCategoryExpenseUseCase: GetCategoryExpenseUseCase,
             getCategoryAndAmountUseCase: GetCategoryAndAmountUseCase,
+            getByDateRangeUseCase: GetByDateRangeUseCase,
+            getByFilterDateRangeUseCase: GetByFilterDateRangeUseCase,
+            getByFilterDateRangeExpAscUseCase: GetByFilterDateRangeExpAscUseCase,
+            getByFilterExpAscUseCase: GetByFilterExpAscUseCase,
+            getByDateRangeExpAscUseCase: GetByDateRangeExpAscUseCase,
+            getByFilterDateRangeExpDescUseCase: GetByFilterDateRangeExpDescUseCase,
+            getByFilterExpDescUseCase: GetByFilterExpDescUseCase,
+            getByDateRangeExpDescUseCase: GetByDateRangeExpDescUseCase,
+            getByExpenseAsc: GetByExpenseAsc,
+            getByExpenseDesc: GetByExpenseDesc,
+            sortByDateAscUseCase: SortByDateAscUseCase,
+            sortByCategoryDateRangeDateAscUseCase: SortByCategoryDateRangDateAscUseCase,
+            sortByCategoryDateAscUseCase: SortByCategoryDateAscUseCase,
+            sortByDateRangeDateAscUseCase: SortByDateRangeDateAscUseCase,
+            sortByDateDescUseCase: SortByDateDescUseCase,
+            sortByCategoryDateRangeDateDescUseCase: SortByCategoryDateRangDateDescUseCase,
+            sortByCategoryDateDescUseCase: SortByCategoryDateDescUseCase,
+            sortByDateRangeDateDescUseCase: SortByDateRangeDateDescUseCase,
+
             dateConverter: DateConverter
         ) = ExpenseViewModelFactory(
             insertExpenseUseCase,
@@ -55,6 +74,24 @@ abstract class UIModule {
             getTotalExpenseUseCase,
             getCategoryExpenseUseCase,
             getCategoryAndAmountUseCase,
+            getByDateRangeUseCase,
+            getByFilterDateRangeUseCase,
+            getByFilterDateRangeExpAscUseCase,
+            getByFilterExpAscUseCase,
+            getByDateRangeExpAscUseCase,
+            getByFilterDateRangeExpDescUseCase,
+            getByFilterExpDescUseCase,
+            getByDateRangeExpDescUseCase,
+            getByExpenseAsc,
+            getByExpenseDesc,
+            sortByDateAscUseCase,
+            sortByCategoryDateRangeDateAscUseCase,
+            sortByCategoryDateAscUseCase,
+            sortByDateRangeDateAscUseCase,
+            sortByDateDescUseCase,
+            sortByCategoryDateRangeDateDescUseCase,
+            sortByCategoryDateDescUseCase,
+            sortByDateRangeDateDescUseCase,
             dateConverter
         )
     }
