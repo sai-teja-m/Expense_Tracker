@@ -79,7 +79,7 @@ class ExpenseViewModel(
     private val _endDate: MutableLiveData<Date> = MutableLiveData()
     val endDate: LiveData<Date> = _endDate
 
-    private val _expenseOrder: MutableLiveData<Int> = MutableLiveData()
+    private val _expenseOrder: MutableLiveData<Int> = MutableLiveData(3)
     val expenseOrder: LiveData<Int> = _expenseOrder
 
     fun isEntryValid(
@@ -122,7 +122,7 @@ class ExpenseViewModel(
     }
 
     //default is date Desc -1 ,for exp Asc 0 exp Desc 1 Date Asc 2 Date Desc 3
-    fun setExpenseOrder(order: Int = -1) {
+    fun setExpenseOrder(order: Int = 3) {
         _expenseOrder.postValue(order)
     }
 
