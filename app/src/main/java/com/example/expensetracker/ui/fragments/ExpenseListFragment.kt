@@ -145,14 +145,7 @@ class ExpenseListFragment : DaggerFragment() {
                     recyclerView.visibility = View.VISIBLE
                 }
             })
-            viewModel.selectedCategory.observe(viewLifecycleOwner) {
-                setFilterIcon()
-                if (it.isEmpty()) {
-                    //DO NOTHING
-                } else {
-                    viewModel.filter(it, viewModel.startDate.value, viewModel.endDate.value)
-                }
-            }
+
 
             viewModel.categoryExpense.observe(viewLifecycleOwner) {
                 if (it != null) {
@@ -233,7 +226,8 @@ class ExpenseListFragment : DaggerFragment() {
     private fun setFilterIcon() {
         if (::menu.isInitialized) {
             val item = menu.findItem(R.id.filter)
-            val filterSelected = (!viewModel.selectedCategory.value.isNullOrEmpty() || viewModel.startDate.value != null || viewModel.expenseOrder.value != 3)
+            val filterSelected =
+                (!viewModel.selectedCategory.value.isNullOrEmpty() || viewModel.startDate.value != null || viewModel.expenseOrder.value != 3)
             if (item != null) {
                 if (filterSelected) {
                     item.setIcon(R.drawable.ic_filter_list_enabled)

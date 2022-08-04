@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.expensetracker.R
 import com.example.expensetracker.database.expense.DateConverter
 import com.example.expensetracker.databinding.FragmentFilterBinding
+import com.example.expensetracker.domain.SortFilterOptions
 import com.example.expensetracker.ui.adapters.CategoryAdapter
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
@@ -35,7 +36,7 @@ class FilterFragment : DaggerFragment() {
     private lateinit var menu: Menu
     private var startDate: Date? = null
     private var endDate: Date? = null
-    private var categoryList: List<String>? = null
+    private var categoryList: List<String> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,6 +120,8 @@ class FilterFragment : DaggerFragment() {
                 if (viewModel.startDate.value == null && viewModel.endDate.value == null) {
 
                 } else if (viewModel.startDate.value != null && viewModel.endDate.value != null) {
+                    startDate = viewModel.startDate.value
+                    endDate = viewModel.endDate.value
                     filterStartDate.text = dateConverter.fromDate(viewModel.startDate.value)
                     filterEndDate.text = dateConverter.fromDate(viewModel.endDate.value)
                     filterStartDate.visibility = View.VISIBLE
@@ -138,7 +141,7 @@ class FilterFragment : DaggerFragment() {
                     clearDateRange()
             }
 
-            editDateRange.setOnClickListener{
+            editDateRange.setOnClickListener {
                 showDateRangePicker()
             }
 
@@ -147,11 +150,16 @@ class FilterFragment : DaggerFragment() {
                 if (startDate != null)
                     viewModel.selectDateRange(startDate, endDate)
                 onRadioButtonClicked()
-                viewModel.filter(
-                    categoryList,
-                    startDate, endDate,
-                    expOrder
+
+                val expOrderList =
+                    listOf<String>("ExpOrderAsc", "ExpOrderDesc", "DateOrderAsc", "DateOrderDesc")
+                var sort = SortFilterOptions(
+                    SortFilterOptions.SortOptions.valueOf(expOrderList[expOrder]),
+                    SortFilterOptions.DateRangeFilter(startDate, endDate),
+                    categoryList
                 )
+
+                viewModel.filter(sort)
                 findNavController().navigateUp()
             }
 
@@ -200,7 +208,7 @@ class FilterFragment : DaggerFragment() {
     }
 
     private fun setRadio() {
-        expOrder = viewModel?.expenseOrder?.value?:-1
+        expOrder = viewModel?.expenseOrder?.value ?: -1
         if (expOrder == -1 || expOrder == 3 || expOrder == null) {
             binding?.radioSortNewestFirst?.isChecked = true
         }
@@ -270,6 +278,8 @@ class FilterFragment : DaggerFragment() {
     }
 
     private fun clearDateRange() {
+        startDate = null
+        endDate = null
         viewModel.selectDateRange(null, null)
         setDate(null, null)
         setDateRange()
@@ -290,6 +300,7 @@ class FilterFragment : DaggerFragment() {
         categoryAdapter.removeAllSelection()
         viewModel.setExpenseOrder(3)
         viewModel.getAllExpenses()
+        SortFilterOptions(SortFilterOptions.SortOptions.ExpOrderAsc, null, emptyList())
         findNavController().navigateUp()
     }
 

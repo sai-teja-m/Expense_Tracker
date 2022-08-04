@@ -35,9 +35,8 @@ class CategoryAdapter() :
 
     private var currentSelectedCategories: MutableList<String> = mutableListOf()
 
-
     fun setCurrentCategory(categories: List<String>) {
-//        currentSelectedCategory = category
+        currentSelectedCategories.clear()
         currentSelectedCategories.addAll(categories)
     }
 
@@ -102,7 +101,7 @@ class CategoryAdapter() :
         notifyDataSetChanged()
     }
 
-    fun getSelectedCategories():List<String> { return currentSelectedCategories}
+    fun getSelectedCategories():List<String> { return currentSelectedCategories.distinct()}
     fun isItemSelected(item : String):Boolean{
         return currentSelectedCategories.contains(item)
     }
