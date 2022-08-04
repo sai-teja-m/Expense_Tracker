@@ -2,12 +2,8 @@ package com.example.expensetracker.ui.fragments
 
 import android.os.Bundle
 import android.view.*
-import android.widget.*
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.util.Pair
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,13 +15,9 @@ import com.example.expensetracker.ui.adapters.ExpenseAdapter
 import com.example.expensetracker.utils.SwipeToDeleteCallBack
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointBackward
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
-import kotlin.reflect.KProperty
 
 
 class ExpenseListFragment : DaggerFragment() {
@@ -241,7 +233,7 @@ class ExpenseListFragment : DaggerFragment() {
     private fun setFilterIcon() {
         if (::menu.isInitialized) {
             val item = menu.findItem(R.id.filter)
-            val filterSelected = (!viewModel.selectedCategory.value.isNullOrEmpty() || viewModel.startDate.value != null || viewModel.expenseOrder.value !=-1)
+            val filterSelected = (!viewModel.selectedCategory.value.isNullOrEmpty() || viewModel.startDate.value != null || viewModel.expenseOrder.value != 3)
             if (item != null) {
                 if (filterSelected) {
                     item.setIcon(R.drawable.ic_filter_list_enabled)

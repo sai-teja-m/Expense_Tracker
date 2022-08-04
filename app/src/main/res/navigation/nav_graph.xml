@@ -13,9 +13,6 @@
             android:id="@+id/action_listDisplay_to_addEdit"
             app:destination="@id/addEdit" />
         <action
-            android:id="@+id/action_listDisplay_to_categoryFragment"
-            app:destination="@id/categoryFragment" />
-        <action
             android:id="@+id/action_listDisplay_to_graphFragment"
             app:destination="@id/graphFragment" />
         <action
@@ -44,11 +41,6 @@
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/categoryFragment"
-        android:name="com.example.expensetracker.ui.fragments.CategoryFragment"
-        android:label="@string/filter_by_category"
-        tools:layout="@layout/fragment_category" />
-    <fragment
         android:id="@+id/graphFragment"
         android:name="com.example.expensetracker.ui.fragments.GraphFragment"
         android:label="@string/graph_fragment"
@@ -56,5 +48,6 @@
     <fragment
         android:id="@+id/filterFragment"
         android:name="com.example.expensetracker.ui.fragments.FilterFragment"
-        android:label="FilterFragment" />
+        android:label = "@string/sort_and_filter"
+        tools:layout="@layout/fragment_filter"/>
 </navigation>

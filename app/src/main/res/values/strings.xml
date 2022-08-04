@@ -62,4 +62,5 @@
     <string name="apply_filters">Apply Filters</string>
     <string name="end_date">End Date</string>
     <string name="start_date">Start Date</string>
+    <string name="sort_and_filter">Sort &amp; Filter</string>
 </resources>
