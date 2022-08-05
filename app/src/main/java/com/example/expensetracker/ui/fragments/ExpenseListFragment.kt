@@ -75,10 +75,10 @@ class ExpenseListFragment : DaggerFragment() {
 
 
             R.id.category_total -> {
-                if (viewModel.selectedCategory.value.isNullOrEmpty()) {
+                if (viewModel.sortFilterDetails?.value?.categories.isNullOrEmpty()) {
                     showSnackBarCategoryExp(null)
                 } else {
-                    viewModel.selectedCategory.value?.toList()
+                    viewModel.sortFilterDetails?.value?.categories?.toList()
                         ?.let { viewModel.getCategoryExpense(it) }
                 }
                 true
@@ -145,14 +145,7 @@ class ExpenseListFragment : DaggerFragment() {
                     recyclerView.visibility = View.VISIBLE
                 }
             })
-            viewModel.selectedCategory.observe(viewLifecycleOwner) {
-                setFilterIcon()
-                if (it.isEmpty()) {
-                    //DO NOTHING
-                } else {
-                    viewModel.filter(it, viewModel.startDate.value, viewModel.endDate.value)
-                }
-            }
+
 
             viewModel.categoryExpense.observe(viewLifecycleOwner) {
                 if (it != null) {
@@ -207,7 +200,7 @@ class ExpenseListFragment : DaggerFragment() {
                     it.listDisplay,
                     getString(
                         R.string.expense_for,
-                        viewModel.selectedCategory.value.toString(),
+                        viewModel.sortFilterDetails?.value?.categories,
                         categoryExpense.toString()
                     ),
                     Snackbar.LENGTH_LONG
@@ -233,13 +226,13 @@ class ExpenseListFragment : DaggerFragment() {
     private fun setFilterIcon() {
         if (::menu.isInitialized) {
             val item = menu.findItem(R.id.filter)
-            val filterSelected = (!viewModel.selectedCategory.value.isNullOrEmpty() || viewModel.startDate.value != null || viewModel.expenseOrder.value != 3)
+            val filterSelected =
+                (viewModel.sortFilterDetails?.value != null)
             if (item != null) {
                 if (filterSelected) {
                     item.setIcon(R.drawable.ic_filter_list_enabled)
                 } else {
                     item.setIcon(R.drawable.ic_filter_list)
-                    item.icon.setTint(resources.getColor(R.color.card_grey))
                 }
             }
         }

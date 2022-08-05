@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.expensetracker.R
 import com.example.expensetracker.database.expense.DateConverter
 import com.example.expensetracker.databinding.FragmentFilterBinding
+import com.example.expensetracker.domain.SortFilterOptions
 import com.example.expensetracker.ui.adapters.CategoryAdapter
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
@@ -35,7 +36,8 @@ class FilterFragment : DaggerFragment() {
     private lateinit var menu: Menu
     private var startDate: Date? = null
     private var endDate: Date? = null
-    private var categoryList: List<String>? = null
+    private var categoryList: List<String> = emptyList()
+    private var sortOptions:SortFilterOptions.SortOptions = SortFilterOptions.SortOptions.DateOrderDesc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,11 +78,8 @@ class FilterFragment : DaggerFragment() {
         binding?.run {
             categoryRecycler.layoutManager = LinearLayoutManager(context)
             categoryRecycler.adapter = categoryAdapter
-            viewModel.categoryList.observe(viewLifecycleOwner) {
-                categoryAdapter.setCurrentCategory(viewModel.selectedCategory.value ?: emptyList())
-                categoryAdapter.submitList(it)
-            }
-            setDateRangeInit()
+
+
             //drop down open close for sort option
             sortDropDown.setOnClickListener {
                 if (sortDropDown.tag == "up") {
@@ -109,27 +108,35 @@ class FilterFragment : DaggerFragment() {
             }
 
             viewModel.categoryList.observe(viewLifecycleOwner) {
-                categoryAdapter.setCurrentCategory(viewModel.selectedCategory.value ?: emptyList())
+                categoryAdapter.setCurrentCategory(
+                    viewModel.sortFilterDetails.value?.categories ?: emptyList()
+                )
                 categoryAdapter.submitList(it)
             }
 
 
             //range visibility
-            viewModel.startDate.observe(viewLifecycleOwner) {
-                if (viewModel.startDate.value == null && viewModel.endDate.value == null) {
-
-                } else if (viewModel.startDate.value != null && viewModel.endDate.value != null) {
-                    filterStartDate.text = dateConverter.fromDate(viewModel.startDate.value)
-                    filterEndDate.text = dateConverter.fromDate(viewModel.endDate.value)
+            viewModel.sortFilterDetails.observe(viewLifecycleOwner) {
+                if (viewModel.sortFilterDetails.value?.dateRange?.startDate == null) {
+                    //DO NOTHING
+                } else if (viewModel.sortFilterDetails.value?.dateRange?.startDate != null) {
+                    startDate = viewModel.sortFilterDetails?.value?.dateRange?.startDate
+                    endDate = viewModel.sortFilterDetails.value?.dateRange?.endDate
+                    filterStartDate.text = dateConverter.fromDate(startDate)
+                    filterEndDate.text = dateConverter.fromDate(endDate)
                     filterStartDate.visibility = View.VISIBLE
                     filterEndDate.visibility = View.VISIBLE
                     dateRange.text = getString(R.string.clear_date_range)
                 }
+                viewModel.sortFilterDetails.value?.categories?.let { it1 ->
+                    categoryAdapter.setCurrentCategory(
+                        it1
+                    )
+                }
+                setDateRangeInit()
             }
 
-            viewModel.selectedCategory.observe(viewLifecycleOwner) {
-                categoryAdapter.setCurrentCategory(it)
-            }
+//            }
 
             dateRange.setOnClickListener {
                 if (dateRange.text == getString(R.string.select_date_range))
@@ -138,31 +145,30 @@ class FilterFragment : DaggerFragment() {
                     clearDateRange()
             }
 
-            editDateRange.setOnClickListener{
+            editDateRange.setOnClickListener {
                 showDateRangePicker()
             }
 
             applyFilters.setOnClickListener {
                 setSelectCategory(categoryAdapter.getSelectedCategories())
-                if (startDate != null)
-                    viewModel.selectDateRange(startDate, endDate)
                 onRadioButtonClicked()
-                viewModel.filter(
-                    categoryList,
-                    startDate, endDate,
-                    expOrder
+
+                var sort = SortFilterOptions(
+                    sortOptions,
+                    SortFilterOptions.DateRangeFilter(startDate, endDate),
+                    categoryList
                 )
+
+                viewModel.setSortFilterOption(sort)
+                viewModel.filter(sort)
                 findNavController().navigateUp()
             }
 
             setDateRange()
-            viewModel.expenseOrder.observe(viewLifecycleOwner) {
-                setRadio()
-            }
+            setRadio()
         }
     }
 
-    private var expOrder = -1
 
     private fun showDateRangePicker() {
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
@@ -200,15 +206,16 @@ class FilterFragment : DaggerFragment() {
     }
 
     private fun setRadio() {
-        expOrder = viewModel?.expenseOrder?.value?:-1
-        if (expOrder == -1 || expOrder == 3 || expOrder == null) {
+        sortOptions = viewModel.sortFilterDetails.value?.sort?: SortFilterOptions.SortOptions.DateOrderDesc
+
+        if (viewModel.sortFilterDetails == null || sortOptions ==SortFilterOptions.SortOptions.DateOrderDesc ) {
             binding?.radioSortNewestFirst?.isChecked = true
         }
-        if (expOrder == 2)
+        if (sortOptions == SortFilterOptions.SortOptions.DateOrderAsc)
             binding?.radioSortOldestFirst?.isChecked = true
-        if (expOrder == 1)
+        if (sortOptions == SortFilterOptions.SortOptions.ExpOrderDesc)
             binding?.radioExpenseAmountHighFirst?.isChecked = true
-        if (expOrder == 0)
+        if (sortOptions == SortFilterOptions.SortOptions.ExpOrderAsc)
             binding?.radioExpenseAmountLowFirst?.isChecked = true
     }
 
@@ -217,20 +224,16 @@ class FilterFragment : DaggerFragment() {
         // Check which radio button was clicked
         when (binding?.sortRadioGroup?.checkedRadioButtonId) {
             R.id.radio_sort_newest_first -> {
-                viewModel.setExpenseOrder(3)
-                expOrder = 3
+                sortOptions = SortFilterOptions.SortOptions.DateOrderDesc
             }
             R.id.radio_sort_oldest_first -> {
-                viewModel.setExpenseOrder(2)
-                expOrder = 2
+                sortOptions = SortFilterOptions.SortOptions.DateOrderAsc
             }
             R.id.radio_expense_amount_high_first -> {
-                viewModel.setExpenseOrder(1)
-                expOrder = 1
+                sortOptions = SortFilterOptions.SortOptions.ExpOrderDesc
             }
             R.id.radio_expense_amount_low_first -> {
-                viewModel.setExpenseOrder(0)
-                expOrder = 0
+                sortOptions = SortFilterOptions.SortOptions.ExpOrderAsc
             }
         }
     }
@@ -249,9 +252,11 @@ class FilterFragment : DaggerFragment() {
     }
 
     private fun setDateRangeInit() {
-        if (viewModel.startDate.value != null) {
-            binding?.filterStartDate?.text = dateConverter.fromDate(viewModel.startDate.value)
-            binding?.filterEndDate?.text = dateConverter.fromDate(viewModel.endDate.value)
+        if (viewModel.sortFilterDetails.value?.dateRange?.startDate != null) {
+            binding?.filterStartDate?.text =
+                dateConverter.fromDate(viewModel.sortFilterDetails?.value?.dateRange?.startDate)
+            binding?.filterEndDate?.text =
+                dateConverter.fromDate(viewModel.sortFilterDetails.value?.dateRange?.endDate)
             binding?.cvDateRange?.visibility = View.VISIBLE
             binding?.dateRange?.text = getString(R.string.clear_date_range)
         }
@@ -270,26 +275,23 @@ class FilterFragment : DaggerFragment() {
     }
 
     private fun clearDateRange() {
-        viewModel.selectDateRange(null, null)
+        startDate = null
+        endDate = null
         setDate(null, null)
         setDateRange()
     }
 
     private fun setSelectCategory(str: List<String>) {
         categoryList = str
-        viewModel.selectCategory(str)
     }
 
-    private fun clearCategoryFilter() {
-        viewModel.selectCategory(emptyList())
-    }
 
     private fun clearAll() {
-        clearDateRange()
-        clearCategoryFilter()
-        categoryAdapter.removeAllSelection()
-        viewModel.setExpenseOrder(3)
+        viewModel.setSortFilterOption(null)
+        viewModel.filter(null)
         viewModel.getAllExpenses()
+        clearDateRange()
+        categoryAdapter.removeAllSelection()
         findNavController().navigateUp()
     }
 

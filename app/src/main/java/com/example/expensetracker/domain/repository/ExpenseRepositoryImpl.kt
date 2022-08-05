@@ -3,10 +3,10 @@ package com.example.expensetracker.domain.repository
 import com.example.expensetracker.database.expense.CategoryAmount
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.database.expense.ExpenseDao
+import com.example.expensetracker.domain.SortFilterOptions
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import java.util.*
 import javax.inject.Inject
 
 class ExpenseRepositoryImpl @Inject constructor(
@@ -44,107 +44,100 @@ class ExpenseRepositoryImpl @Inject constructor(
         return dao.getCategoryExpense(categories)
     }
 
-    override fun getByCategory(categories: List<String>): Single<List<Expense>> {
-        return dao.getByCategory(categories)
-    }
-
     override fun getById(id: Int): Single<Expense> {
         return dao.getById(id)
     }
 
-    override fun getByDateRange(start: Date, end: Date): Single<List<Expense>> {
-        return dao.sortByDateRange(start, end)
-    }
-
-    override fun sortByExpenseAsc(): Single<List<Expense>> {
-        return dao.sortByExpAsc()
-    }
-
-    override fun sortByCategoryDateRange(
-        categories: List<String>,
-        start: Date,
-        end: Date
-    ): Single<List<Expense>> {
-        return dao.sortByFilterDateRange(categories, start, end)
-    }
-
-
-
-
-    override fun sortByCategoryDateRangeExpAsc(
-        categories: List<String>,
-        start: Date,
-        end: Date
-    ): Single<List<Expense>> {
-        return dao.sortByFilterDateRangeExpAsc(categories,start, end)
-    }
-
-    override fun sortByCategoryExpenseAsc(categories: List<String>): Single<List<Expense>> {
-        return dao.sortByCategoryExpAsc(categories)
-    }
-
-    override fun sortByDateRangeExpAsc(start: Date, end: Date): Single<List<Expense>> {
-        return dao.sortByDateRangeExpAsc(start, end)
-    }
-
-    override fun sortByExpenseDesc(): Single<List<Expense>> {
-        return dao.sortByExpDesc()
-    }
-
-    override fun sortByCategoryDateRangeExpDesc(
-        categories: List<String>,
-        start: Date,
-        end: Date
-    ): Single<List<Expense>> {
-        return dao.sortByCategoryDateRangeExpDesc(categories, start, end)
-    }
-
-    override fun sortByCategoryExpDesc(categories: List<String>): Single<List<Expense>> {
-        return dao.sortByCategoryExpDesc(categories)
-    }
-
-    override fun sortByDateRangeExpDesc(start: Date, end: Date): Single<List<Expense>> {
-        return dao.sortByDateRangeExpDesc(start, end)
-    }
-
-    override fun sortByDateAsc(): Single<List<Expense>> {
-        return dao.sortByDateAsc()
-    }
-
-    override fun sortByCategoryDateRangeDateAsc(
-        categories: List<String>,
-        start: Date,
-        end: Date
-    ): Single<List<Expense>> {
-        return dao.sortByCategoryDateRangeDateAsc(categories, start, end)
-    }
-
-    override fun sortByCategoryDateAsc(categories: List<String>): Single<List<Expense>> {
-        return dao.sortByCategoryDateAsc(categories)
-    }
-
-    override fun sortByDateRangeDateAsc(start: Date, end: Date): Single<List<Expense>> {
-        return dao.sortByDateRangeDateAsc(start, end)
-    }
-
-    override fun sortByDateDesc(): Single<List<Expense>> {
-        return dao.sortByDateDesc()
-    }
-
-    override fun sortByCategoryDateRangeDateDesc(
-        categories: List<String>,
-        start: Date,
-        end: Date
-    ): Single<List<Expense>> {
-        return dao.sortByCategoryDateRangeExpDesc(categories, start, end)
-    }
-
-    override fun sortByCategoryDateDesc(categories: List<String>): Single<List<Expense>> {
-        return dao.sortByCategoryDateDesc(categories)
-    }
-
-    override fun sortByDateRangeDateDesc(start: Date, end: Date): Single<List<Expense>> {
-        return dao.sortByDateRangeDateDesc(start, end)
+    override fun sortAndFilter(sortFilterOptions: SortFilterOptions): Single<List<Expense>> {
+        if (sortFilterOptions.dateRange?.startDate == null && sortFilterOptions.dateRange?.endDate == null && sortFilterOptions.categories.isNotEmpty()) {
+            return when (sortFilterOptions.sort) {
+                SortFilterOptions.SortOptions.ExpOrderAsc -> {
+                    dao.sortByCategoryExpAsc(sortFilterOptions.categories)
+                }
+                SortFilterOptions.SortOptions.ExpOrderDesc -> {
+                    dao.sortByCategoryExpDesc(sortFilterOptions.categories)
+                }
+                SortFilterOptions.SortOptions.DateOrderAsc -> {
+                    dao.sortByCategoryDateAsc(sortFilterOptions.categories)
+                }
+                SortFilterOptions.SortOptions.DateOrderDesc -> {
+                    dao.sortByCategoryDateDesc(sortFilterOptions.categories)
+                }
+            }
+        } else if (sortFilterOptions.dateRange?.startDate == null && sortFilterOptions.dateRange?.endDate == null && sortFilterOptions.categories.isEmpty()) {
+            return when (sortFilterOptions.sort) {
+                SortFilterOptions.SortOptions.ExpOrderAsc -> {
+                    dao.sortByExpAsc()
+                }
+                SortFilterOptions.SortOptions.ExpOrderDesc -> {
+                    dao.sortByExpDesc()
+                }
+                SortFilterOptions.SortOptions.DateOrderAsc -> {
+                    dao.sortByDateAsc()
+                }
+                SortFilterOptions.SortOptions.DateOrderDesc -> {
+                    dao.sortByDateDesc()
+                }
+            }
+        } else if (sortFilterOptions.dateRange != null && sortFilterOptions.categories.isNotEmpty() && sortFilterOptions.dateRange.startDate != null && sortFilterOptions.dateRange.endDate != null) {
+            return when (sortFilterOptions.sort) {
+                SortFilterOptions.SortOptions.ExpOrderAsc -> {
+                    dao.sortByFilterDateRangeExpAsc(
+                        sortFilterOptions.categories,
+                        sortFilterOptions.dateRange.startDate,
+                        sortFilterOptions.dateRange.endDate
+                    )
+                }
+                SortFilterOptions.SortOptions.ExpOrderDesc -> {
+                    dao.sortByCategoryDateRangeExpDesc(
+                        sortFilterOptions.categories,
+                        sortFilterOptions.dateRange.startDate,
+                        sortFilterOptions.dateRange.endDate
+                    )
+                }
+                SortFilterOptions.SortOptions.DateOrderAsc -> {
+                    dao.sortByCategoryDateRangeDateAsc(
+                        sortFilterOptions.categories,
+                        sortFilterOptions.dateRange.startDate,
+                        sortFilterOptions.dateRange.endDate
+                    )
+                }
+                SortFilterOptions.SortOptions.DateOrderDesc -> {
+                    dao.sortByFilterDateRangeDateDesc(
+                        sortFilterOptions.categories,
+                        sortFilterOptions.dateRange.startDate,
+                        sortFilterOptions.dateRange.endDate
+                    )
+                }
+            }
+        } else if (sortFilterOptions.dateRange != null && sortFilterOptions.categories.isEmpty() && sortFilterOptions.dateRange.startDate != null && sortFilterOptions.dateRange.endDate != null) {
+            return when (sortFilterOptions.sort) {
+                SortFilterOptions.SortOptions.ExpOrderAsc -> {
+                    dao.sortByDateRangeExpAsc(
+                        sortFilterOptions.dateRange.startDate,
+                        sortFilterOptions.dateRange.endDate
+                    )
+                }
+                SortFilterOptions.SortOptions.ExpOrderDesc -> {
+                    dao.sortByDateRangeExpDesc(
+                        sortFilterOptions.dateRange.startDate,
+                        sortFilterOptions.dateRange.endDate
+                    )
+                }
+                SortFilterOptions.SortOptions.DateOrderAsc -> {
+                    dao.sortByDateRangeDateAsc(
+                        sortFilterOptions.dateRange.startDate,
+                        sortFilterOptions.dateRange.endDate
+                    )
+                }
+                SortFilterOptions.SortOptions.DateOrderDesc -> {
+                    dao.sortByDateRangeDateDesc(
+                        sortFilterOptions.dateRange.startDate,
+                        sortFilterOptions.dateRange.endDate
+                    )
+                }
+            }
+        } else return dao.getAllExpense()
     }
 
 
