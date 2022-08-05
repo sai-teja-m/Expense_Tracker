@@ -13,14 +13,23 @@ class DateConverter {
     @TypeConverter
     fun toDate(value: String?): Date? {
         return if (value != null)
-            formatter.parse(value)
+            try {
+                formatter.parse(value)
+            }catch(ex:Exception) {
+                 null
+            }
+
         else
             null
     }
 
     @TypeConverter
     fun fromDate(date: Date?): String? {
-        return formatter.format(date)
+        return try {
+            formatter.format(date)
+        }catch (ex:Exception){
+            null
+        }
     }
 
 

@@ -82,7 +82,7 @@ class CategoryAdapter() :
 
     fun removeSelection(position: Int) {
         currentSelectedCategories.remove(getItem(position))
-        notifyItemChanged(position)
+//        notifyItemChanged(position)
     }
 
     fun removeAllSelection() {

@@ -86,9 +86,9 @@ class ExpenseViewModel(
         return validEntry
     }
 
-    fun setSortFilterOption(sortFilter: SortFilterOptions?) {
-        _sortFilterDetails.postValue(sortFilter)
-    }
+//    fun setSortFilterOption(sortFilter: SortFilterOptions?) {
+//        _sortFilterDetails.postValue(sortFilter)
+//    }
 
     fun getTotalExpense() {
         getTotalExpenseUseCase.execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
@@ -124,6 +124,9 @@ class ExpenseViewModel(
 
     fun clearCategoryExpense() {
         _categoryExpense.postValue(null)
+    }
+    fun clearTotalExpense(){
+        _totalExpense.postValue(null)
     }
 
     fun getCategory() {
@@ -220,9 +223,11 @@ class ExpenseViewModel(
             }
     }
 
-    fun filter(sort: SortFilterOptions?) {
-        if (sort != null)
-            sortFilter(sort)
+    fun filter(sortFilter: SortFilterOptions?) {
+        _sortFilterDetails.postValue(sortFilter)
+        if (sortFilter != null)
+            sortFilter(sortFilter)
+        else getAllExpenses()
     }
 
 

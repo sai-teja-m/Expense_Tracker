@@ -43,6 +43,7 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        viewModel.getTotalExpense()
     }
 
     override fun onCreateView(

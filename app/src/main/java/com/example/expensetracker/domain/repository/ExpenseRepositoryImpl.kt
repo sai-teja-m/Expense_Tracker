@@ -49,7 +49,7 @@ class ExpenseRepositoryImpl @Inject constructor(
     }
 
     override fun sortAndFilter(sortFilterOptions: SortFilterOptions): Single<List<Expense>> {
-        if (sortFilterOptions.dateRange?.startDate == null && sortFilterOptions.dateRange?.endDate == null && sortFilterOptions.categories.isNotEmpty()) {
+        if (sortFilterOptions.dateRange == null && sortFilterOptions.categories.isNotEmpty()) {
             return when (sortFilterOptions.sort) {
                 SortFilterOptions.SortOptions.ExpOrderAsc -> {
                     dao.sortByCategoryExpAsc(sortFilterOptions.categories)
@@ -64,7 +64,7 @@ class ExpenseRepositoryImpl @Inject constructor(
                     dao.sortByCategoryDateDesc(sortFilterOptions.categories)
                 }
             }
-        } else if (sortFilterOptions.dateRange?.startDate == null && sortFilterOptions.dateRange?.endDate == null && sortFilterOptions.categories.isEmpty()) {
+        } else if (sortFilterOptions.dateRange == null && sortFilterOptions.categories.isEmpty()) {
             return when (sortFilterOptions.sort) {
                 SortFilterOptions.SortOptions.ExpOrderAsc -> {
                     dao.sortByExpAsc()
@@ -79,7 +79,7 @@ class ExpenseRepositoryImpl @Inject constructor(
                     dao.sortByDateDesc()
                 }
             }
-        } else if (sortFilterOptions.dateRange != null && sortFilterOptions.categories.isNotEmpty() && sortFilterOptions.dateRange.startDate != null && sortFilterOptions.dateRange.endDate != null) {
+        } else if (sortFilterOptions.dateRange != null && sortFilterOptions.categories.isNotEmpty() ) {
             return when (sortFilterOptions.sort) {
                 SortFilterOptions.SortOptions.ExpOrderAsc -> {
                     dao.sortByFilterDateRangeExpAsc(
@@ -110,7 +110,7 @@ class ExpenseRepositoryImpl @Inject constructor(
                     )
                 }
             }
-        } else if (sortFilterOptions.dateRange != null && sortFilterOptions.categories.isEmpty() && sortFilterOptions.dateRange.startDate != null && sortFilterOptions.dateRange.endDate != null) {
+        } else if (sortFilterOptions.dateRange != null && sortFilterOptions.categories.isEmpty() ) {
             return when (sortFilterOptions.sort) {
                 SortFilterOptions.SortOptions.ExpOrderAsc -> {
                     dao.sortByDateRangeExpAsc(

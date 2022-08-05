@@ -38,7 +38,6 @@ class ExpenseListFragment : DaggerFragment() {
         expenseViewModelFactory
     }
 
-
     private var _binding: FragmentListDisplayBinding? = null
     private val binding get() = _binding
 
@@ -48,7 +47,6 @@ class ExpenseListFragment : DaggerFragment() {
         viewModel.getAllExpenses()
         viewModel.getCategory()
         viewModel.getTotalExpense()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -68,7 +66,7 @@ class ExpenseListFragment : DaggerFragment() {
                 if (viewModel.allExpense.value.isNullOrEmpty()) {
                     showSnackBarTotalExpEmpty()
                 } else {
-                    showSnackBarTotalExp()
+                    calculateTotalExpense()
                 }
                 true
             }
@@ -160,6 +158,14 @@ class ExpenseListFragment : DaggerFragment() {
 
         }
     }
+    private fun calculateTotalExpense(){
+        viewModel.getTotalExpense()
+        viewModel.totalExpense.observe(viewLifecycleOwner){
+            if(it!=null)
+                showSnackBarTotalExp()
+            viewModel.clearTotalExpense()
+        }
+    }
 
     private fun showSnackBarTotalExpEmpty() {
         binding?.let {
@@ -232,7 +238,7 @@ class ExpenseListFragment : DaggerFragment() {
                 if (filterSelected) {
                     item.setIcon(R.drawable.ic_filter_list_enabled)
                 } else {
-                    item.setIcon(R.drawable.ic_filter_list)
+                    item.setIcon(R.drawable.ic_filter_disabled)
                 }
             }
         }
