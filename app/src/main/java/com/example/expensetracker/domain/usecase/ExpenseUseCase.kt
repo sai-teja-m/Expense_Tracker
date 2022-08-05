@@ -79,7 +79,7 @@ class GetCategoryUseCase @Inject constructor(
 
 class GetCategoryAndAmountUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-) : SingleUseCaseParam<CategoryAmount> {
+) : SingleUseCase<List<CategoryAmount>> {
     override fun execute(): Single<List<CategoryAmount>> {
         return expenseRepo.getCategoryAndAmount()
     }
@@ -109,8 +109,4 @@ interface SingleUseCaseParams<T, P> {
 
 interface FlowableUseCaseString<P> {
     fun execute(): Flowable<List<P>>
-}
-
-interface SingleUseCaseParam<P> {
-    fun execute(): Single<List<P>>
 }
