@@ -44,9 +44,7 @@ class ExpenseListFragment : DaggerFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        viewModel.getAllExpenses()
-        viewModel.getCategory()
-        viewModel.getTotalExpense()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

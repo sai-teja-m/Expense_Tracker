@@ -56,6 +56,10 @@ class ExpenseViewModel(
     private val _sortFilterDetails: MutableLiveData<SortFilterOptions> = MutableLiveData()
     val sortFilterDetails: LiveData<SortFilterOptions> = _sortFilterDetails
 
+    init {
+        getAllExpenses()
+        getCategory()
+    }
     fun isEntryValid(
         expenseTitle: String,
         expense: String,
