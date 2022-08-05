@@ -1,7 +1,6 @@
 package com.example.expensetracker.viewmodels
 
 import SingleLiveEvent
-import android.os.Build.VERSION_CODES.S
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -54,9 +53,8 @@ class ExpenseViewModel(
     private val _categoryAndAmount: SingleLiveEvent<List<CategoryAmount>> = SingleLiveEvent()
     val categoryAndAmount: LiveData<List<CategoryAmount>> = _categoryAndAmount
 
-
-    private val _sort : MutableLiveData<SortFilterOptions> = MutableLiveData()
-    val sort:LiveData<SortFilterOptions> = _sort
+    private val _sortFilterDetails: MutableLiveData<SortFilterOptions> = MutableLiveData()
+    val sortFilterDetails: LiveData<SortFilterOptions> = _sortFilterDetails
 
     fun isEntryValid(
         expenseTitle: String,
@@ -88,13 +86,9 @@ class ExpenseViewModel(
         return validEntry
     }
 
-    fun setSortFilterOption(sortFilter: SortFilterOptions?){
-        _sort.postValue(sortFilter)
+    fun setSortFilterOption(sortFilter: SortFilterOptions?) {
+        _sortFilterDetails.postValue(sortFilter)
     }
-
-//    fun selectCategory(categories: List<String>) {
-//        _selectedCategory.postValue(categories)
-//    }
 
     fun getTotalExpense() {
         getTotalExpenseUseCase.execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
@@ -227,8 +221,8 @@ class ExpenseViewModel(
     }
 
     fun filter(sort: SortFilterOptions?) {
-        if(sort!= null)
-        sortFilter(sort)
+        if (sort != null)
+            sortFilter(sort)
     }
 
 

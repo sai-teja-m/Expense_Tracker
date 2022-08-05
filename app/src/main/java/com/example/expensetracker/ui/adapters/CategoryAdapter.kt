@@ -1,20 +1,11 @@
 package com.example.expensetracker.ui.adapters
 
-import android.hardware.biometrics.BiometricManager
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.TextViewCompat
-import androidx.recyclerview.selection.ItemDetailsLookup
-import androidx.recyclerview.selection.ItemKeyProvider
-import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.expensetracker.R
 import com.example.expensetracker.databinding.ItemCategoryBinding
-import com.github.mikephil.charting.utils.Utils.init
-import kotlinx.android.synthetic.main.expense_view.view.*
 
 
 class CategoryAdapter() :
@@ -45,28 +36,27 @@ class CategoryAdapter() :
         fun bind(position: Int) {
             binding.run {
                 val category: String = getItem(position)
-                if(currentSelectedCategories.contains(category)){
+                if (currentSelectedCategories.contains(category)) {
                     itemText.isChecked = true
-                }else{
-                    itemText.isChecked =false
+                } else {
+                    itemText.isChecked = false
                 }
 
                 itemText.text = category
 
                 itemText.setOnCheckedChangeListener { _, isChecked ->
-                    if(isChecked) {
+                    if (isChecked) {
                         addSelection(position)
-                    }
-                    else {
+                    } else {
                         removeSelection(position)
-                    }
-
                     }
 
                 }
 
             }
+
         }
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -81,28 +71,28 @@ class CategoryAdapter() :
     }
 
 
-
-
     override fun onBindViewHolder(holder: CategoryAdapter.CategoryHolder, position: Int) {
         holder.bind(position)
     }
 
-    fun addSelection(position: Int){
+    fun addSelection(position: Int) {
         currentSelectedCategories.add(getItem(position))
-//        notifyItemChanged(position)
     }
 
-    fun removeSelection(position: Int){
+    fun removeSelection(position: Int) {
         currentSelectedCategories.remove(getItem(position))
-//        notifyItemChanged(position)
     }
-    fun removeAllSelection(){
+
+    fun removeAllSelection() {
         currentSelectedCategories.clear()
         notifyDataSetChanged()
     }
 
-    fun getSelectedCategories():List<String> { return currentSelectedCategories.distinct()}
-    fun isItemSelected(item : String):Boolean{
+    fun getSelectedCategories(): List<String> {
+        return currentSelectedCategories.distinct()
+    }
+
+    fun isItemSelected(item: String): Boolean {
         return currentSelectedCategories.contains(item)
     }
 }

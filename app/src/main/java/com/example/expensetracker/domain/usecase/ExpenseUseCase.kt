@@ -45,9 +45,9 @@ class GetAllUseCase @Inject constructor(
 
 class GetByIdUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-) : SingleUseCaseParams<Expense> {
-    override fun execute(data: Any): Single<Expense> {
-        return expenseRepo.getById(data as Int)
+) : SingleUseCaseParams<Int, Expense> {
+    override fun execute(data: Int): Single<Expense> {
+        return expenseRepo.getById(data)
     }
 }
 
@@ -61,9 +61,9 @@ class GetTotalExpenseUseCase @Inject constructor(
 
 class GetCategoryExpenseUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-) : SingleUseCaseParams<Int> {
-    override fun execute(data: Any): Single<Int> {
-        return expenseRepo.getCategoryExpense(data as List<String>)
+) : SingleUseCaseParams<List<String>, Int> {
+    override fun execute(data: List<String>): Single<Int> {
+        return expenseRepo.getCategoryExpense(data)
     }
 
 
@@ -87,9 +87,9 @@ class GetCategoryAndAmountUseCase @Inject constructor(
 
 class SortFilterOptionsUseCase @Inject constructor(
     private val expenseRepo: ExpenseRepository
-) : SingleUseCaseParams<List<Expense>> {
-    override fun execute(data: Any): Single<List<Expense>> {
-        return expenseRepo.sortAndFilter(data as SortFilterOptions)
+) : SingleUseCaseParams<SortFilterOptions, List<Expense>> {
+    override fun execute(data: SortFilterOptions): Single<List<Expense>> {
+        return expenseRepo.sortAndFilter(data)
     }
 
 }
@@ -103,8 +103,8 @@ interface CompletableUseCaseParams<P> {
     fun execute(data: P): Completable
 }
 
-interface SingleUseCaseParams<P> {
-    fun execute(data: Any): Single<P>
+interface SingleUseCaseParams<T, P> {
+    fun execute(data: T): Single<P>
 }
 
 interface FlowableUseCaseString<P> {

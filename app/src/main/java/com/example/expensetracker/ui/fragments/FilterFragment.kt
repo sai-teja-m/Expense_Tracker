@@ -108,25 +108,27 @@ class FilterFragment : DaggerFragment() {
             }
 
             viewModel.categoryList.observe(viewLifecycleOwner) {
-                categoryAdapter.setCurrentCategory(viewModel.sort.value?.categories?: emptyList())
+                categoryAdapter.setCurrentCategory(
+                    viewModel.sortFilterDetails.value?.categories ?: emptyList()
+                )
                 categoryAdapter.submitList(it)
             }
 
 
             //range visibility
-            viewModel.sort.observe(viewLifecycleOwner) {
-                if (viewModel.sort.value?.dateRange?.startDate == null) {
+            viewModel.sortFilterDetails.observe(viewLifecycleOwner) {
+                if (viewModel.sortFilterDetails.value?.dateRange?.startDate == null) {
                     //DO NOTHING
-                } else if (viewModel.sort.value?.dateRange?.startDate != null) {
-                    startDate = viewModel.sort?.value?.dateRange?.startDate
-                    endDate = viewModel.sort.value?.dateRange?.endDate
+                } else if (viewModel.sortFilterDetails.value?.dateRange?.startDate != null) {
+                    startDate = viewModel.sortFilterDetails?.value?.dateRange?.startDate
+                    endDate = viewModel.sortFilterDetails.value?.dateRange?.endDate
                     filterStartDate.text = dateConverter.fromDate(startDate)
                     filterEndDate.text = dateConverter.fromDate(endDate)
                     filterStartDate.visibility = View.VISIBLE
                     filterEndDate.visibility = View.VISIBLE
                     dateRange.text = getString(R.string.clear_date_range)
                 }
-                viewModel.sort.value?.categories?.let { it1 ->
+                viewModel.sortFilterDetails.value?.categories?.let { it1 ->
                     categoryAdapter.setCurrentCategory(
                         it1
                     )
@@ -206,7 +208,7 @@ class FilterFragment : DaggerFragment() {
     }
 
     private fun setRadio() {
-        expOrder = viewModel.sort.value?.sort?.ordinal ?: 3
+        expOrder = viewModel.sortFilterDetails.value?.sort?.ordinal ?: 3
 
         if (expOrder == -1 || expOrder == 3 || expOrder == null) {
             binding?.radioSortNewestFirst?.isChecked = true
@@ -252,11 +254,11 @@ class FilterFragment : DaggerFragment() {
     }
 
     private fun setDateRangeInit() {
-        if (viewModel.sort.value?.dateRange?.startDate != null) {
+        if (viewModel.sortFilterDetails.value?.dateRange?.startDate != null) {
             binding?.filterStartDate?.text =
-                dateConverter.fromDate(viewModel.sort?.value?.dateRange?.startDate)
+                dateConverter.fromDate(viewModel.sortFilterDetails?.value?.dateRange?.startDate)
             binding?.filterEndDate?.text =
-                dateConverter.fromDate(viewModel.sort.value?.dateRange?.endDate)
+                dateConverter.fromDate(viewModel.sortFilterDetails.value?.dateRange?.endDate)
             binding?.cvDateRange?.visibility = View.VISIBLE
             binding?.dateRange?.text = getString(R.string.clear_date_range)
         }
@@ -285,16 +287,12 @@ class FilterFragment : DaggerFragment() {
         categoryList = str
     }
 
-//    private fun clearCategoryFilter() {
-//        viewModel.selectCategory(emptyList())
-//    }
 
     private fun clearAll() {
         viewModel.setSortFilterOption(null)
         viewModel.filter(null)
         viewModel.getAllExpenses()
         clearDateRange()
-//        clearCategoryFilter()
         categoryAdapter.removeAllSelection()
         findNavController().navigateUp()
     }
