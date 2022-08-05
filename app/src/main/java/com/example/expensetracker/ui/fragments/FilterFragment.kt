@@ -37,7 +37,7 @@ class FilterFragment : DaggerFragment() {
     private var startDate: Date? = null
     private var endDate: Date? = null
     private var categoryList: List<String> = emptyList()
-    private var expOrder = 3
+    private var sortOptions:SortFilterOptions.SortOptions = SortFilterOptions.SortOptions.DateOrderDesc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,9 +133,9 @@ class FilterFragment : DaggerFragment() {
                         it1
                     )
                 }
-
+                setDateRangeInit()
             }
-            setDateRangeInit()
+
 //            }
 
             dateRange.setOnClickListener {
@@ -153,10 +153,8 @@ class FilterFragment : DaggerFragment() {
                 setSelectCategory(categoryAdapter.getSelectedCategories())
                 onRadioButtonClicked()
 
-                val expOrderList =
-                    listOf<String>("ExpOrderAsc", "ExpOrderDesc", "DateOrderAsc", "DateOrderDesc")
                 var sort = SortFilterOptions(
-                    SortFilterOptions.SortOptions.valueOf(expOrderList[expOrder]),
+                    sortOptions,
                     SortFilterOptions.DateRangeFilter(startDate, endDate),
                     categoryList
                 )
@@ -208,16 +206,16 @@ class FilterFragment : DaggerFragment() {
     }
 
     private fun setRadio() {
-        expOrder = viewModel.sortFilterDetails.value?.sort?.ordinal ?: 3
+        sortOptions = viewModel.sortFilterDetails.value?.sort?: SortFilterOptions.SortOptions.DateOrderDesc
 
-        if (expOrder == -1 || expOrder == 3 || expOrder == null) {
+        if (viewModel.sortFilterDetails == null || sortOptions ==SortFilterOptions.SortOptions.DateOrderDesc ) {
             binding?.radioSortNewestFirst?.isChecked = true
         }
-        if (expOrder == 2)
+        if (sortOptions == SortFilterOptions.SortOptions.DateOrderAsc)
             binding?.radioSortOldestFirst?.isChecked = true
-        if (expOrder == 1)
+        if (sortOptions == SortFilterOptions.SortOptions.ExpOrderDesc)
             binding?.radioExpenseAmountHighFirst?.isChecked = true
-        if (expOrder == 0)
+        if (sortOptions == SortFilterOptions.SortOptions.ExpOrderAsc)
             binding?.radioExpenseAmountLowFirst?.isChecked = true
     }
 
@@ -226,16 +224,16 @@ class FilterFragment : DaggerFragment() {
         // Check which radio button was clicked
         when (binding?.sortRadioGroup?.checkedRadioButtonId) {
             R.id.radio_sort_newest_first -> {
-                expOrder = 3
+                sortOptions = SortFilterOptions.SortOptions.DateOrderDesc
             }
             R.id.radio_sort_oldest_first -> {
-                expOrder = 2
+                sortOptions = SortFilterOptions.SortOptions.DateOrderAsc
             }
             R.id.radio_expense_amount_high_first -> {
-                expOrder = 1
+                sortOptions = SortFilterOptions.SortOptions.ExpOrderDesc
             }
             R.id.radio_expense_amount_low_first -> {
-                expOrder = 0
+                sortOptions = SortFilterOptions.SortOptions.ExpOrderAsc
             }
         }
     }
