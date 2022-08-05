@@ -1,6 +1,7 @@
 package com.example.expensetracker.viewmodels
 
 import SingleLiveEvent
+import android.os.Build.VERSION_CODES.S
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -44,9 +45,6 @@ class ExpenseViewModel(
     private val _categoryList: MutableLiveData<List<String>> = MutableLiveData()
     val categoryList: LiveData<List<String>> = _categoryList
 
-    private val _selectedCategory: MutableLiveData<List<String>> = MutableLiveData()
-    val selectedCategory: LiveData<List<String>> = _selectedCategory
-
     private val _totalExpense: MutableLiveData<Int> = MutableLiveData()
     val totalExpense: LiveData<Int> = _totalExpense
 
@@ -56,14 +54,9 @@ class ExpenseViewModel(
     private val _categoryAndAmount: SingleLiveEvent<List<CategoryAmount>> = SingleLiveEvent()
     val categoryAndAmount: LiveData<List<CategoryAmount>> = _categoryAndAmount
 
-    private val _startDate: MutableLiveData<Date> = MutableLiveData()
-    val startDate: LiveData<Date> = _startDate
 
-    private val _endDate: MutableLiveData<Date> = MutableLiveData()
-    val endDate: LiveData<Date> = _endDate
-
-    private val _expenseOrder: MutableLiveData<Int> = MutableLiveData(3)
-    val expenseOrder: LiveData<Int> = _expenseOrder
+    private val _sort : MutableLiveData<SortFilterOptions> = MutableLiveData()
+    val sort:LiveData<SortFilterOptions> = _sort
 
     fun isEntryValid(
         expenseTitle: String,
@@ -95,19 +88,13 @@ class ExpenseViewModel(
         return validEntry
     }
 
-    fun selectCategory(categories: List<String>) {
-        _selectedCategory.postValue(categories)
+    fun setSortFilterOption(sortFilter: SortFilterOptions?){
+        _sort.postValue(sortFilter)
     }
 
-    fun selectDateRange(start: Date? = null, end: Date? = null) {
-        _startDate.postValue(start)
-        _endDate.postValue(end)
-    }
-
-    //default is date Desc -1 ,for exp Asc 0 exp Desc 1 Date Asc 2 Date Desc 3
-    fun setExpenseOrder(order: Int = 3) {
-        _expenseOrder.postValue(order)
-    }
+//    fun selectCategory(categories: List<String>) {
+//        _selectedCategory.postValue(categories)
+//    }
 
     fun getTotalExpense() {
         getTotalExpenseUseCase.execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
@@ -239,7 +226,8 @@ class ExpenseViewModel(
             }
     }
 
-    fun filter(sort: SortFilterOptions) {
+    fun filter(sort: SortFilterOptions?) {
+        if(sort!= null)
         sortFilter(sort)
     }
 

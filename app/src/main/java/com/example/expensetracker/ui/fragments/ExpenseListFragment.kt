@@ -1,5 +1,6 @@
 package com.example.expensetracker.ui.fragments
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.activityViewModels
@@ -11,12 +12,14 @@ import com.example.expensetracker.R
 import com.example.expensetracker.database.expense.DateConverter
 import com.example.expensetracker.database.expense.Expense
 import com.example.expensetracker.databinding.FragmentListDisplayBinding
+import com.example.expensetracker.domain.SortFilterOptions
 import com.example.expensetracker.ui.adapters.ExpenseAdapter
 import com.example.expensetracker.utils.SwipeToDeleteCallBack
 import com.example.expensetracker.viewmodels.ExpenseViewModel
 import com.example.expensetracker.viewmodels.ExpenseViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import java.util.stream.Collectors.toList
 import javax.inject.Inject
 
 
@@ -75,10 +78,10 @@ class ExpenseListFragment : DaggerFragment() {
 
 
             R.id.category_total -> {
-                if (viewModel.selectedCategory.value.isNullOrEmpty()) {
+                if (viewModel.sort?.value?.categories.isNullOrEmpty()) {
                     showSnackBarCategoryExp(null)
                 } else {
-                    viewModel.selectedCategory.value?.toList()
+                    viewModel.sort?.value?.categories?.toList()
                         ?.let { viewModel.getCategoryExpense(it) }
                 }
                 true
@@ -200,7 +203,7 @@ class ExpenseListFragment : DaggerFragment() {
                     it.listDisplay,
                     getString(
                         R.string.expense_for,
-                        viewModel.selectedCategory.value.toString(),
+                        viewModel.sort?.value?.categories,
                         categoryExpense.toString()
                     ),
                     Snackbar.LENGTH_LONG
@@ -227,13 +230,12 @@ class ExpenseListFragment : DaggerFragment() {
         if (::menu.isInitialized) {
             val item = menu.findItem(R.id.filter)
             val filterSelected =
-                (!viewModel.selectedCategory.value.isNullOrEmpty() || viewModel.startDate.value != null || viewModel.expenseOrder.value != 3)
+                (viewModel.sort?.value!=null )
             if (item != null) {
                 if (filterSelected) {
                     item.setIcon(R.drawable.ic_filter_list_enabled)
                 } else {
                     item.setIcon(R.drawable.ic_filter_list)
-                    item.icon.setTint(resources.getColor(R.color.card_grey))
                 }
             }
         }

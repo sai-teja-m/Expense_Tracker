@@ -2,7 +2,7 @@ package com.example.expensetracker.domain
 
 import java.util.*
 
-class SortFilterOptions(val sort:SortOptions, val dateRange:DateRangeFilter?,val categories:List<String>) {
+class SortFilterOptions(val sort:SortOptions , val dateRange:DateRangeFilter?, val categories:List<String>) {
 
     enum class SortOptions{
         ExpOrderAsc,
