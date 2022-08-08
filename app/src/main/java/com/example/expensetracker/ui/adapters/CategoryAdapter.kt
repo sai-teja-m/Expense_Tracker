@@ -36,19 +36,16 @@ class CategoryAdapter() :
         fun bind(position: Int) {
             binding.run {
                 val category: String = getItem(position)
-                if (currentSelectedCategories.contains(category)) {
-                    itemText.isChecked = true
-                } else {
-                    itemText.isChecked = false
-                }
+                itemText.isChecked = currentSelectedCategories.contains(category)
 
                 itemText.text = category
-
-                itemText.setOnCheckedChangeListener { _, isChecked ->
-                    if (isChecked) {
-                        addSelection(position)
-                    } else {
+                itemText.setOnClickListener {
+                    if (!itemText.isChecked) {
                         removeSelection(position)
+                        itemText.isChecked = false
+                    } else {
+                        addSelection(position)
+                        itemText.isChecked = true
                     }
 
                 }
@@ -82,7 +79,7 @@ class CategoryAdapter() :
 
     fun removeSelection(position: Int) {
         currentSelectedCategories.remove(getItem(position))
-//        notifyItemChanged(position)
+        notifyItemChanged(position)
     }
 
     fun removeAllSelection() {

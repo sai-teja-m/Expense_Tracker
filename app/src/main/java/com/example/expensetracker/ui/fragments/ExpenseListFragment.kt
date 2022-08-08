@@ -44,7 +44,6 @@ class ExpenseListFragment : DaggerFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -150,6 +149,11 @@ class ExpenseListFragment : DaggerFragment() {
                 }
             }
 
+            viewModel.totalExpense.observe(viewLifecycleOwner){
+                if(it!=null)
+                    showSnackBarTotalExp()
+            }
+
             viewModel.categoryAndAmount.observe(viewLifecycleOwner) {
                 findNavController().navigate(ExpenseListFragmentDirections.actionListDisplayToGraphFragment())
             }
@@ -158,11 +162,7 @@ class ExpenseListFragment : DaggerFragment() {
     }
     private fun calculateTotalExpense(){
         viewModel.getTotalExpense()
-        viewModel.totalExpense.observe(viewLifecycleOwner){
-            if(it!=null)
-                showSnackBarTotalExp()
-            viewModel.clearTotalExpense()
-        }
+
     }
 
     private fun showSnackBarTotalExpEmpty() {

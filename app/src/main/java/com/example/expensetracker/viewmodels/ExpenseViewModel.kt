@@ -44,7 +44,7 @@ class ExpenseViewModel(
     private val _categoryList: MutableLiveData<List<String>> = MutableLiveData()
     val categoryList: LiveData<List<String>> = _categoryList
 
-    private val _totalExpense: MutableLiveData<Int> = MutableLiveData()
+    private val _totalExpense: SingleLiveEvent<Int> = SingleLiveEvent()
     val totalExpense: LiveData<Int> = _totalExpense
 
     private val _categoryExpense: MutableLiveData<Int> = MutableLiveData()
@@ -90,9 +90,6 @@ class ExpenseViewModel(
         return validEntry
     }
 
-//    fun setSortFilterOption(sortFilter: SortFilterOptions?) {
-//        _sortFilterDetails.postValue(sortFilter)
-//    }
 
     fun getTotalExpense() {
         getTotalExpenseUseCase.execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
