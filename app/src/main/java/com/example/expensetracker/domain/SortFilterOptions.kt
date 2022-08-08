@@ -10,6 +10,6 @@ class SortFilterOptions(val sort:SortOptions , val dateRange:DateRangeFilter?, v
         DateOrderAsc,
         DateOrderDesc
     }
-    data class DateRangeFilter( val startDate:Date?, val endDate: Date?)
+    data class DateRangeFilter( val startDate:Date, val endDate: Date)
 
 }

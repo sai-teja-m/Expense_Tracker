@@ -44,7 +44,7 @@ class ExpenseViewModel(
     private val _categoryList: MutableLiveData<List<String>> = MutableLiveData()
     val categoryList: LiveData<List<String>> = _categoryList
 
-    private val _totalExpense: MutableLiveData<Int> = MutableLiveData()
+    private val _totalExpense: SingleLiveEvent<Int> = SingleLiveEvent()
     val totalExpense: LiveData<Int> = _totalExpense
 
     private val _categoryExpense: MutableLiveData<Int> = MutableLiveData()
@@ -56,6 +56,10 @@ class ExpenseViewModel(
     private val _sortFilterDetails: MutableLiveData<SortFilterOptions> = MutableLiveData()
     val sortFilterDetails: LiveData<SortFilterOptions> = _sortFilterDetails
 
+    init {
+        getAllExpenses()
+        getCategory()
+    }
     fun isEntryValid(
         expenseTitle: String,
         expense: String,
@@ -86,9 +90,6 @@ class ExpenseViewModel(
         return validEntry
     }
 
-    fun setSortFilterOption(sortFilter: SortFilterOptions?) {
-        _sortFilterDetails.postValue(sortFilter)
-    }
 
     fun getTotalExpense() {
         getTotalExpenseUseCase.execute().subscribeOn(ioScheduler).observeOn(uiScheduler).subscribe({
@@ -124,6 +125,9 @@ class ExpenseViewModel(
 
     fun clearCategoryExpense() {
         _categoryExpense.postValue(null)
+    }
+    fun clearTotalExpense(){
+        _totalExpense.postValue(null)
     }
 
     fun getCategory() {
@@ -220,9 +224,11 @@ class ExpenseViewModel(
             }
     }
 
-    fun filter(sort: SortFilterOptions?) {
-        if (sort != null)
-            sortFilter(sort)
+    fun filter(sortFilter: SortFilterOptions?) {
+        _sortFilterDetails.postValue(sortFilter)
+        if (sortFilter != null)
+            sortFilter(sortFilter)
+        else getAllExpenses()
     }
 
 

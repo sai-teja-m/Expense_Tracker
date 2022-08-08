@@ -43,6 +43,7 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        viewModel.getTotalExpense()
     }
 
     override fun onCreateView(
@@ -55,16 +56,17 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.totalExpense.observe(viewLifecycleOwner) {
+            viewModel.categoryAndAmount.value?.let {
 
-        viewModel.categoryAndAmount.value?.let {
 
+                for (i in it) {
+                    entries.add(PieEntry(i.categoryAmount.toFloat(), i.category))
+                }
 
-            for (i in it) {
-                entries.add(PieEntry(i.categoryAmount.toFloat(), i.category))
             }
-
+            setPieChart()
         }
-        setPieChart()
     }
 
 
@@ -107,19 +109,16 @@ class GraphFragment : DaggerFragment(), OnChartValueSelectedListener {
 
     override fun onValueSelected(e: Entry?, h: Highlight?) {
         if (e == null || h == null) {
-            Toast.makeText(requireContext(), "empty", Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), "empty", Toast.LENGTH_LONG).show()
             return
         }
         val textView: TextView? = binding?.pieValue
-        viewModel.getTotalExpense()
-        viewModel.totalExpense?.value?.let {
             textView?.text = getString(
                 R.string.pie_chart_text,
                 e.y.toInt(),
                 entries[h.x.toInt()].label.toString(),
-                e.y * 100 / it
+                e.y * 100 / (viewModel.totalExpense.value?:1)
             )
-        }
 
         textView?.visibility = View.VISIBLE
 
